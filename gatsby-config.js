@@ -1,6 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: "OurPortal",
+    siteUrl: `https://ourportal.com`, // change later
   },
   plugins: [
     "gatsby-plugin-postcss",
