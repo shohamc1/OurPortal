@@ -4,8 +4,8 @@ const Sidebar = () => {
   return (
     <div class="flex flex-col max-w-1/7 h-screen bg-gray-100 rounded-r-lg">
       <h1 class="font-bold text-6xl pl-4 pr-8 py-4 mb-4">OurPortal</h1>
-      <button class="mx-4 mb-4 bg-white rounded shadow-md">
-        <div class="items-center justify-center flex flex-row w-full py-2">
+      <button class="mx-2 mb-4 rounded text-gray-100 primary-button">
+        <div class="px-4 items-center flex flex-row w-full py-2">
           <svg
             class="mr-4"
             width="32"
@@ -16,7 +16,7 @@ const Sidebar = () => {
           >
             <path
               d="M1.33331 2.66666H5.0623C5.9997 2.66666 6.81133 3.31772 7.01468 4.2328L7.99998 8.66666M7.99998 8.66666L9.77089 18.4066C10.2896 21.2596 12.7744 23.3333 15.6741 23.3333H22.5439C25.3453 23.3333 27.7739 21.3948 28.3947 18.6631L30.2502 10.4991C30.4635 9.56044 29.7501 8.66666 28.7875 8.66666H7.99998Z"
-              stroke="#14142B"
+              stroke="#F5F6F8"
               stroke-width="2"
               stroke-linecap="round"
             />
@@ -25,7 +25,7 @@ const Sidebar = () => {
               cy="28"
               rx="1.33333"
               ry="1.33333"
-              stroke="#14142B"
+              stroke="#F5F6F8"
               stroke-width="2"
             />
             <ellipse
@@ -33,7 +33,7 @@ const Sidebar = () => {
               cy="28"
               rx="1.33333"
               ry="1.33333"
-              stroke="#14142B"
+              stroke="#F5F6F8"
               stroke-width="2"
             />
           </svg>
@@ -41,8 +41,8 @@ const Sidebar = () => {
         </div>
       </button>
 
-      <button class="mx-4 bg-white rounded shadow-md">
-        <div class="items-center justify-center flex flex-row w-full py-2">
+      <button class="mx-2 mb-4 rounded">
+        <div class="px-4 items-center items-center flex flex-row w-full py-2">
           <svg
             class="mr-4"
             width="32"
