@@ -11,19 +11,28 @@ module.exports = {
       },
       colors: {
         gray: {
+          50: "#F5F5F5",
           100: "#F5F6F8",
           300: "#ECECEC",
           600: "#C4C4C4",
+          700: "#D9DBE9",
         },
         purple: {
           700: "#2A00A2",
           500: "#5F2EEA",
+        },
+        mint: {
+          DEFAULT: "#86EDD1",
         },
       },
       borderRadius: {
         DEFAULT: "12px",
         lg: "25px",
         button: "40px",
+      },
+      minWidth: {
+        72: "18rem",
+        80: "20rem",
       },
     },
   },
