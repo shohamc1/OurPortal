@@ -6,6 +6,7 @@ import Landing from "../components/auth/landing";
 import Dashboard from "../components/dashboard/dashboard";
 import Login from "../components/auth/login";
 import SignUp from "../components/auth/signup";
+import Trade from "../components/p2ptrade/trade"
 
 const Index = () => {
   return (
@@ -17,6 +18,7 @@ const Index = () => {
 
       <Landing path="/" />
       <Dashboard path="dashboard" />
+      <Trade path="trade" />
     </Router>
   );
 };
