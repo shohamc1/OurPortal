@@ -1,17 +1,11 @@
 import React from "react";
 
-const SelectedModuleCard = ({
-  selectionIndex,
-  courseName,
-  courseCode,
-}) => {
+const SelectedModuleCard = ({ selectionIndex, courseName, courseCode }) => {
   return (
     <div class="flex flex-row rounded items-center bg-gray-50 w-auto h-auto shadow-md overflow-hidden my-2">
       <div class="text-base px-2">{selectionIndex} </div>
       <div class="text-lg font-semibold px-2 py-2">{courseCode}</div>
-      <div class="mx-2">
-        {courseName}
-      </div>
+      <div class="mx-2">{courseName}</div>
       <div class="flex items-center ml-auto mr-4">
         <input
           class="mr-4 w-12 text-gray-800 bg-gray-50 border-gray-500 border-b 
