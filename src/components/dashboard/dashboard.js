@@ -7,7 +7,7 @@ import Card from "../card";
 const Dashboard = () => {
   return (
     <div class="flex">
-      <Sidebar />
+      <Sidebar active="home" />
       <div class="flex flex-col flex-grow">
         <Header pageName="Overview" />
         <div class="pl-6 pt-4">
