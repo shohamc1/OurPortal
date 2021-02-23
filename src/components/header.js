@@ -1,5 +1,9 @@
 import React from "react";
 
+/**
+ * Standardised header with configurable text
+ * @param {string} pageName - header text
+ */
 const Header = ({ pageName = "Test" }) => {
   return (
     <div class="flex border-b-2 w-auto h-auto items-center">

@@ -1,12 +1,17 @@
 import React from "react";
 
-// the value of active determines which button will be highlighted
+/**
+ * Sidebar with configurable highlight
+ * @param {string} active - determines which button will be highlighted
+ */
 const Sidebar = ({ active = "home" }) => {
+  // base CSS classes
   var homeClass = "mx-2 mb-4 rounded";
   var enrollClass = "mx-2 mb-4 rounded";
   var peerClass = "mx-2 mb-4 rounded";
   var autoClass = "mx-2 mb-4 rounded";
 
+  // apply CSS classes depending on value of active recieved
   switch (active) {
     case "home":
       homeClass =
@@ -30,9 +35,12 @@ const Sidebar = ({ active = "home" }) => {
 
   return (
     <div class="flex flex-col max-w-1/7 h-screen bg-gray-100 rounded-r-lg">
+      {/* header text */}
       <h1 class="font-bold text-4xl xl:text-6xl pl-4 pr-8 py-4 mb-4">
         OurPortal
       </h1>
+
+      {/* nav buttons */}
       <a href="/dashboard" class={homeClass}>
         <div class="px-4 items-center flex flex-row w-full py-2">
           <svg
