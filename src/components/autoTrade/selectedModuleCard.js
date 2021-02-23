@@ -18,7 +18,7 @@ const SelectedModuleCard = ({ selectionIndex, courseName, courseCode }) => {
         ></input>
         <span class="cursor-pointer inline-block ">
           <svg
-            class="stroke-current text-gray-500 stroke-2 hover:text-red-700 hover:scale-110"
+            class="stroke-current text-gray-500 stroke-2 hover:text-red-700"
             width="24"
             height="24"
             viewBox="0 0 24 24"

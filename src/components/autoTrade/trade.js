@@ -15,12 +15,12 @@ const Trade = () => {
 
   return (
     <div class="flex">
-      <Sidebar active="peer" />
+      <Sidebar active="auto" />
       <div class="flex flex-col flex-grow">
-        <Header pageName="P2P Trade" />
+        <Header pageName="Auto Trade" />
         <div class="flex flex-col text-sm text-gray-800 w-full py-4 px-4">
           {info ? (
-            <div class="p-2 bg-red-500 rounded">
+            <div class="p-2 bg-red-400 rounded mb-4">
               <div class="ml-2 my-2 text-justify">
                 <button class="float-right mx-2 p-2" onClick={closeInfo}>
                   <svg
@@ -56,7 +56,7 @@ const Trade = () => {
                 </ol>
                 <p class="font-light text-sm">
                   <em>
-                    All trades are done based on availability and there is
+                    All trades are done based on availability and there is{" "}
                     <strong>NO GUARANTEE</strong> you will get your desired
                     module, so choose wisely
                   </em>
@@ -66,7 +66,7 @@ const Trade = () => {
           ) : (
             <></>
           )}
-          <h2 class="font-bold text-3xl pt-2">Current Module</h2>
+          <h2 class="font-bold text-3xl pt-2 mb-2">Current Module</h2>
 
           <CurrentModuleCard
             courseCode="02.102DH"
@@ -75,8 +75,10 @@ const Trade = () => {
             instructorLastName="Pang"
           />
 
-          <h2 class="font-bold text-3xl pt-2">Selected Modules</h2>
-          <p class="font-light text-sm">Your Selection is Updated</p>
+          <h2 class="font-bold text-3xl mt-4">Selected Modules</h2>
+          <p class="font-light text-green-500 text-sm mb-2">
+            Your Selection is Updated
+          </p>
 
           <SelectedModuleCard
             courseCode="02.105DH"
