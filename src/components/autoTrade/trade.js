@@ -6,11 +6,28 @@ import SelectedModuleCard from "./selectedModuleCard";
 
 const Trade = () => {
   const [info, setInfo] = useState(true);
+  const [remainingWeightage, setRemainingWeightage] = useState(100);
+  const [weightages, setWeightages] = useState([0, 0, 0]);
   console.log(info);
 
   const closeInfo = (e) => {
     e.preventDefault();
     setInfo(false);
+  };
+
+  const updateWeightages = (value, index) => {
+    let sum = value;
+    for (let i = 0; i < 3; i++) {
+      if (i !== index) {
+        sum += weightages[i];
+      }
+    }
+    console.log(sum);
+    if (100 - sum >= 0) {
+      setRemainingWeightage(100 - sum);
+      setWeightages(weightages.map((w, i) => (i == index ? value : w)));
+    }
+    console.log(weightages);
   };
 
   return (
@@ -77,23 +94,26 @@ const Trade = () => {
 
           <h2 class="font-bold text-3xl mt-4">Selected Modules</h2>
           <p class="font-light text-green-500 text-sm mb-2">
-            Your Selection is Updated
+            Your Selection is Updated {remainingWeightage}
           </p>
 
           <SelectedModuleCard
             courseCode="02.105DH"
             courseName="Sages Through The Ages: Readings in Early Indian and Chinese Religion and Philosophy"
-            selectionIndex="1."
+            selectionIndex={1}
+            onWeightageUpdate={updateWeightages}
           />
           <SelectedModuleCard
             courseCode="02.155TS"
             courseName="Design Anthropology"
-            selectionIndex="2."
+            selectionIndex={2}
+            onWeightageUpdate={updateWeightages}
           />
           <SelectedModuleCard
             courseCode="02.216"
             courseName="Southeast Asia Under Japan: Motives, Memoirs, and Media"
-            selectionIndex="3."
+            selectionIndex={3}
+            onWeightageUpdate={updateWeightages}
           />
         </div>
       </div>

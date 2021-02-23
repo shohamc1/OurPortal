@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 
-const SelectedModuleCard = ({ selectionIndex, courseName, courseCode }) => {
+const SelectedModuleCard = ({
+  selectionIndex,
+  courseName,
+  courseCode,
+  onWeightageUpdate,
+}) => {
+  const [weightage, setWeightage] = useState(0);
+
+  const handleWeightageUpdate = (value, index) => {
+    setWeightage(value == "" ? "" : parseInt(value));
+    onWeightageUpdate(value == "" ? 0 : parseInt(value), index);
+  };
   return (
     <div class="flex flex-row rounded items-center bg-gray-50 w-auto h-auto shadow-md overflow-hidden my-2">
-      <div class="text-base px-2">{selectionIndex} </div>
+      <div class="text-base px-3">{selectionIndex}.</div>
       <div class="w-24 text-lg font-semibold py-2">{courseCode}</div>
       <div class="mx-2">{courseName}</div>
       <div class="flex items-center ml-auto mr-4">
@@ -12,6 +23,10 @@ const SelectedModuleCard = ({ selectionIndex, courseName, courseCode }) => {
         placeholder-gray-400 
         focus:outline-none focus:border-purple-500 focus:placeholder-opacity-40"
           placeholder="0"
+          value={weightage}
+          onChange={(e) =>
+            handleWeightageUpdate(e.target.value, selectionIndex - 1)
+          }
           type="number"
           min="0"
           max="100"
