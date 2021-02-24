@@ -8,6 +8,7 @@ const Trade = () => {
   const [info, setInfo] = useState(true);
   const [remainingWeightage, setRemainingWeightage] = useState(100);
   const [weightages, setWeightages] = useState([0, 0, 0]);
+  const [invalidWeightage, setInvalidWeightage] = useState(false);
   console.log(info);
 
   const closeInfo = (e) => {
@@ -22,12 +23,9 @@ const Trade = () => {
         sum += weightages[i];
       }
     }
-    console.log(sum);
-    if (100 - sum >= 0) {
-      setRemainingWeightage(100 - sum);
-      setWeightages(weightages.map((w, i) => (i == index ? value : w)));
-    }
-    console.log(weightages);
+    setRemainingWeightage(100 - sum);
+    setWeightages(weightages.map((w, i) => (i == index ? value : w)));
+    setInvalidWeightage(100 - sum >= 0 ? false : true);
   };
 
   return (
@@ -116,14 +114,61 @@ const Trade = () => {
             onWeightageUpdate={updateWeightages}
           />
           <div class="flex flex-row mt-8 items-center">
-            <p class="font-bold">Remaining Weightage:</p>
-            <div class="bg-red-700 text-white opacity-90 text-sm font-bold p-2 m-2 rounded-md">
+            <p class="font-bold 2xl:text-lg 2xl:ml-6 2xl:mr-2">
+              Remaining Weightage:
+            </p>
+            <div
+              class={`${
+                remainingWeightage ? "bg-red-700" : "bg-green-500"
+              } text-white opacity-90 text-sm 2xl:text-lg text-center font-bold w-10 2xl:w-12 min-w-min p-2 m-2 rounded-md`}
+            >
               {remainingWeightage}
             </div>
-            <button class="secondary-button rounded-button py-2 px-4 mr-2 md:px-10 ml-auto md:mr-4 text-white">
+            {invalidWeightage ? (
+              <div class="flex flex-col text-xs text-red-500">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="11"
+                    stroke="#ED2E7E"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M12 7V12"
+                    stroke="#ED2E7E"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M12 16V16.5"
+                    stroke="#ED2E7E"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <p>Negative weights not allowed</p>
+              </div>
+            ) : (
+              <></>
+            )}
+            <button class="secondary-button rounded-button py-2 px-4 mr-2 md:px-10 2xl:px-14 ml-auto md:mr-4 2xl:mr-8 text-lg 2xl:text-2xl text-white">
               Search
             </button>
-            <button class="secondary-button-ns rounded-button py-2 px-4 mr-2 md:px-10 md:mr-4  text-white">
+            <button
+              class={`${
+                remainingWeightage ? "bg-gray-500" : "secondary-button-ns"
+              } rounded-button py-2 px-4 mr-2 md:px-10 2xl:px-14 md:mr-4 2xl:mr-8 text-lg 2xl:text-2xl text-white`}
+              disabled={remainingWeightage !== 0}
+            >
               Update
             </button>
           </div>
