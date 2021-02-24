@@ -12,3 +12,11 @@
 .primary-button-ns {
   background: linear-gradient(114.44deg, #7433ff 0%, #ffa3fd 100%);
 }
+.secondary-button {
+  background: linear-gradient(114.44deg, #06258d 0%, #2762cf 100%);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.secondary-button-ns {
+  background: linear-gradient(114.44deg, #239e8a 0%, #0ee6a5 100%);
+}

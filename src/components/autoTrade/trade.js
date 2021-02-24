@@ -94,7 +94,7 @@ const Trade = () => {
 
           <h2 class="font-bold text-3xl mt-4">Selected Modules</h2>
           <p class="font-light text-green-500 text-sm mb-2">
-            Your Selection is Updated {remainingWeightage}
+            Your Selection is Updated
           </p>
 
           <SelectedModuleCard
@@ -115,6 +115,18 @@ const Trade = () => {
             selectionIndex={3}
             onWeightageUpdate={updateWeightages}
           />
+          <div class="flex flex-row mt-8 items-center">
+            <p class="font-bold">Remaining Weightage:</p>
+            <div class="bg-red-700 text-white opacity-90 text-sm font-bold p-2 m-2 rounded-md">
+              {remainingWeightage}
+            </div>
+            <button class="secondary-button rounded-button py-2 px-4 mr-2 md:px-10 ml-auto md:mr-4 text-white">
+              Search
+            </button>
+            <button class="secondary-button-ns rounded-button py-2 px-4 mr-2 md:px-10 md:mr-4  text-white">
+              Update
+            </button>
+          </div>
         </div>
       </div>
     </div>
