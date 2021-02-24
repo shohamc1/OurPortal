@@ -24,7 +24,7 @@ const Trade = () => {
       }
     }
     setRemainingWeightage(100 - sum);
-    setWeightages(weightages.map((w, i) => (i == index ? value : w)));
+    setWeightages(weightages.map((w, i) => (i === index ? value : w)));
     setInvalidWeightage(100 - sum >= 0 ? false : true);
   };
 
@@ -33,7 +33,7 @@ const Trade = () => {
       <Sidebar active="auto" />
       <div class="flex flex-col flex-grow">
         <Header pageName="Auto Trade" />
-        <div class="flex flex-col text-sm text-gray-800 w-full py-4 px-4">
+        <div class="flex flex-col text-sm text-gray-800 w-full py-4 px-4 h-full">
           {info ? (
             <div class="p-2 bg-red-400 rounded mb-4">
               <div class="ml-2 my-2 text-justify">
@@ -113,14 +113,12 @@ const Trade = () => {
             selectionIndex={3}
             onWeightageUpdate={updateWeightages}
           />
-          <div class="flex flex-row mt-8 items-center">
-            <p class="font-bold 2xl:text-lg 2xl:ml-6 2xl:mr-2">
-              Remaining Weightage:
-            </p>
+          <div class="flex flex-row mt-auto items-center">
+            <p class="font-bold text-xl inline-block">Remaining Weightage:</p>
             <div
               class={`${
                 remainingWeightage ? "bg-red-700" : "bg-green-500"
-              } text-white opacity-90 text-sm 2xl:text-lg text-center font-bold w-10 2xl:w-12 min-w-min p-2 m-2 rounded-md`}
+              } text-white opacity-90 font-bold p-2 m-2 rounded-md text-xl`}
             >
               {remainingWeightage}
             </div>
@@ -160,13 +158,13 @@ const Trade = () => {
             ) : (
               <></>
             )}
-            <button class="secondary-button rounded-button py-2 px-4 mr-2 md:px-10 2xl:px-14 ml-auto md:mr-4 2xl:mr-8 text-lg 2xl:text-2xl text-white">
+            <button class="secondary-button rounded py-2 mr-2 xl:px-10 ml-auto xl:mr-4 text-white text-xl w-1/5">
               Search
             </button>
             <button
               class={`${
                 remainingWeightage ? "bg-gray-500" : "secondary-button-ns"
-              } rounded-button py-2 px-4 mr-2 md:px-10 2xl:px-14 md:mr-4 2xl:mr-8 text-lg 2xl:text-2xl text-white`}
+              } rounded py-2 px-4 mr-2 xl:px-10 xl:mr-4 text-white text-xl w-1/5`}
               disabled={remainingWeightage !== 0}
             >
               Update

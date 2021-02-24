@@ -101,7 +101,7 @@ const Sidebar = ({ active = "home" }) => {
         </div>
       </a>
 
-      <a href="/trade" class={peerClass}>
+      <a href="#" class={peerClass}>
         <div class="px-4 items-center flex flex-row w-full py-2">
           <svg
             class="mr-4"
@@ -121,7 +121,7 @@ const Sidebar = ({ active = "home" }) => {
         </div>
       </a>
 
-      <a href="#" class={autoClass}>
+      <a href="/autotrade" class={autoClass}>
         <div class="px-4 items-center flex flex-row w-full py-2">
           <svg
             class="mr-4"
