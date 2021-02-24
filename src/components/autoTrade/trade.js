@@ -25,7 +25,7 @@ const Trade = () => {
     console.log(sum);
     if (100 - sum >= 0) {
       setRemainingWeightage(100 - sum);
-      setWeightages(weightages.map((w, i) => (i == index ? value : w)));
+      setWeightages(weightages.map((w, i) => (i === index ? value : w)));
     }
     console.log(weightages);
   };
@@ -35,7 +35,7 @@ const Trade = () => {
       <Sidebar active="auto" />
       <div class="flex flex-col flex-grow">
         <Header pageName="Auto Trade" />
-        <div class="flex flex-col text-sm text-gray-800 w-full py-4 px-4">
+        <div class="flex flex-col text-sm text-gray-800 w-full py-4 px-4 h-full">
           {info ? (
             <div class="p-2 bg-red-400 rounded mb-4">
               <div class="ml-2 my-2 text-justify">
@@ -115,15 +115,15 @@ const Trade = () => {
             selectionIndex={3}
             onWeightageUpdate={updateWeightages}
           />
-          <div class="flex flex-row mt-8 items-center">
-            <p class="font-bold">Remaining Weightage:</p>
-            <div class="bg-red-700 text-white opacity-90 text-sm font-bold p-2 m-2 rounded-md">
+          <div class="flex flex-row mt-auto items-center">
+            <p class="font-bold text-xl inline-block">Remaining Weightage:</p>
+            <div class="bg-red-700 text-white opacity-90 text-sm font-bold p-2 m-2 rounded-md text-xl">
               {remainingWeightage}
             </div>
-            <button class="secondary-button rounded-button py-2 px-4 mr-2 md:px-10 ml-auto md:mr-4 text-white">
+            <button class="secondary-button rounded py-2 mr-2 xl:px-10 ml-auto xl:mr-4 text-white text-xl w-1/5">
               Search
             </button>
-            <button class="secondary-button-ns rounded-button py-2 px-4 mr-2 md:px-10 md:mr-4  text-white">
+            <button class="secondary-button-ns rounded py-2 px-4 mr-2 xl:px-10 xl:mr-4 text-white text-xl w-1/5">
               Update
             </button>
           </div>

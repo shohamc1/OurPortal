@@ -9,8 +9,8 @@ const SelectedModuleCard = ({
   const [weightage, setWeightage] = useState(0);
 
   const handleWeightageUpdate = (value, index) => {
-    setWeightage(value == "" ? "" : parseInt(value));
-    onWeightageUpdate(value == "" ? 0 : parseInt(value), index);
+    setWeightage(value === "" ? "" : parseInt(value));
+    onWeightageUpdate(value === "" ? 0 : parseInt(value), index);
   };
   return (
     <div class="flex flex-row rounded items-center bg-gray-50 w-auto h-auto shadow-md overflow-hidden my-2 px-4 py-2">
@@ -21,8 +21,8 @@ const SelectedModuleCard = ({
       <div class="mx-2">{courseName}</div>
       <div class="flex items-center ml-auto mr-4">
         <input
-          class="mr-4 w-12 text-gray-800 bg-gray-50 border-gray-500 border-b 
-        placeholder-gray-400 
+          class="mr-8 w-12 text-gray-800 bg-gray-50 border-gray-500 border-b 
+        placeholder-gray-400 text-center no-spin
         focus:outline-none focus:border-purple-500 focus:placeholder-opacity-40"
           placeholder="0"
           value={weightage}
