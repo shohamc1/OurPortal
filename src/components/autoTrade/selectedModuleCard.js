@@ -13,9 +13,17 @@ const SelectedModuleCard = ({
     onWeightageUpdate(value == "" ? 0 : parseInt(value), index);
   };
   return (
+<<<<<<< HEAD
     <div class="flex flex-row rounded items-center bg-gray-50 w-auto h-auto shadow-md overflow-hidden my-2">
       <div class="text-base px-3">{selectionIndex}.</div>
       <div class="w-24 text-lg font-semibold py-2">{courseCode}</div>
+=======
+    <div class="flex flex-row rounded items-center bg-gray-50 w-auto h-auto shadow-md overflow-hidden my-2 px-4 py-2">
+      <div class="text-base px-2 hidden">{selectionIndex} </div>
+      <div class="text-lg xl:text-2xl font-semibold px-2 py-2 w-24 xl:w-32">
+        {courseCode}
+      </div>
+>>>>>>> 60d59f082cfa7ca4726afc4a6b5498016c56639f
       <div class="mx-2">{courseName}</div>
       <div class="flex items-center ml-auto mr-4">
         <input
