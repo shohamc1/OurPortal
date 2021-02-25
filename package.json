@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@reach/router": "^1.3.4",
+    "algoliasearch": "^4.8.5",
     "gatsby": "^2.32.3",
     "gatsby-plugin-postcss": "^3.7.0",
     "gatsby-plugin-react-helmet": "^3.10.0",
@@ -23,7 +24,8 @@
     "postcss": "^8.2.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-helmet": "^6.1.0"
+    "react-helmet": "^6.1.0",
+    "react-instantsearch-dom": "^6.10.0"
   },
   "devDependencies": {
     "tailwindcss": "^2.0.3"

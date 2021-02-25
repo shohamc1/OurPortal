@@ -7,6 +7,7 @@ import Dashboard from "../components/dashboard/dashboard";
 import Login from "../components/auth/login";
 import SignUp from "../components/auth/signup";
 import Trade from "../components/autoTrade/trade";
+import Enroll from "../components/enroll/enroll";
 
 const Index = () => {
   return (
@@ -19,6 +20,7 @@ const Index = () => {
       <Landing path="/" />
       <Dashboard path="dashboard" />
       <Trade path="autotrade" />
+      <Enroll path="enroll" />
     </Router>
   );
 };

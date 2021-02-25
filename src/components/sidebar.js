@@ -34,7 +34,7 @@ const Sidebar = ({ active = "home" }) => {
   }
 
   return (
-    <div class="flex flex-col max-w-1/7 h-screen bg-gray-100 rounded-r-lg">
+    <div class="flex flex-col max-w-1/7 h-screen bg-gray-100 rounded-r-lg sticky top-0">
       {/* header text */}
       <h1 class="font-bold text-4xl xl:text-6xl pl-4 pr-8 py-4 mb-4">
         OurPortal
