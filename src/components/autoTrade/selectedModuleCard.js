@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 
+/**
+ * Card to display user's selected module with configurable text.
+ * @param {number} selectionIndex -
+ * @param {string} courseCode - course code
+ * @param {string} courseName - course name
+ * @function onWeightageUpdate - callback to pass weightage value to trade.js //no idea if this is correct way to document
+ */
+
 const SelectedModuleCard = ({
   selectionIndex,
-  courseName,
   courseCode,
+  courseName,
   onWeightageUpdate,
 }) => {
   const [weightage, setWeightage] = useState("");
@@ -25,7 +33,7 @@ const SelectedModuleCard = ({
       <div class="mx-2 xl:text-lg">{courseName}</div>
       <div class="flex items-center ml-auto mr-4">
         <input
-          class="mr-4 w-12 2xl:w-14 2xl:text-lg text-gray-800 bg-gray-50 border-gray-500 border-b 
+          class="mr-4 w-12 2xl:w-14 xl:text-lg text-gray-800 bg-gray-50 border-gray-500 border-b 
         placeholder-gray-400 text-center no-spin 
         focus:outline-none focus:border-purple-500 focus:placeholder-opacity-40"
           placeholder="0"
