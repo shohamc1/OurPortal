@@ -26,7 +26,7 @@ module.exports = {
           red: "#F19DA2",
           yellow: "#FCDCA1",
           blue: "#ACF0FF",
-          orange: "#FFDFBA",
+          turquoise: "#ACE8DC",
         },
       },
       borderRadius: {

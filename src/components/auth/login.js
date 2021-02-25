@@ -11,6 +11,7 @@ const Login = () => {
         <div class="flex flex-col rounded-lg bg-gray-300 p-4 px-6 mb-8">
           <span class="font-semibold text-lg">Username</span>
           <input
+            type="email"
             class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
             placeholder="john_doe"
           />

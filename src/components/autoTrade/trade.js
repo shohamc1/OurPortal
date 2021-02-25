@@ -117,7 +117,7 @@ const Trade = () => {
           />
           <div class="flex flex-row mt-auto items-center">
             <p class="font-bold text-xl inline-block">Remaining Weightage:</p>
-            <div class="bg-red-700 text-white opacity-90 text-sm font-bold p-2 m-2 rounded-md text-xl">
+            <div class="bg-red-700 text-white opacity-90 font-bold p-2 m-2 rounded-md text-xl">
               {remainingWeightage}
             </div>
             <button class="secondary-button rounded py-2 mr-2 xl:px-10 ml-auto xl:mr-4 text-white text-xl w-1/5">

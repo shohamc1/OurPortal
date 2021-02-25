@@ -5,7 +5,7 @@ import ModuleCard from "./moduleCard";
 const Hits = ({ hits }) => {
   return (
     <>
-      {hits.length != 0 ? (
+      {hits.length !== 0 ? (
         <>
           <div class="pl-6 grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             {hits.map((item, index) => (
