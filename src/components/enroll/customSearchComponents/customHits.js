@@ -15,6 +15,7 @@ const Hits = ({ hits }) => {
                   courseName={item.title}
                   instructorFirstName={item.instructor}
                   instructorLastName={item.instructor}
+                  type={item.type}
                   key={index}
                 />
               </>
