@@ -1,8 +1,10 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 
 const Login = () => {
   return (
     <div class="flex w-screen h-screen">
+      <Helmet title="Login | OurPortal" />
       <div class="flex my-auto mx-auto flex-col">
         <span class="text-8xl font-bold tracking-tight">OurPortal</span>
         <span class="text-4xl font-bold mb-8 tracking-tight">

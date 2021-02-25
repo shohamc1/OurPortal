@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 
 import Sidebar from "../sidebar";
 import Header from "../header";
@@ -13,6 +14,7 @@ const Request = () => {
   };
   return (
     <div class="flex">
+      <Helmet title="P2P Trade Request | OurPortal" />
       <Sidebar active="peer" />
       <div class="flex flex-col flex-grow h-screen">
         <Header pageName="P2P Trade Request" />
@@ -40,7 +42,9 @@ const Request = () => {
           <div class="grid grid-flow-col grid-cols-auto my-auto">
             <div class="flex flex-col">
               {/* your current module */}
-              <span class="text-4xl font-bold">Your Current Module</span>
+              <span class="text-4xl font-bold text-justify">
+                Your Current Module
+              </span>
               <Card
                 courseCode="50.004"
                 courseName="Introduction to Bullshit"
@@ -81,7 +85,9 @@ const Request = () => {
 
             <div class="flex flex-col">
               {/* recipient */}
-              <span class="text-4xl font-bold">Recipient's Details</span>
+              <span class="text-4xl font-bold text-justify">
+                Recipient's Details
+              </span>
               <div class="flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md mr-6 mb-6 p-2">
                 <div class="my-auto">
                   <span class="font-semibold text-lg">Email</span>

@@ -1,4 +1,5 @@
-import * as React from "react";
+import React from "react";
+import { Helmet } from "react-helmet";
 
 import Sidebar from "../sidebar";
 import Header from "../header";
@@ -7,6 +8,7 @@ import Card from "../card";
 const Dashboard = () => {
   return (
     <div class="flex">
+      <Helmet title="Overview | OurPortal" />
       <Sidebar active="home" />
       <div class="flex flex-col flex-grow">
         <Header pageName="Overview" />

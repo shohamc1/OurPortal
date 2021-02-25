@@ -1,10 +1,13 @@
 import React from "react";
+import { Helmet } from "react-helmet";
+
 import { Link } from "gatsby";
 import OriToor from "../../assets/oritoor.jpg";
 
 const Landing = () => {
   return (
     <div class="flex w-screen h-screen">
+      <Helmet title="OurPortal" />
       <img
         src={OriToor}
         class="object-cover md:w-1/2 w-auto h-auto"

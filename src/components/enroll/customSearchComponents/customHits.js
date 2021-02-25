@@ -13,8 +13,8 @@ const Hits = ({ hits }) => {
                 <ModuleCard
                   courseCode={item.subject_code}
                   courseName={item.title}
-                  instructorFirstName={item.instructor}
-                  instructorLastName={item.instructor}
+                  instructorFirstName={item.instructor_first_name}
+                  instructorLastName={item.instructor_last_name}
                   type={item.type}
                   key={index}
                 />
