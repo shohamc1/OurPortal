@@ -21,8 +21,12 @@ module.exports = {
           700: "#2A00A2",
           500: "#5F2EEA",
         },
-        mint: {
-          DEFAULT: "#86EDD1",
+        pastel: {
+          mint: "#ABFFE8",
+          red: "#F19DA2",
+          yellow: "#FCDCA1",
+          blue: "#ACF0FF",
+          turquoise: "#ACE8DC",
         },
       },
       borderRadius: {

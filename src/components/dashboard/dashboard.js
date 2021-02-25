@@ -12,12 +12,13 @@ const Dashboard = () => {
         <Header pageName="Overview" />
         <div class="pl-6 pt-4">
           <div class="text-5xl font-light mb-4">Good morning, firstname</div>
-          <div class="flex flex-row flex-wrap">
+          <div class="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             <Card
               courseCode="30.001"
               courseName="Ayylmao"
               instructorFirstName="Yang Huei"
               instructorLastName="Pang"
+              type="HASS"
             />
 
             <Card
@@ -25,6 +26,7 @@ const Dashboard = () => {
               courseName="ggezpz"
               instructorFirstName="Yang Huei"
               instructorLastName="Pang"
+              type="EPD"
             />
 
             <Card
@@ -32,6 +34,7 @@ const Dashboard = () => {
               courseName="wth"
               instructorFirstName="Yang Huei"
               instructorLastName="Pang"
+              type="ISTD"
             />
 
             <Card
@@ -39,6 +42,15 @@ const Dashboard = () => {
               courseName="aaaa"
               instructorFirstName="Yang Huei"
               instructorLastName="Pang"
+              type="ESD"
+            />
+
+            <Card
+              courseCode="30.004"
+              courseName="aaaa"
+              instructorFirstName="Yang Huei"
+              instructorLastName="Pang"
+              type="ASD"
             />
           </div>
         </div>
