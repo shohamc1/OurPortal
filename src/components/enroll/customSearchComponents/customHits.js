@@ -1,8 +1,10 @@
 import React from "react";
 import { connectHits } from "react-instantsearch-dom";
 import ModuleCard from "./moduleCard";
+import {useUser} from "../../../contexts/userContext";
 
 const Hits = ({ hits }) => {
+  const user = useUser();
   return (
     <>
       {hits.length !== 0 ? (

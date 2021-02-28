@@ -11,21 +11,25 @@ import Enroll from "../components/enroll/enroll";
 import Request from "../components/p2ptrade/request";
 import ConfirmTrade from "../components/p2ptrade/confirmTrade";
 
+import { UserProvider } from "../contexts/userContext";
+
 const Index = () => {
   return (
-    <Router basepath="/">
-      <NotFoundPage default />
+    <UserProvider>
+      <Router basepath="/">
+        <NotFoundPage default />
 
-      <Login path="/login" />
-      <SignUp path="/signup" />
+        <Login path="/login" />
+        <SignUp path="/signup" />
 
-      <Landing path="/" />
-      <Dashboard path="dashboard" />
-      <Trade path="autotrade" />
-      <Enroll path="enroll" />
-      <Request path="request" />
-      <ConfirmTrade path="trade/:id" />
-    </Router>
+        <Landing path="/" />
+        <Dashboard path="dashboard" />
+        <Trade path="autotrade" />
+        <Enroll path="enroll" />
+        <Request path="request" />
+        <ConfirmTrade path="trade/:id" />
+      </Router>
+    </UserProvider>
   );
 };
 
