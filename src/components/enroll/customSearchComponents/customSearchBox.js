@@ -34,7 +34,7 @@ const SearchBox = ({ currentRefinement, refine }) => (
     </svg>
 
     <input
-      class="w-auto flex-grow placeholder-gray-500 text-lg"
+      class="w-auto flex-grow placeholder-gray-500 text-lg font-medium"
       type="input"
       placeholder="Search"
       value={currentRefinement}
