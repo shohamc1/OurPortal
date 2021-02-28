@@ -25,7 +25,10 @@ const Hits = ({ hits }) => {
           </div>
         </>
       ) : (
-        <span>No results</span>
+        <div class="ml-4 flex flex-col">
+          <span class="text-3xl font-bold">No results 😞</span>
+          <span class="text-xl font-medium">Try changing your search term.</span>
+        </div>
       )}
     </>
   );
