@@ -3,8 +3,6 @@ import { Helmet } from "react-helmet";
 import firebase from "firebase";
 import "firebase/auth";
 
-import { AuthContext } from "../../context/authContext";
-
 var firebaseConfig = {
   apiKey: "AIzaSyCsNTpDcTDvEvjGdNrCECgQ5vnWga2pO9s",
   authDomain: "ourportal-e0a9c.firebaseapp.com",
@@ -19,7 +17,6 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const Login = () => {
-  const { user } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signInError, setSignInError] = useState(false);
@@ -47,16 +44,14 @@ const Login = () => {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(function (user) {
-        //Add to database
+        // Add to database
         // firebase
         //   .database()
         //   .ref("users/" + user.user.uid)
         //   .update({
-        //     name: "Anonymous",
         //     email: user.user.email,
         //     source: user.user.providerData[0].providerId,
         //     uid: user.user.uid,
-        //     tier: "basic",
         //   });
       })
       .catch(function (error) {
