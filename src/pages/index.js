@@ -11,11 +11,11 @@ import Enroll from "../components/enroll/enroll";
 import Request from "../components/p2ptrade/request";
 import ConfirmTrade from "../components/p2ptrade/confirmTrade";
 
-import { UserProvider } from "../contexts/userContext";
+import { AuthProvider } from "../context/authContext";
 
 const Index = () => {
   return (
-    <UserProvider>
+    <AuthProvider>
       <Router basepath="/">
         <NotFoundPage default />
 
@@ -29,7 +29,7 @@ const Index = () => {
         <Request path="request" />
         <ConfirmTrade path="trade/:id" />
       </Router>
-    </UserProvider>
+    </AuthProvider>
   );
 };
 

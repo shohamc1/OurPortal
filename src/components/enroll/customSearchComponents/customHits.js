@@ -1,7 +1,7 @@
 import React from "react";
 import { connectHits } from "react-instantsearch-dom";
 import ModuleCard from "./moduleCard";
-import {useUser} from "../../../contexts/userContext";
+import { useUser } from "../../../context/authContext";
 
 const Hits = ({ hits }) => {
   const user = useUser();
@@ -27,7 +27,9 @@ const Hits = ({ hits }) => {
       ) : (
         <div class="ml-4 flex flex-col">
           <span class="text-3xl font-bold">No results 😞</span>
-          <span class="text-xl font-medium">Try changing your search term.</span>
+          <span class="text-xl font-medium">
+            Try changing your search term.
+          </span>
         </div>
       )}
     </>

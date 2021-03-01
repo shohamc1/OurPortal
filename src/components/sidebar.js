@@ -1,6 +1,6 @@
 import React from "react";
 
-import Cart from "./enroll/cart";
+import Cart from "./enroll/cart/cart";
 
 /**
  * Sidebar with configurable highlight

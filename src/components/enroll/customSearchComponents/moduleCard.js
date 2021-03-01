@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { useUser } from "../../../contexts/userContext";
+import { useUser } from "../../../context/authContext";
 
 const Status = ({ statusType }) => {
   var fillColour = "#34EAB9";
@@ -39,13 +39,13 @@ const ModuleCard = ({
   courseCode,
   instructorFirstName,
   instructorLastName,
-  type
+  type,
 }) => {
   const user = useUser();
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
-    setAdded(user.cart.map(m => m.courseCode).includes(courseCode));
+    setAdded(user.cart.map((m) => m.courseCode).includes(courseCode));
   }, [courseCode, user.cart]);
 
   var focusColor = "bg-gray-500";
