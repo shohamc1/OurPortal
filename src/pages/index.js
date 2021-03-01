@@ -12,21 +12,23 @@ import Request from "../components/p2ptrade/request";
 import ConfirmTrade from "../components/p2ptrade/confirmTrade";
 
 import { AuthProvider } from "../context/authContext";
+import OnlyPublicRoute from "../routes/onlyPublicRoute";
+import OnlyPrivateRoute from "../routes/onlyPrivateRoute";
 
 const Index = () => {
   return (
     <AuthProvider>
       <Router basepath="/">
         <NotFoundPage default />
-
-        <Login path="/login" />
-        <SignUp path="/signup" />
-
         <Landing path="/" />
-        <Dashboard path="dashboard" />
-        <Trade path="autotrade" />
-        <Enroll path="enroll" />
-        <Request path="request" />
+
+        <OnlyPublicRoute component={Login} path="/login" />
+        <OnlyPublicRoute component={SignUp} path="/signup" />
+
+        <OnlyPrivateRoute component={Dashboard} path="dashboard" />
+        <OnlyPrivateRoute component={Trade} path="autotrade" />
+        <OnlyPrivateRoute component={Enroll} path="enroll" />
+        <OnlyPrivateRoute component={Request} path="request" />
         <ConfirmTrade path="trade/:id" />
       </Router>
     </AuthProvider>
