@@ -23,6 +23,9 @@ const Hits = ({ hits }) => {
               </>
             ))}
           </div>
+          <div class="mx-auto text-center text-xs font-light">
+            You have reached the end of results. 😶
+          </div>
         </>
       ) : (
         <div class="ml-4 flex flex-col">

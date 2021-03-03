@@ -72,6 +72,8 @@ const Login = () => {
         <div class="flex flex-col rounded-lg bg-gray-300 p-4 px-6 mb-8">
           <span class="font-semibold text-lg">Email</span>
           <input
+            name="email"
+            autoComplete="username"
             type="email"
             class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
             placeholder="john_doe@mymail.sutd.edu.sg"
@@ -80,6 +82,8 @@ const Login = () => {
           />
           <span class="font-semibold text-lg">Password</span>
           <input
+            name="current-password"
+            autoComplete="current-password"
             type="password"
             class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
             placeholder="********"
