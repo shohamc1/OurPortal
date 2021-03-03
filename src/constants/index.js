@@ -1,7 +1,7 @@
 const STATUS_COLOUR = {
   Available: "#34EAB9",
-  "Filling Fast": "FFD789",
-  Full: "ED2E7E",
+  "Filling Fast": "#FFD789",
+  Full: "#ED2E7E",
 };
 
 const MODULE_CARD_COLOUR = {

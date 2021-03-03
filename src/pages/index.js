@@ -25,9 +25,9 @@ const Index = () => {
         <OnlyPublicRoute component={Login} path="/login" />
         <OnlyPublicRoute component={SignUp} path="/signup" />
 
-        <OnlyPrivateRoute component={Dashboard} path="dashboard" />
+        <OnlyPublicRoute component={Dashboard} path="dashboard" />
         <OnlyPrivateRoute component={Trade} path="autotrade" />
-        <OnlyPrivateRoute component={Enroll} path="enroll" />
+        <OnlyPublicRoute component={Enroll} path="enroll" />
         <OnlyPrivateRoute component={Request} path="request" />
         <ConfirmTrade path="trade/:id" />
       </Router>

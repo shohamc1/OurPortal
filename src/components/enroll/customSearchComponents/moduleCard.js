@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
-
 import { useUser } from "../../../context/authContext";
 import CONSTANTS from "../../../constants";
+
+import firebase from "firebase";
+import "firebase/database";
+
+var database = firebase.database();
 
 const Status = ({ statusType }) => {
   const { STATUS_COLOUR, MODULE_COLOUR } = CONSTANTS;
@@ -35,18 +39,59 @@ const ModuleCard = ({
   const { MODULE_CARD_COLOUR } = CONSTANTS;
   const user = useUser();
   const [added, setAdded] = useState(false);
+  const [available, setAvailable] = useState("Full");
 
   useEffect(() => {
     setAdded(user.cart.map((m) => m.courseCode).includes(courseCode));
   }, [courseCode, user.cart]);
 
+  var number = database.ref("avail").child(courseCode.replace(".", ""));
+  useEffect(() => {
+    number.on("value", (snapshot) => {
+      var data = snapshot.val();
+      console.log(data);
+      if (data == 0) {
+        setAvailable("Full");
+      } else if (data < 10) {
+        setAvailable("Filling Fast");
+      } else {
+        setAvailable("Available");
+      }
+
+      if (data == null) {
+        setAvailable("Full");
+      }
+    });
+  });
+
+  // var focusColor = "bg-gray-500";
+  // switch (type) {
+  //   case "EPD":
+  //     focusColor = "bg-pastel-mint";
+  //     break;
+  //   case "HASS":
+  //     focusColor = "bg-pastel-red";
+  //     break;
+  //   case "ISTD":
+  //     focusColor = "bg-pastel-turquoise";
+  //     break;
+  //   case "ESD":
+  //     focusColor = "bg-pastel-blue";
+  //     break;
+  //   case "ASD":
+  //     focusColor = "bg-pastel-yellow";
+  //     break;
+  //   default:
+  //     focusColor = "bg-gray-500";
+  //     break;
+  // }
   var focusColor = MODULE_CARD_COLOUR[type]
     ? MODULE_CARD_COLOUR[type]
     : MODULE_CARD_COLOUR.DEFAULT;
 
   const addToCart = () => {
     setAdded(true);
-    user.setCart([...user.cart, { courseCode, type, status: "Available" }]);
+    user.setCart([...user.cart, { courseCode, type, status: available }]);
   };
 
   const removeFromCart = () => {
@@ -63,7 +108,7 @@ const ModuleCard = ({
         <span class="text-lg">{courseName}</span>
         <div class="flex pb-2 pr-4 mt-auto">
           <div class="flex flex-col">
-            <Status statusType="Available" />
+            <Status statusType={available} />
             <span class="text-sm font-light">{instructorLastName}</span>
             <span class="text-sm font-light">{instructorFirstName}</span>
           </div>
