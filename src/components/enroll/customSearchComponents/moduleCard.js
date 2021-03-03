@@ -1,23 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 import { useUser } from "../../../context/authContext";
+import { STATUS_COLOUR, MODULE_COLOUR } from "../../../constants";
 
 const Status = ({ statusType }) => {
-  var fillColour = "#34EAB9";
-  switch (statusType) {
-    case "Available":
-      fillColour = "#34EAB9";
-      break;
-    case "Filling Fast":
-      fillColour = "#FFD789";
-      break;
-    case "Full":
-      fillColour = "#ED2E7E";
-      break;
-    default:
-      fillColour = "#34EAB9";
-      break;
-  }
+  var fillColour = STATUS_COLOUR[statusType]
+    ? STATUS_COLOUR[statusType]
+    : STATUS_COLOUR["Available"];
+
   return (
     <div class="flex flex-row items-center mb-2">
       <svg
@@ -48,27 +38,9 @@ const ModuleCard = ({
     setAdded(user.cart.map((m) => m.courseCode).includes(courseCode));
   }, [courseCode, user.cart]);
 
-  var focusColor = "bg-gray-500";
-  switch (type) {
-    case "EPD":
-      focusColor = "bg-pastel-mint";
-      break;
-    case "HASS":
-      focusColor = "bg-pastel-red";
-      break;
-    case "ISTD":
-      focusColor = "bg-pastel-turquoise";
-      break;
-    case "ESD":
-      focusColor = "bg-pastel-blue";
-      break;
-    case "ASD":
-      focusColor = "bg-pastel-yellow";
-      break;
-    default:
-      focusColor = "bg-gray-500";
-      break;
-  }
+  var focusColor = `bg-${
+    MODULE_COLOUR[type] ? MODULE_COLOUR[type] : MODULE_COLOUR.DEFAULT
+  }`;
 
   const addToCart = () => {
     setAdded(true);

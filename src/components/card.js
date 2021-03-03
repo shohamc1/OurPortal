@@ -1,5 +1,7 @@
 import React from "react";
 
+import { MODULE_COLOUR } from "../constants";
+
 const Card = ({
   courseName,
   courseCode,
@@ -7,27 +9,9 @@ const Card = ({
   instructorLastName,
   type,
 }) => {
-  var focusColor = "bg-gray-200";
-  switch (type) {
-    case "EPD":
-      focusColor = "bg-pastel-mint";
-      break;
-    case "HASS":
-      focusColor = "bg-pastel-red";
-      break;
-    case "ISTD":
-      focusColor = "bg-pastel-turquoise";
-      break;
-    case "ESD":
-      focusColor = "bg-pastel-blue";
-      break;
-    case "ASD":
-      focusColor = "bg-pastel-yellow";
-      break;
-    default:
-      focusColor = "bg-gray-300";
-      break;
-  }
+  var focusColor = `bg-${
+    MODULE_COLOUR[type] ? MODULE_COLOUR[type] : MODULE_COLOUR.DEFAULT
+  }`;
 
   return (
     <div class="relative flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md overflow-hidden mr-6 mb-6">
