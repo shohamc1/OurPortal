@@ -1,16 +1,17 @@
 import React from "react";
 import { useUser } from "../../../context/authContext";
-import { STATUS_COLOUR, MODULE_COLOUR } from "../../../constants";
+import CONSTANTS from "../../../constants";
 
 const ModuleTab = ({ courseCode, status, type }) => {
   const user = useUser();
+  const { MODULE_TAB_COLOUR, STATUS_COLOUR } = CONSTANTS;
 
   var fillColour = STATUS_COLOUR[status]
     ? STATUS_COLOUR[status]
     : STATUS_COLOUR["Available"];
-  var focusColor = `border-${
-    MODULE_COLOUR[type] ? MODULE_COLOUR[type] : MODULE_COLOUR.DEFAULT
-  }`;
+  var focusColor = MODULE_TAB_COLOUR[type]
+    ? MODULE_TAB_COLOUR[type]
+    : MODULE_TAB_COLOUR.DEFAULT;
 
   const removeFromCart = () => {
     user.setCart(user.cart.filter((m) => m.courseCode !== courseCode));

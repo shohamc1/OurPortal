@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 import { useUser } from "../../../context/authContext";
-import { STATUS_COLOUR, MODULE_COLOUR } from "../../../constants";
+import CONSTANTS from "../../../constants";
 
 const Status = ({ statusType }) => {
+  const { STATUS_COLOUR, MODULE_COLOUR } = CONSTANTS;
   var fillColour = STATUS_COLOUR[statusType]
     ? STATUS_COLOUR[statusType]
     : STATUS_COLOUR["Available"];
@@ -31,6 +32,7 @@ const ModuleCard = ({
   instructorLastName,
   type,
 }) => {
+  const { MODULE_CARD_COLOUR } = CONSTANTS;
   const user = useUser();
   const [added, setAdded] = useState(false);
 
@@ -38,9 +40,9 @@ const ModuleCard = ({
     setAdded(user.cart.map((m) => m.courseCode).includes(courseCode));
   }, [courseCode, user.cart]);
 
-  var focusColor = `bg-${
-    MODULE_COLOUR[type] ? MODULE_COLOUR[type] : MODULE_COLOUR.DEFAULT
-  }`;
+  var focusColor = MODULE_CARD_COLOUR[type]
+    ? MODULE_CARD_COLOUR[type]
+    : MODULE_CARD_COLOUR.DEFAULT;
 
   const addToCart = () => {
     setAdded(true);
