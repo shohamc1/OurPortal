@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import "firebase/auth";
 
 var firebaseConfig = {

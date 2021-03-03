@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "../../../context/authContext";
 import CONSTANTS from "../../../constants";
 
-import firebase from "firebase";
+import firebase from "firebase/app";
 import "firebase/database";
 
 var database = firebase.database();
