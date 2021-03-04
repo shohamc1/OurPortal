@@ -10,12 +10,14 @@ const Landing = () => {
       <Helmet title="OurPortal" />
       <img
         src={OriToor}
-        class="object-cover md:w-1/2 w-auto h-auto"
+        class="hidden md:flex object-cover md:w-1/2 w-auto h-auto"
         alt="Focus"
       />
-      <div class="my-auto flex flex-col p-8">
-        <span class="text-8xl font-bold tracking-tight">OurPortal</span>
-        <span class="text-4xl font-bold mb-8 tracking-tight">
+      <div class="mx-auto w-full md:w-auto md:mx-0 my-auto flex flex-col px-2 md:p-8">
+        <span class="text-6xl md:text-8xl font-bold tracking-tight">
+          OurPortal
+        </span>
+        <span class="text-3xl md:text-4xl font-bold mb-8 tracking-tight">
           Get your mods
         </span>
         <Link
