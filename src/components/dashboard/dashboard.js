@@ -26,19 +26,26 @@ const Dashboard = () => {
     fetchData();
   }, [userUID]);
 
-  const fetchData = async () => {
-    var doc = await db.doc(user.uid).get();
-    var data = doc.data();
-    setFirstName(data.firstName);
+  const fetchData = () => {
+    db.doc(user.uid)
+      .get()
+      .then((doc) => {
+        var data = doc.data();
+        setFirstName(data.firstName);
 
-    var modulesArray = data.modules;
-    var modulesData = [];
-    var doc1 = "";
-    modulesArray.forEach(async function (item) {
-      doc1 = await moduleDB.doc(item).get();
-      modulesData.push(doc1.data());
-    });
-    setModules(modulesData);
+        var modulesArray = data.modules;
+        var modulesData = [];
+        modulesArray.forEach(function (item) {
+          moduleDB
+            .doc(item)
+            .get()
+            .then((doc) => {
+              modulesData.push(doc.data());
+            });
+        });
+        setModules(modulesData);
+        console.log(modulesData);
+      });
   };
 
   return (
