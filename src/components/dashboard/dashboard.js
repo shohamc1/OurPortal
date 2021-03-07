@@ -11,7 +11,7 @@ import { AuthContext } from "../../context/authContext";
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const [userUID, setUserUID] = useState(null);
-  const [firstName, setFirstName] = useState("Hugh");
+  const [firstName, setFirstName] = useState("");
   const [modules, setModules] = useState([]);
   const db = firebase.firestore().collection("users");
   const moduleDB = firebase.firestore().collection("modules");
@@ -35,16 +35,22 @@ const Dashboard = () => {
 
         var modulesArray = data.modules;
         var modulesData = [];
+        var promises = [];
+
         modulesArray.forEach(function (item) {
-          moduleDB
-            .doc(item)
-            .get()
-            .then((doc) => {
-              modulesData.push(doc.data());
-            });
+          promises.push(
+            moduleDB
+              .doc(item)
+              .get()
+              .then((doc) => {
+                modulesData.push(doc.data());
+              })
+          );
         });
-        setModules(modulesData);
-        console.log(modulesData);
+
+        Promise.all(promises).then(() => {
+          setModules(modulesData);
+        });
       });
   };
 
