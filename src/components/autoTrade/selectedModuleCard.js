@@ -16,12 +16,20 @@ const SelectedModuleCard = ({
 }) => {
   const [weightage, setWeightage] = useState("");
   const handleWeightageUpdate = (value, index) => {
+    // if (value.includes("-") || value.includes("+") || value.includes(".")) {
+    //   setWeightage("");
+    // }
     let w = parseInt(value);
     if (w > 100) {
       setWeightage(value.slice(0, -1));
     } else {
       setWeightage(value === "" ? "" : w);
       onWeightageUpdate(value === "" ? 0 : w, index);
+    }
+  };
+  const checkInvalidInput = (e) => {
+    if ("Ee+-.".includes(e.key)) {
+      e.preventDefault();
     }
   };
   return (
@@ -38,13 +46,11 @@ const SelectedModuleCard = ({
         focus:outline-none focus:border-purple-500 focus:placeholder-opacity-40"
           placeholder="0"
           value={weightage.toString()}
+          onKeyDown={checkInvalidInput}
           onChange={(e) =>
             handleWeightageUpdate(e.target.value, selectionIndex - 1)
           }
           type="number"
-          min="0"
-          max="100"
-          maxLength={3}
         ></input>
         <span class="cursor-pointer inline-block ">
           <svg
