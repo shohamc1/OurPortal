@@ -3,11 +3,16 @@ import { Helmet } from "react-helmet";
 
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/firestore";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [signUpError, setSignUpError] = useState(false);
+
+  const db = firebase.firestore().collection("users");
 
   const handleEmailChange = (event) => {
     const target = event.target;
@@ -23,10 +28,34 @@ const Signup = () => {
     setPassword(value);
   };
 
+  const handleFirstNameChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+
+    setFirstName(value);
+  };
+
+  const handleLastNameChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+
+    setLastName(value);
+  };
+
   const signUpProc = () => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
+      .then(function (user) {
+        console.log(user);
+        db.doc(user.user.uid).set({
+          firstName: firstName,
+          lastName: lastName,
+          email: user.user.email,
+          uid: user.user.uid,
+          modules: [],
+        });
+      })
       .catch(function (error) {
         var errorMessage = error.message;
         setSignUpError(errorMessage);
@@ -44,8 +73,11 @@ const Signup = () => {
           Get your mods
         </span>
         <div class="flex flex-col rounded-lg bg-gray-300 p-4 px-6 mb-8">
-          <span class="font-semibold text-lg">Username</span>
+          <span class="font-semibold text-lg">Email</span>
           <input
+            name="email"
+            autoComplete="email"
+            type="email"
             class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
             placeholder="john_doe@mymail.sutd.edu.sg"
             value={email}
@@ -53,11 +85,31 @@ const Signup = () => {
           />
           <span class="font-semibold text-lg">Password</span>
           <input
+            name="current-password"
+            autoComplete="current-password"
             type="password"
             class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
             placeholder="********"
             value={password}
             onChange={handlePasswordChange}
+          />
+          <span class="font-semibold text-lg">First Name</span>
+          <input
+            autoComplete="given-name"
+            type="text"
+            class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
+            placeholder="Hugh"
+            value={firstName}
+            onChange={handleFirstNameChange}
+          />
+          <span class="font-semibold text-lg">Last Name</span>
+          <input
+            autoComplete="family-name"
+            type="text"
+            class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
+            placeholder="Jass"
+            value={lastName}
+            onChange={handleLastNameChange}
           />
         </div>
         <button

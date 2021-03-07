@@ -75,7 +75,7 @@ const Login = () => {
           <span class="font-semibold text-lg">Email</span>
           <input
             name="email"
-            autoComplete="username"
+            autoComplete="email"
             type="email"
             class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
             placeholder="john_doe@mymail.sutd.edu.sg"
