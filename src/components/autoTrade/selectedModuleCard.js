@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useUser } from "../../context/authContext";
 
 /**
  * Card to display user's selected module with configurable text.
@@ -12,18 +13,27 @@ const SelectedModuleCard = ({
   selectionIndex,
   courseCode,
   courseName,
+  weightage,
   onWeightageUpdate,
 }) => {
-  const [weightage, setWeightage] = useState("");
+  const user = useUser();
+
   const handleWeightageUpdate = (value, index) => {
-    // if (value.includes("-") || value.includes("+") || value.includes(".")) {
-    //   setWeightage("");
-    // }
     let w = parseInt(value);
     if (w > 100) {
-      setWeightage(value.slice(0, -1));
+      user.setAutoTradeModules(
+        user.autoTradeModules.map((m) =>
+          m.courseCode == courseCode
+            ? { ...m, weightage: parseInt(value.slice(0, -1)) }
+            : m
+        )
+      );
     } else {
-      setWeightage(value === "" ? "" : w);
+      user.setAutoTradeModules(
+        user.autoTradeModules.map((m, i) =>
+          i == index ? { ...m, weightage: w } : m
+        )
+      );
       onWeightageUpdate(value === "" ? 0 : w, index);
     }
   };
@@ -32,6 +42,14 @@ const SelectedModuleCard = ({
       e.preventDefault();
     }
   };
+
+  const removeFromAutoTradeModules = () => {
+    user.setAutoTradeModules(
+      user.autoTradeModules.filter((m) => m.courseCode !== courseCode)
+    );
+    onWeightageUpdate(0, selectionIndex - 1);
+  };
+
   return (
     <div class="flex flex-row rounded items-center 2xl:self-center bg-gray-50 w-auto 2xl:w-3/4 h-auto shadow-md overflow-hidden my-2 px-4 py-2">
       <div class="text-base px-2 hidden">{selectionIndex} </div>
@@ -52,7 +70,10 @@ const SelectedModuleCard = ({
           }
           type="number"
         ></input>
-        <span class="cursor-pointer inline-block ">
+        <span
+          class="cursor-pointer inline-block "
+          onClick={removeFromAutoTradeModules}
+        >
           <svg
             class="stroke-current text-gray-500 stroke-2 hover:text-red-700"
             width="24"

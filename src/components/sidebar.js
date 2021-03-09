@@ -46,7 +46,7 @@ const Sidebar = ({ active = "home" }) => {
 
       {/* nav buttons */}
 
-      {active == "enroll" ? (
+      {active == "enroll" || active == "trade-search" ? (
         <Cart />
       ) : (
         <>

@@ -6,7 +6,7 @@ import "firebase/firestore";
 import Sidebar from "../sidebar";
 import Header from "../header";
 import Card from "../card";
-import { AuthContext } from "../../context/authContext";
+import { AuthContext, useUser } from "../../context/authContext";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -15,6 +15,11 @@ const Dashboard = () => {
   const [modules, setModules] = useState([]);
   const db = firebase.firestore().collection("users");
   const moduleDB = firebase.firestore().collection("modules");
+  const userObject = useUser();
+
+  useEffect(() => {
+    userObject.setActivePage("home");
+  }, []);
 
   useEffect(() => {
     if (user !== null) {

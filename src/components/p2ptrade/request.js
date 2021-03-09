@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
 import Sidebar from "../sidebar";
 import Header from "../header";
 import Card from "../card";
+import { useUser } from "../../context/authContext";
 
 const Request = () => {
   const [info, setInfo] = useState(true);
+  const user = useUser();
+
+  useEffect(() => {
+    user.setActivePage("peer");
+  }, []);
 
   const closeInfo = (e) => {
     e.preventDefault();

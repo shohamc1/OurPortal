@@ -14,7 +14,13 @@ const ModuleTab = ({ courseCode, status, type }) => {
     : MODULE_TAB_COLOUR.DEFAULT;
 
   const removeFromCart = () => {
-    user.setCart(user.cart.filter((m) => m.courseCode !== courseCode));
+    if (user.activePage == "enroll") {
+      user.setCart(user.cart.filter((m) => m.courseCode !== courseCode));
+    } else if (user.activePage == "auto-search") {
+      user.setAutoTradeModules(
+        user.autoTradeModules.filter((m) => m.courseCode !== courseCode)
+      );
+    }
   };
 
   return (

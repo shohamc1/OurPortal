@@ -8,7 +8,9 @@ const AuthContext = React.createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
+  const [autoTradeModules, setAutoTradeModules] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activePage, setActivePage] = useState("home");
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -24,6 +26,10 @@ const AuthProvider = ({ children }) => {
         loading,
         cart,
         setCart,
+        autoTradeModules,
+        setAutoTradeModules,
+        activePage,
+        setActivePage,
       }}
     >
       {children}

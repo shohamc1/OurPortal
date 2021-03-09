@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+// TODO: limit search to only include HASS mods
+// TODO: integrate autoTradeModules into Firebase
+
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
 import Sidebar from "../sidebar";
 import Header from "../header";
 import CurrentModuleCard from "./currentModuleCard";
 import SelectedModuleCard from "./selectedModuleCard";
+import AlgoliaMainContent from "../enroll/algoliaMainContent";
+import { useUser } from "../../context/authContext";
+import EmptyModuleCard from "./emptyModuleCard";
 
 const Trade = () => {
+  const user = useUser();
   const [info, setInfo] = useState(true);
   const [remainingWeightage, setRemainingWeightage] = useState(100);
-  const [weightages, setWeightages] = useState([0, 0, 0]);
   const [invalidWeightage, setInvalidWeightage] = useState(false);
   console.log(info);
+
+  useEffect(() => {
+    user.setActivePage("auto");
+  }, []);
+  console.log(user);
 
   const closeInfo = (e) => {
     e.preventDefault();
@@ -19,17 +30,51 @@ const Trade = () => {
   };
 
   const updateWeightages = (value, index) => {
+    const weightages = user.autoTradeModules.map((m) => m.weightage);
     let sum = value;
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < weightages.length; i++) {
       if (i !== index) {
         sum += weightages[i];
       }
     }
     setRemainingWeightage(100 - sum);
-    setWeightages(weightages.map((w, i) => (i === index ? value : w)));
     setInvalidWeightage(100 - sum >= 0 ? false : true);
   };
 
+  const selectedModules = user.autoTradeModules.length
+    ? user.autoTradeModules
+        .map((m, i) => (
+          <SelectedModuleCard
+            courseCode={m.courseCode}
+            courseName={m.courseName}
+            weightage={m.weightage}
+            selectionIndex={i + 1}
+            onWeightageUpdate={updateWeightages}
+          />
+        ))
+        .concat([
+          ...Array(3 - user.autoTradeModules.length).fill(<EmptyModuleCard />),
+        ])
+    : [1, 2, 3].map((m) => <EmptyModuleCard />);
+
+  const displaySearch = () => {
+    user.setActivePage("auto-search");
+  };
+
+  if (user.activePage == "auto-search") {
+    return (
+      <div class="flex">
+        <Helmet title="Auto Trade | OurPortal" />
+        <Sidebar active="trade-search" />
+        <div class="flex flex-col flex-grow">
+          <Header pageName="Auto Trade" />
+          <div class="h-full">
+            <AlgoliaMainContent />
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div class="flex">
       <Helmet title="Auto Trade | OurPortal" />
@@ -107,24 +152,7 @@ const Trade = () => {
             Your Selection is Updated
           </p>
 
-          <SelectedModuleCard
-            courseCode="02.105DH"
-            courseName="Sages Through The Ages: Readings in Early Indian and Chinese Religion and Philosophy"
-            selectionIndex={1}
-            onWeightageUpdate={updateWeightages}
-          />
-          <SelectedModuleCard
-            courseCode="02.155TS"
-            courseName="Design Anthropology"
-            selectionIndex={2}
-            onWeightageUpdate={updateWeightages}
-          />
-          <SelectedModuleCard
-            courseCode="02.216"
-            courseName="Southeast Asia Under Japan: Motives, Memoirs, and Media"
-            selectionIndex={3}
-            onWeightageUpdate={updateWeightages}
-          />
+          {selectedModules}
           <div class="flex flex-row mt-auto items-center">
             <p class="font-bold text-lg xl:text-xl inline-block">
               Remaining Weightage:
@@ -172,7 +200,10 @@ const Trade = () => {
             ) : (
               <></>
             )}
-            <button class="secondary-button rounded py-2 mr-2 xl:px-10 ml-auto xl:mr-4 text-white text-xl 2xl:text-2xl w-1/5">
+            <button
+              class="secondary-button rounded py-2 mr-2 xl:px-10 ml-auto xl:mr-4 text-white text-xl 2xl:text-2xl w-1/5"
+              onClick={displaySearch}
+            >
               Search
             </button>
             <button
