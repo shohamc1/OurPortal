@@ -1,10 +1,25 @@
 import React from "react";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 import { useUser } from "../../../context/authContext";
 import ModuleTab from "./moduleTab";
 
 const Cart = () => {
   const user = useUser();
+  const db = firebase.firestore().collection("availability");
+
+  const checkOutProc = async () => {
+    var doc = db.doc("02.231");
+
+    await db.runTransaction(async (t) => {
+      const curModule = await t.get(doc);
+      if (curModule.data().available > 0) {
+        const newAvail = curModule.data().available - 1;
+        t.update(doc, { available: newAvail });
+      }
+    });
+  };
 
   const array = user.activePage == "enroll" ? user.cart : user.autoTradeModules;
   const modules = array.map((m) => (
