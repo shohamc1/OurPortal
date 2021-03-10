@@ -8,9 +8,10 @@ const AuthContext = React.createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
+  const [tradeModule, setTradeModule] = useState(null);
   const [autoTradeModules, setAutoTradeModules] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activePage, setActivePage] = useState("home");
+  const [activePage, setActivePage] = useState("home"); // home, enroll, peer, auto, auto-search
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -30,6 +31,8 @@ const AuthProvider = ({ children }) => {
         setAutoTradeModules,
         activePage,
         setActivePage,
+        tradeModule,
+        setTradeModule,
       }}
     >
       {children}
@@ -42,7 +45,7 @@ const useUser = () => {
   if (context === undefined) {
     throw new Error("useUser must be used within a UserProvider");
   }
-  return context;
+  return { ...context };
 };
 
 export { AuthContext, AuthProvider, useUser };

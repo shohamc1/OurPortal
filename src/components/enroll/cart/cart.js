@@ -4,32 +4,32 @@ import { useUser } from "../../../context/authContext";
 import ModuleTab from "./moduleTab";
 
 const Cart = () => {
-  const user = useUser();
+  const { cart, autoTradeModules, activePage, setActivePage } = useUser();
 
-  const array = user.activePage == "enroll" ? user.cart : user.autoTradeModules;
+  const array = activePage == "enroll" ? cart : autoTradeModules;
   const modules = array.map((m) => (
     <ModuleTab courseCode={m.courseCode} status={m.status} type={m.type} />
   ));
 
   const empty = (
     <div class="flex text-gray-400 py-2">
-      {user.activePage == "enroll"
+      {activePage == "enroll"
         ? "Your cart is empty!"
         : "You have not selected any modules!"}
     </div>
   );
 
   return (
-    <div class="px-4 py-2">
+    <div class="px-4 py-2 flex flex-col h-full">
       <div class="items-center flex flex-row w-full py-2">
-        {user.activePage == "enroll" ? (
+        {activePage == "enroll" ? (
           <></>
         ) : (
           <a
             class="mr-3"
             href="#"
             onClick={() => {
-              user.setActivePage("auto");
+              setActivePage("auto");
             }}
           >
             <svg
@@ -61,10 +61,47 @@ const Cart = () => {
           </a>
         )}
         <span class="text-3xl xl:text-4xl">
-          {user.activePage == "enroll" ? "Your Cart" : "Selected"}
+          {activePage == "enroll" ? "Your Cart" : "Selected"}
         </span>
       </div>
-      {array.length ? modules : empty}
+      <div class="mb-auto overflow-y-scroll">
+        {array.length ? modules : empty}
+      </div>
+      {activePage == "enroll" && array.length ? (
+        <button
+          class={`bg-green-500 container py-3 px-8 mt-4 mb-3 rounded-md flex flex-row`}
+        >
+          <span class="text-white text-lg xl:text-xl text-center opacity-90 font-normal w-full">
+            Proceed
+          </span>
+          <svg
+            width="20"
+            height="25"
+            viewBox="0 0 20 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.6611 5.83179L17.1452 12.7664L11.6611 19.7009"
+              stroke="#F5F6F8"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <line
+              x1="15.9272"
+              y1="12.8071"
+              x2="3.44929"
+              y2="12.8071"
+              stroke="#F5F6F8"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

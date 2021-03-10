@@ -38,6 +38,9 @@ module.exports = {
         72: "18rem",
         80: "20rem",
       },
+      minHeight: {
+        "text-sm": "1.75rem",
+      },
     },
   },
   variants: {

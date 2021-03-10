@@ -14,27 +14,27 @@ const SelectedModuleCard = ({
   courseCode,
   courseName,
   weightage,
-  onWeightageUpdate,
+  // onWeightageUpdate,
 }) => {
-  const user = useUser();
+  const { autoTradeModules, setAutoTradeModules } = useUser();
 
   const handleWeightageUpdate = (value, index) => {
     let w = parseInt(value);
     if (w > 100) {
-      user.setAutoTradeModules(
-        user.autoTradeModules.map((m) =>
+      setAutoTradeModules(
+        autoTradeModules.map((m) =>
           m.courseCode == courseCode
             ? { ...m, weightage: parseInt(value.slice(0, -1)) }
             : m
         )
       );
     } else {
-      user.setAutoTradeModules(
-        user.autoTradeModules.map((m, i) =>
+      setAutoTradeModules(
+        autoTradeModules.map((m, i) =>
           i == index ? { ...m, weightage: w } : m
         )
       );
-      onWeightageUpdate(value === "" ? 0 : w, index);
+      // onWeightageUpdate(value === "" ? 0 : w, index);
     }
   };
   const checkInvalidInput = (e) => {
@@ -44,10 +44,10 @@ const SelectedModuleCard = ({
   };
 
   const removeFromAutoTradeModules = () => {
-    user.setAutoTradeModules(
-      user.autoTradeModules.filter((m) => m.courseCode !== courseCode)
+    setAutoTradeModules(
+      autoTradeModules.filter((m) => m.courseCode !== courseCode)
     );
-    onWeightageUpdate(0, selectionIndex - 1);
+    // onWeightageUpdate(0, selectionIndex - 1);
   };
 
   return (

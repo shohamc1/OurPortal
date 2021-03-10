@@ -4,24 +4,29 @@ import ModuleCard from "./moduleCard";
 import { useUser } from "../../../context/authContext";
 
 const Hits = ({ hits }) => {
-  const user = useUser();
+  const { activePage, tradeModule } = useUser();
   return (
     <>
       {hits.length !== 0 ? (
         <>
           <div class="pl-6 grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-            {hits.map((item, index) => (
-              <>
-                <ModuleCard
-                  courseCode={item.subject_code}
-                  courseName={item.title}
-                  instructorFirstName={item.instructor_first_name}
-                  instructorLastName={item.instructor_last_name}
-                  type={item.type}
-                  key={index}
-                />
-              </>
-            ))}
+            {hits.map((item, index) =>
+              activePage == "auto-search" &&
+              tradeModule.courseCode == item.courseCode ? (
+                <></>
+              ) : (
+                <>
+                  <ModuleCard
+                    courseCode={item.courseCode}
+                    courseName={item.courseName}
+                    instructorFirstName={item.instructorFirstName}
+                    instructorLastName={item.instructorLastName}
+                    type={item.type}
+                    key={index}
+                  />
+                </>
+              )
+            )}
           </div>
           <div class="mx-auto text-center text-xs font-light">
             You have reached the end of results. 😶

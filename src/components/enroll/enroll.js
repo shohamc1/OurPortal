@@ -7,16 +7,16 @@ import AlgoliaMainContent from "./algoliaMainContent";
 import { useUser } from "../../context/authContext";
 
 const Enroll = () => {
-  const user = useUser();
+  const { setActivePage } = useUser();
 
   useEffect(() => {
-    user.setActivePage("enroll");
+    setActivePage("enroll");
   }, []);
-  console.log(user);
+
   return (
     <div class="flex">
       <Helmet title="Enroll | OurPortal" />
-      <Sidebar active="enroll" />
+      <Sidebar />
       <div class="flex flex-col flex-grow">
         <Header pageName="Enroll" />
         <div class="h-full">

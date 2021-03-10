@@ -9,16 +9,15 @@ import Card from "../card";
 import { AuthContext, useUser } from "../../context/authContext";
 
 const Dashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { user, setActivePage } = useContext(AuthContext);
   const [userUID, setUserUID] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [modules, setModules] = useState([]);
   const db = firebase.firestore().collection("users");
   const moduleDB = firebase.firestore().collection("modules");
-  const userObject = useUser();
 
   useEffect(() => {
-    userObject.setActivePage("home");
+    setActivePage("home");
   }, []);
 
   useEffect(() => {
@@ -62,7 +61,7 @@ const Dashboard = () => {
   return (
     <div class="flex">
       <Helmet title="Overview | OurPortal" />
-      <Sidebar active="home" />
+      <Sidebar />
       <div class="flex flex-col flex-grow">
         <Header pageName="Overview" />
         <div class="pl-6 pt-4">
@@ -71,10 +70,10 @@ const Dashboard = () => {
             {modules.length ? (
               modules.map((item, index) => (
                 <Card
-                  courseCode={item.subject_code}
-                  courseName={item.title}
-                  instructorFirstName={item.instructor_first_name}
-                  instructorLastName={item.instructor_last_name}
+                  courseCode={item.courseCode}
+                  courseName={item.courseName}
+                  instructorFirstName={item.instructorFirstName}
+                  instructorLastName={item.instructorLastName}
                   type={item.type}
                   key={index}
                 />

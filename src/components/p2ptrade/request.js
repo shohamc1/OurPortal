@@ -8,10 +8,10 @@ import { useUser } from "../../context/authContext";
 
 const Request = () => {
   const [info, setInfo] = useState(true);
-  const user = useUser();
+  const { setActivePage } = useUser();
 
   useEffect(() => {
-    user.setActivePage("peer");
+    setActivePage("peer");
   }, []);
 
   const closeInfo = (e) => {
@@ -21,7 +21,7 @@ const Request = () => {
   return (
     <div class="flex">
       <Helmet title="P2P Trade Request | OurPortal" />
-      <Sidebar active="peer" />
+      <Sidebar />
       <div class="flex flex-col flex-grow h-screen">
         <Header pageName="P2P Trade Request" />
         <div class="flex flex-col flex-grow px-6 pt-4">

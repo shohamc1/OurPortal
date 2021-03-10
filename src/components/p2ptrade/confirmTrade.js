@@ -15,7 +15,7 @@ const ConfirmTrade = ({ id }) => {
   // need to check if trade exists first
   return (
     <div class="flex">
-      <Sidebar active="peer" />
+      <Sidebar />
       <div class="flex flex-col flex-grow h-screen">
         <Header pageName={`Trade ${id}`} />
         <div class="flex flex-col flex-grow px-6 pt-4">

@@ -37,25 +37,30 @@ const ModuleCard = ({
   type,
 }) => {
   const { MODULE_CARD_COLOUR } = CONSTANTS;
-  const user = useUser();
+  const {
+    activePage,
+    autoTradeModules,
+    setAutoTradeModules,
+    cart,
+    setCart,
+  } = useUser();
   const [added, setAdded] = useState(false);
   const [available, setAvailable] = useState("Full");
 
   useEffect(() => {
     if (
-      (user.activePage == "auto-search" &&
-        user.autoTradeModules.some((m) => m.courseCode == courseCode)) ||
-      (user.activePage == "enroll" &&
-        user.cart.some((m) => m.courseCode == courseCode))
+      (activePage == "auto-search" &&
+        autoTradeModules.some((m) => m.courseCode == courseCode)) ||
+      (activePage == "enroll" && cart.some((m) => m.courseCode == courseCode))
     ) {
       setAdded(true);
     }
   }, []);
 
   useEffect(() => {
-    var array = user.activePage == "enroll" ? user.cart : user.autoTradeModules;
+    var array = activePage == "enroll" ? cart : autoTradeModules;
     setAdded(array.map((m) => m.courseCode).includes(courseCode));
-  }, [courseCode, user.cart, user.autoTradeModules]);
+  }, [courseCode, cart, autoTradeModules]);
 
   var number = database.ref("avail").child(courseCode.replace(".", ""));
   useEffect(() => {
@@ -81,17 +86,14 @@ const ModuleCard = ({
     : MODULE_CARD_COLOUR.DEFAULT;
 
   const addToCart = () => {
-    if (user.activePage == "enroll") {
+    if (activePage == "enroll") {
       setAdded(true);
-      user.setCart([
-        ...user.cart,
-        { courseCode, type, courseName, status: available },
-      ]);
-    } else if (user.activePage == "auto-search") {
-      if (user.autoTradeModules.length < 3) {
+      setCart([...cart, { courseCode, type, courseName, status: available }]);
+    } else if (activePage == "auto-search") {
+      if (autoTradeModules.length < 3) {
         setAdded(true);
-        user.setAutoTradeModules([
-          ...user.autoTradeModules,
+        setAutoTradeModules([
+          ...autoTradeModules,
           { courseCode, type, courseName, weightage: "", status: available },
         ]);
       } else {
@@ -104,11 +106,11 @@ const ModuleCard = ({
 
   const removeFromCart = () => {
     setAdded(false);
-    if (user.activePage == "enroll") {
-      user.setCart(user.cart.filter((m) => m.courseCode !== courseCode));
-    } else if (user.activePage == "auto-search") {
-      user.setAutoTradeModules(
-        user.autoTradeModules.filter((m) => m.courseCode !== courseCode)
+    if (activePage == "enroll") {
+      setCart(cart.filter((m) => m.courseCode !== courseCode));
+    } else if (activePage == "auto-search") {
+      setAutoTradeModules(
+        autoTradeModules.filter((m) => m.courseCode !== courseCode)
       );
     }
   };
