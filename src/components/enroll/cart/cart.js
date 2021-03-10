@@ -78,7 +78,7 @@ const Cart = () => {
           {activePage == "enroll" ? "Your Cart" : "Selected"}
         </span>
       </div>
-      <div class="mb-auto overflow-y-scroll">
+      <div class="mb-auto overflow-y-scroll disable-scrollbars">
         {array.length ? modules : empty}
       </div>
       {activePage == "enroll" && array.length ? (

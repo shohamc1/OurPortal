@@ -106,7 +106,8 @@ const Trade = () => {
       .update({
         autoTradeModules: autoTradeModules.map((m) => ({
           courseCode: m.courseCode,
-          weightage: Number.isNaN(m.weightage) ? 0 : m.weightage,
+          weightage:
+            Number.isNaN(m.weightage) || m.weightage == "" ? 0 : m.weightage,
         })),
       })
       .then(() => {
