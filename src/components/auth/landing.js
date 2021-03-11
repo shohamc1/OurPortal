@@ -18,7 +18,7 @@ const Landing = () => {
           OurPortal
         </span>
         <span class="text-3xl md:text-4xl font-bold mb-8 tracking-tight">
-          Get your mods
+          Get Your Mods
         </span>
         <Link
           to="/login"

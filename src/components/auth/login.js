@@ -69,7 +69,7 @@ const Login = () => {
           OurPortal
         </span>
         <span class="text-3xl md:text-4xl font-bold mb-8 tracking-tight">
-          Get your mods
+          Get Your Mods
         </span>
         <div class="flex flex-col rounded-lg bg-gray-300 p-4 px-6 mb-8">
           <span class="font-semibold text-lg">Email</span>
@@ -81,6 +81,7 @@ const Login = () => {
             placeholder="john_doe@mymail.sutd.edu.sg"
             value={email}
             onChange={handleEmailChange}
+            data-testid="loginEmail"
           />
           <span class="font-semibold text-lg">Password</span>
           <input
@@ -91,11 +92,13 @@ const Login = () => {
             placeholder="********"
             value={password}
             onChange={handlePasswordChange}
+            data-testid="loginPassword"
           />
         </div>
         <button
           class="bg-purple-500 rounded-button p-4 text-white"
           onClick={emailLoginProc}
+          data-testid="loginBtn"
         >
           Log In
         </button>
@@ -120,7 +123,9 @@ const Login = () => {
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
           </div>
-          <div class="w-full">{signInError}</div>
+          <div class="w-full" data-testid="errorMessage">
+            {signInError}
+          </div>
           <button
             class="flex flex-auto flex-row-reverse"
             onClick={(e) => {

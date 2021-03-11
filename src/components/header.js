@@ -21,6 +21,7 @@ const Header = ({ pageName = "Test" }) => {
       <button
         class="rounded-button mx-8 my-4 px-6 py-2 primary-button-ns align-right self-center text-white"
         onClick={logoutProc}
+        data-testId="logoutBtn"
       >
         Sign Out
       </button>

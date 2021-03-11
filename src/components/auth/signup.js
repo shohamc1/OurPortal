@@ -70,7 +70,7 @@ const Signup = () => {
           OurPortal
         </span>
         <span class="text-3xl md:text-4xl font-bold mb-8 tracking-tight">
-          Get your mods
+          Get Your Mods
         </span>
         <div class="flex flex-col rounded-lg bg-gray-300 p-4 px-6 mb-8">
           <span class="font-semibold text-lg">Email</span>
