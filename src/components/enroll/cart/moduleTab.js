@@ -3,7 +3,13 @@ import { useUser } from "../../../context/authContext";
 import CONSTANTS from "../../../constants";
 
 const ModuleTab = ({ courseCode, status, type }) => {
-  const user = useUser();
+  const {
+    activePage,
+    cart,
+    autoTradeModules,
+    setCart,
+    setAutoTradeModules,
+  } = useUser();
   const { MODULE_TAB_COLOUR, STATUS_COLOUR } = CONSTANTS;
 
   var fillColour = STATUS_COLOUR[status]
@@ -14,7 +20,13 @@ const ModuleTab = ({ courseCode, status, type }) => {
     : MODULE_TAB_COLOUR.DEFAULT;
 
   const removeFromCart = () => {
-    user.setCart(user.cart.filter((m) => m.courseCode !== courseCode));
+    if (activePage == "enroll") {
+      setCart(cart.filter((m) => m.courseCode !== courseCode));
+    } else if (activePage == "auto-search") {
+      setAutoTradeModules(
+        autoTradeModules.filter((m) => m.courseCode !== courseCode)
+      );
+    }
   };
 
   return (

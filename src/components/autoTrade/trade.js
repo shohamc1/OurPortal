@@ -1,43 +1,161 @@
-import React, { useState } from "react";
+// TODO: limit search to only include HASS mods
+
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 import Sidebar from "../sidebar";
 import Header from "../header";
 import CurrentModuleCard from "./currentModuleCard";
 import SelectedModuleCard from "./selectedModuleCard";
+import AlgoliaMainContent from "../enroll/algoliaMainContent";
+import { useUser } from "../../context/authContext";
+import EmptyModuleCard from "./emptyModuleCard";
 
 const Trade = () => {
-  const [info, setInfo] = useState(true);
+  const {
+    user,
+    activePage,
+    setActivePage,
+    autoTradeModules,
+    setAutoTradeModules,
+    tradeModule,
+    setTradeModule,
+  } = useUser();
+  const [showInfo, setShowInfo] = useState(true);
+  const [showUpdateMessage, setShowUpdateMessage] = useState(false);
   const [remainingWeightage, setRemainingWeightage] = useState(100);
-  const [weightages, setWeightages] = useState([0, 0, 0]);
   const [invalidWeightage, setInvalidWeightage] = useState(false);
-  console.log(info);
+  const db = firebase.firestore().collection("users");
+  const moduleDB = firebase.firestore().collection("modules");
+
+  useEffect(() => {
+    setActivePage("auto");
+    if (user != null) {
+      db.doc(user.uid)
+        .get()
+        .then((doc) => {
+          var data = doc.data();
+
+          if (data.autoTradeModules != null) {
+            var modulesData = [];
+            var promises = [];
+            var totalWeightage = 0;
+
+            data.autoTradeModules.forEach(function (item) {
+              promises.push(
+                moduleDB
+                  .doc(item.courseCode)
+                  .get()
+                  .then((doc) => {
+                    modulesData.push({
+                      ...doc.data(),
+                      weightage: item.weightage,
+                    });
+                    totalWeightage += item.weightage;
+                  })
+              );
+            });
+
+            Promise.all(promises).then(() => {
+              setAutoTradeModules(modulesData);
+              setRemainingWeightage(100 - totalWeightage);
+            });
+          }
+
+          if (data.modules != null) {
+            data.modules.forEach(function (item) {
+              moduleDB
+                .where("courseCode", "==", item)
+                .where("type", "==", "HASS")
+                .get()
+                .then((doc) => {
+                  if (!doc.empty) {
+                    doc.forEach((d) => {
+                      setTradeModule(d.data());
+                    });
+                  }
+                });
+            });
+          }
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    var totalWeightage = 0;
+    autoTradeModules.forEach((m) => {
+      totalWeightage += Number.isNaN(m.weightage) ? 0 : m.weightage;
+    });
+    setRemainingWeightage(100 - totalWeightage);
+    setInvalidWeightage(100 - totalWeightage < 0);
+  }, [autoTradeModules]);
 
   const closeInfo = (e) => {
     e.preventDefault();
-    setInfo(false);
+    setShowInfo(false);
   };
 
-  const updateWeightages = (value, index) => {
-    let sum = value;
-    for (let i = 0; i < 3; i++) {
-      if (i !== index) {
-        sum += weightages[i];
-      }
-    }
-    setRemainingWeightage(100 - sum);
-    setWeightages(weightages.map((w, i) => (i === index ? value : w)));
-    setInvalidWeightage(100 - sum >= 0 ? false : true);
+  const displaySearch = () => {
+    setActivePage("auto-search");
   };
 
+  const updateFirestore = () => {
+    db.doc(user.uid)
+      .update({
+        autoTradeModules: autoTradeModules.map((m) => ({
+          courseCode: m.courseCode,
+          weightage:
+            Number.isNaN(m.weightage) || m.weightage == "" ? 0 : m.weightage,
+        })),
+      })
+      .then(() => {
+        setShowUpdateMessage(true);
+        setTimeout(() => {
+          setShowUpdateMessage(false);
+        }, 3000);
+      });
+  };
+
+  const selectedModules = autoTradeModules.length
+    ? autoTradeModules
+        .map((m, i) => (
+          <SelectedModuleCard
+            courseCode={m.courseCode}
+            courseName={m.courseName}
+            weightage={m.weightage}
+            selectionIndex={i + 1}
+            // onWeightageUpdate={updateWeightages}
+          />
+        ))
+        .concat([
+          ...Array(3 - autoTradeModules.length).fill(<EmptyModuleCard />),
+        ])
+    : [1, 2, 3].map((m) => <EmptyModuleCard />);
+
+  if (activePage == "auto-search") {
+    return (
+      <div class="flex">
+        <Helmet title="Auto Trade | OurPortal" />
+        <Sidebar active="trade-search" />
+        <div class="flex flex-col flex-grow">
+          <Header pageName="Auto Trade" />
+          <div class="h-full">
+            <AlgoliaMainContent />
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div class="flex">
       <Helmet title="Auto Trade | OurPortal" />
-      <Sidebar active="auto" />
+      <Sidebar />
       <div class="flex flex-col flex-grow">
         <Header pageName="Auto Trade" />
         <div class="flex flex-col text-sm text-gray-800 w-full py-4 px-4 h-full">
-          {info ? (
+          {showInfo ? (
             <div class="flex flex-col rounded mb-4 shadow-md border-2 border-red-400">
               <div class="flex flex-row items-center h-1/6 w-auto rounded-t ">
                 <div class="font-bold text-lg ml-2">Information</div>
@@ -90,41 +208,28 @@ const Trade = () => {
           <h2 class="font-bold text-3xl pt-2 mb-2">Current Module</h2>
 
           <CurrentModuleCard
-            courseCode="02.102DH"
-            courseName="The World Since 1400"
-            instructorFirstName="Yang Huei"
-            instructorLastName="Pang"
-          />
-          <CurrentModuleCard
-            courseCode=""
-            courseName="The World Since 1400"
-            instructorFirstName="Yang Huei"
-            instructorLastName="Pang"
+            courseCode={tradeModule ? tradeModule.courseCode : ""}
+            courseName={tradeModule ? tradeModule.courseName : ""}
+            instructorFirstName={
+              tradeModule ? tradeModule.instructorFirstName : ""
+            }
+            instructorLastName={
+              tradeModule ? tradeModule.instructorLastName : ""
+            }
           />
 
           <h2 class="font-bold text-3xl mt-4">Selected Modules</h2>
-          <p class="font-light text-green-500 text-sm mb-2">
-            Your Selection is Updated
-          </p>
+          <div class="min-h-text-sm">
+            {showUpdateMessage ? (
+              <p class="font-light text-green-500 text-sm mb-2">
+                Your Selection is Updated
+              </p>
+            ) : (
+              <></>
+            )}
+          </div>
 
-          <SelectedModuleCard
-            courseCode="02.105DH"
-            courseName="Sages Through The Ages: Readings in Early Indian and Chinese Religion and Philosophy"
-            selectionIndex={1}
-            onWeightageUpdate={updateWeightages}
-          />
-          <SelectedModuleCard
-            courseCode="02.155TS"
-            courseName="Design Anthropology"
-            selectionIndex={2}
-            onWeightageUpdate={updateWeightages}
-          />
-          <SelectedModuleCard
-            courseCode="02.216"
-            courseName="Southeast Asia Under Japan: Motives, Memoirs, and Media"
-            selectionIndex={3}
-            onWeightageUpdate={updateWeightages}
-          />
+          {selectedModules}
           <div class="flex flex-row mt-auto items-center">
             <p class="font-bold text-lg xl:text-xl inline-block">
               Remaining Weightage:
@@ -172,7 +277,13 @@ const Trade = () => {
             ) : (
               <></>
             )}
-            <button class="secondary-button rounded py-2 mr-2 xl:px-10 ml-auto xl:mr-4 text-white text-xl 2xl:text-2xl w-1/5">
+            <button
+              class={`${
+                tradeModule ? "secondary-button" : "bg-gray-500"
+              } rounded py-2 mr-2 xl:px-10 ml-auto xl:mr-4 text-white text-xl 2xl:text-2xl w-1/5`}
+              onClick={displaySearch}
+              disabled={!tradeModule}
+            >
               Search
             </button>
             <button
@@ -180,6 +291,7 @@ const Trade = () => {
                 remainingWeightage ? "bg-gray-500" : "secondary-button-ns"
               } rounded py-2 px-4 mr-2 xl:px-10 xl:mr-4 text-white text-xl 2xl:text-2xl w-1/5`}
               disabled={remainingWeightage !== 0}
+              onClick={updateFirestore}
             >
               Update
             </button>

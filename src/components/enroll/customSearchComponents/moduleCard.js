@@ -37,13 +37,30 @@ const ModuleCard = ({
   type,
 }) => {
   const { MODULE_CARD_COLOUR } = CONSTANTS;
-  const user = useUser();
+  const {
+    activePage,
+    autoTradeModules,
+    setAutoTradeModules,
+    cart,
+    setCart,
+  } = useUser();
   const [added, setAdded] = useState(false);
   const [available, setAvailable] = useState("Full");
 
   useEffect(() => {
-    setAdded(user.cart.map((m) => m.courseCode).includes(courseCode));
-  }, [courseCode, user.cart]);
+    if (
+      (activePage == "auto-search" &&
+        autoTradeModules.some((m) => m.courseCode == courseCode)) ||
+      (activePage == "enroll" && cart.some((m) => m.courseCode == courseCode))
+    ) {
+      setAdded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    var array = activePage == "enroll" ? cart : autoTradeModules;
+    setAdded(array.map((m) => m.courseCode).includes(courseCode));
+  }, [courseCode, cart, autoTradeModules]);
 
   var number = database.ref("avail").child(courseCode.replace(".", ""));
   useEffect(() => {
@@ -64,39 +81,38 @@ const ModuleCard = ({
     });
   });
 
-  // var focusColor = "bg-gray-500";
-  // switch (type) {
-  //   case "EPD":
-  //     focusColor = "bg-pastel-mint";
-  //     break;
-  //   case "HASS":
-  //     focusColor = "bg-pastel-red";
-  //     break;
-  //   case "ISTD":
-  //     focusColor = "bg-pastel-turquoise";
-  //     break;
-  //   case "ESD":
-  //     focusColor = "bg-pastel-blue";
-  //     break;
-  //   case "ASD":
-  //     focusColor = "bg-pastel-yellow";
-  //     break;
-  //   default:
-  //     focusColor = "bg-gray-500";
-  //     break;
-  // }
   var focusColor = MODULE_CARD_COLOUR[type]
     ? MODULE_CARD_COLOUR[type]
     : MODULE_CARD_COLOUR.DEFAULT;
 
   const addToCart = () => {
-    setAdded(true);
-    user.setCart([...user.cart, { courseCode, type, status: available }]);
+    if (activePage == "enroll") {
+      setAdded(true);
+      setCart([...cart, { courseCode, type, courseName, status: available }]);
+    } else if (activePage == "auto-search") {
+      if (autoTradeModules.length < 3) {
+        setAdded(true);
+        setAutoTradeModules([
+          ...autoTradeModules,
+          { courseCode, type, courseName, weightage: "", status: available },
+        ]);
+      } else {
+        alert(
+          "You have already selected 3 modules. Remove one to add a new one."
+        );
+      }
+    }
   };
 
   const removeFromCart = () => {
     setAdded(false);
-    user.setCart(user.cart.filter((m) => m.courseCode !== courseCode));
+    if (activePage == "enroll") {
+      setCart(cart.filter((m) => m.courseCode !== courseCode));
+    } else if (activePage == "auto-search") {
+      setAutoTradeModules(
+        autoTradeModules.filter((m) => m.courseCode !== courseCode)
+      );
+    }
   };
 
   return (
@@ -118,21 +134,21 @@ const ModuleCard = ({
           >
             {added ? (
               <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
+                width="17"
+                height="18"
+                viewBox="0 0 17 18"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M6 6L18.7742 18.7742"
+                  d="M4.25 4.5L13.2984 14.0806"
                   stroke="#14142B"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 />
                 <path
-                  d="M6 18.7742L18.7742 5.99998"
+                  d="M4.25 14.0806L13.2984 4.49992"
                   stroke="#14142B"
                   stroke-width="2"
                   stroke-linecap="round"
