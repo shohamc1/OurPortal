@@ -1,8 +1,12 @@
 /// <reference types="cypress" />
 
 describe("Login", () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit("/login");
+  });
+  beforeEach(() => {
+    cy.getId("loginEmail").clear();
+    cy.getId("loginPassword").clear();
   });
 
   it("Greets with Header and Slogan", () => {
@@ -45,18 +49,20 @@ describe("Login", () => {
     cy.getId("loginPassword").type("test123");
     cy.getId("loginBtn").click();
     cy.url().should("contain", "/dashboard");
+    cy.getId("welcomeMessage").should("contain", "test");
     cy.logout();
   });
-
+});
+describe("logout", () => {
   it("Logout redirects to landing", () => {
     cy.login();
     cy.visit("/dashboard");
     cy.url().should("contain", "/dashboard");
+    cy.getId("welcomeMessage").should("contain", "test");
     cy.getId("logoutBtn").click();
     cy.url().should("eq", "http://localhost:8000/");
   });
 });
-
 // User is at landing page => the pic loads and the 2 important buttons exist
 // User clicks on login button and is redirected to the login page
 // Get the username and text fields and attempt to login
