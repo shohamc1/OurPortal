@@ -41,7 +41,7 @@ const Sidebar = () => {
   return (
     <div class="flex flex-col max-w-1/7 h-screen bg-gray-100 rounded-r-lg sticky top-0">
       {/* header text */}
-      <a href="/dashboard">
+      <a href="/dashboard" data-testid="sideBarOurPortal">
         <h1 class="font-bold text-4xl xl:text-6xl pl-4 pr-8 py-4 mb-4">
           OurPortal
         </h1>
@@ -53,7 +53,7 @@ const Sidebar = () => {
         <Cart />
       ) : (
         <>
-          <a href="/dashboard" class={homeClass}>
+          <a href="/dashboard" class={homeClass} data-testId="sideBarHome">
             <div class="px-4 items-center flex flex-row w-full py-2">
               <svg
                 class="mr-4"
@@ -76,7 +76,7 @@ const Sidebar = () => {
             </div>
           </a>
 
-          <a href="/enroll" class={enrollClass}>
+          <a href="/enroll" class={enrollClass} data-testId="sideBarEnroll">
             <div class="px-4 items-center flex flex-row w-full py-2">
               <svg
                 class="mr-4"
@@ -113,7 +113,7 @@ const Sidebar = () => {
             </div>
           </a>
 
-          <a href="/request" class={peerClass}>
+          <a href="/request" class={peerClass} data-testId="sideBarPeer">
             <div class="px-4 items-center flex flex-row w-full py-2">
               <svg
                 class="mr-4"
@@ -133,7 +133,7 @@ const Sidebar = () => {
             </div>
           </a>
 
-          <a href="/autotrade" class={autoClass}>
+          <a href="/autotrade" class={autoClass} data-testId="sideBarAuto">
             <div class="px-4 items-center flex flex-row w-full py-2">
               <svg
                 class="mr-4"
