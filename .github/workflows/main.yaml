@@ -1,0 +1,29 @@
+name: Run Tests
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - actions-test
+
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run cypress tests
+        run: npm run ci
+      - name: Persist cypress results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: cypress-artifacts
+          path: |
+            cypress/screenshots
+            cypress/videos
