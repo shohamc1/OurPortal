@@ -10,6 +10,7 @@ const Cart = () => {
   const db = firebase.firestore().collection("availability");
 
   const checkOutProc = async () => {
+    // db should be just the firebase.firestore()
     var doc = db.doc("02.231");
     await db.runTransaction(async (t) => {
       const curModule = await t.get(doc);
