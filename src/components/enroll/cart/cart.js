@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
@@ -7,18 +7,34 @@ import ModuleTab from "./moduleTab";
 
 const Cart = () => {
   const { cart, autoTradeModules, activePage, setActivePage } = useUser();
-  const db = firebase.firestore().collection("availability");
+  const db = firebase.firestore();
+  const collection = db.collection("availability");
+
+  const [suc, setSec] = useState([]);
+  const [fail, setFail] = useState([]);
 
   const checkOutProc = async () => {
-    // db should be just the firebase.firestore()
-    var doc = db.doc("02.231");
-    await db.runTransaction(async (t) => {
-      const curModule = await t.get(doc);
-      if (curModule.data().available > 0) {
-        const newAvail = curModule.data().available - 1;
-        t.update(doc, { available: newAvail });
+    for await (const mod of array) {
+      try {
+        var doc = collection.doc(mod.courseCode);
+
+        await db.runTransaction(async (t) => {
+          const curModule = await t.get(doc);
+          if (curModule.data().available > 0) {
+            const newAvail = curModule.data().available - 1;
+            t.update(doc, { available: newAvail });
+            setSec([...suc, mod]);
+          } else {
+            setFail([...fail, mod]);
+          }
+        });
+      } catch (e) {
+        console.log("Transaction error: ", e);
       }
-    });
+    }
+
+    console.log(suc);
+    console.log(fail);
   };
 
   const array = activePage == "enroll" ? cart : autoTradeModules;
