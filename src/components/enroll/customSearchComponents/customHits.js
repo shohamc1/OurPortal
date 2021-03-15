@@ -11,8 +11,8 @@ const Hits = ({ hits }) => {
         <>
           <div class="pl-6 grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             {hits.map((item, index) =>
-              activePage == "auto-search" &&
-              tradeModule.courseCode == item.courseCode ? (
+              activePage === "auto-search" &&
+              tradeModule.courseCode === item.courseCode ? (
                 <></>
               ) : (
                 <>
@@ -29,12 +29,20 @@ const Hits = ({ hits }) => {
             )}
           </div>
           <div class="mx-auto text-center text-xs font-light">
-            You have reached the end of results. 😶
+            You have reached the end of results.{" "}
+            <span role="img" aria-label="no-mouth">
+              😶
+            </span>
           </div>
         </>
       ) : (
         <div class="ml-4 flex flex-col">
-          <span class="text-3xl font-bold">No results 😞</span>
+          <span class="text-3xl font-bold">
+            No results{" "}
+            <span role="img" aria-label="sad">
+              😞
+            </span>
+          </span>
           <span class="text-xl font-medium">
             Try changing your search term.
           </span>

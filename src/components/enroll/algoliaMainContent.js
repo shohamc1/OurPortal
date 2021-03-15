@@ -15,7 +15,7 @@ const AlgoliaMainContent = () => {
   const { activePage } = React.useContext(AuthContext);
   return (
     <InstantSearch searchClient={searchClient} indexName="ourportal">
-      <Configure filters={activePage == "enroll" ? "" : "type:HASS"} />
+      <Configure filters={activePage === "enroll" ? "" : "type:HASS"} />
       <CustomSearchBox />
       <CustomHits />
     </InstantSearch>

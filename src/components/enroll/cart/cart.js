@@ -37,14 +37,14 @@ const Cart = () => {
     console.log(fail);
   };
 
-  const array = activePage == "enroll" ? cart : autoTradeModules;
+  const array = activePage === "enroll" ? cart : autoTradeModules;
   const modules = array.map((m) => (
     <ModuleTab courseCode={m.courseCode} status={m.status} type={m.type} />
   ));
 
   const empty = (
     <div class="flex text-gray-400 py-2">
-      {activePage == "enroll"
+      {activePage === "enroll"
         ? "Your cart is empty!"
         : "You have not selected any modules!"}
     </div>
@@ -53,7 +53,7 @@ const Cart = () => {
   return (
     <div class="px-4 py-2 flex flex-col h-full">
       <div class="items-center flex flex-row w-full py-2">
-        {activePage == "enroll" ? (
+        {activePage === "enroll" ? (
           <></>
         ) : (
           <a
@@ -92,13 +92,13 @@ const Cart = () => {
           </a>
         )}
         <span class="text-3xl xl:text-4xl">
-          {activePage == "enroll" ? "Your Cart" : "Selected"}
+          {activePage === "enroll" ? "Your Cart" : "Selected"}
         </span>
       </div>
       <div class="mb-auto overflow-y-scroll disable-scrollbars">
         {array.length ? modules : empty}
       </div>
-      {activePage == "enroll" && array.length ? (
+      {activePage === "enroll" && array.length ? (
         <button
           class={`bg-green-500 container py-3 px-8 mt-4 mb-3 rounded-md flex flex-row`}
           onClick={checkOutProc}

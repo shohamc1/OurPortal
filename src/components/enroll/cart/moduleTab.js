@@ -20,9 +20,9 @@ const ModuleTab = ({ courseCode, status, type }) => {
     : MODULE_TAB_COLOUR.DEFAULT;
 
   const removeFromCart = () => {
-    if (activePage == "enroll") {
+    if (activePage === "enroll") {
       setCart(cart.filter((m) => m.courseCode !== courseCode));
-    } else if (activePage == "auto-search") {
+    } else if (activePage === "auto-search") {
       setAutoTradeModules(
         autoTradeModules.filter((m) => m.courseCode !== courseCode)
       );
