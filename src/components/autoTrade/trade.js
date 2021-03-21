@@ -107,7 +107,7 @@ const Trade = () => {
         autoTradeModules: autoTradeModules.map((m) => ({
           courseCode: m.courseCode,
           weightage:
-            Number.isNaN(m.weightage) || m.weightage === "" ? 0 : m.weightage,
+            Number.isNaN(m.weightage) || m.weightage == "" ? 0 : m.weightage,
         })),
       })
       .then(() => {
@@ -134,7 +134,7 @@ const Trade = () => {
         ])
     : [1, 2, 3].map((m) => <EmptyModuleCard />);
 
-  if (activePage === "auto-search") {
+  if (activePage == "auto-search") {
     return (
       <div class="flex">
         <Helmet title="Auto Trade | OurPortal" />

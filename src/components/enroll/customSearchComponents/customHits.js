@@ -4,15 +4,23 @@ import ModuleCard from "./moduleCard";
 import { useUser } from "../../../context/authContext";
 
 const Hits = ({ hits }) => {
-  const { activePage, tradeModule } = useUser();
+  const { activePage, tradeModule, enrolledModules } = useUser();
+  console.log(enrolledModules);
+  const enrolledModulesCode = enrolledModules.map((m) => m.courseCode);
+  const shouldFilter = (item) => {
+    return (
+      (activePage === "auto-search" &&
+        tradeModule.courseCode === item.courseCode) ||
+      (activePage == "enroll" && enrolledModulesCode.includes(item.courseCode))
+    );
+  };
   return (
     <>
       {hits.length !== 0 ? (
         <>
           <div class="pl-6 grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             {hits.map((item, index) =>
-              activePage === "auto-search" &&
-              tradeModule.courseCode === item.courseCode ? (
+              shouldFilter(item) ? (
                 <></>
               ) : (
                 <>
