@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 /**
  * Card to display user's selected module with configurable text.

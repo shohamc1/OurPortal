@@ -4,7 +4,16 @@ import ModuleCard from "./moduleCard";
 import { useUser } from "../../../context/authContext";
 
 const Hits = ({ hits }) => {
-  const { activePage, tradeModule } = useUser();
+  const { activePage, tradeModule, enrolledModules } = useUser();
+  console.log(enrolledModules);
+  const enrolledModulesCode = enrolledModules.map((m) => m.courseCode);
+  const shouldFilter = (item) => {
+    return (
+      (activePage === "auto-search" &&
+        tradeModule.courseCode === item.courseCode) ||
+      (activePage === "enroll" && enrolledModulesCode.includes(item.courseCode))
+    );
+  };
   return (
     <>
       {hits.length !== 0 ? (
@@ -14,8 +23,7 @@ const Hits = ({ hits }) => {
             data-testid="customHitsResults"
           >
             {hits.map((item, index) =>
-              activePage == "auto-search" &&
-              tradeModule.courseCode == item.courseCode ? (
+              shouldFilter(item) ? (
                 <></>
               ) : (
                 <>
@@ -32,12 +40,20 @@ const Hits = ({ hits }) => {
             )}
           </div>
           <div class="mx-auto text-center text-xs font-light">
-            You have reached the end of results. 😶
+            You have reached the end of results.{" "}
+            <span role="img" aria-label="no-mouth">
+              😶
+            </span>
           </div>
         </>
       ) : (
         <div class="ml-4 flex flex-col" data-testid="customHitsMessage">
-          <span class="text-3xl font-bold">No results 😞</span>
+          <span class="text-3xl font-bold">
+            No results{" "}
+            <span role="img" aria-label="sad">
+              😞
+            </span>
+          </span>
           <span class="text-xl font-medium">
             Try changing your search term.
           </span>

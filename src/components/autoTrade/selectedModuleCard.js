@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useUser } from "../../context/authContext";
 
 /**
@@ -23,7 +23,7 @@ const SelectedModuleCard = ({
     if (w > 100) {
       setAutoTradeModules(
         autoTradeModules.map((m) =>
-          m.courseCode == courseCode
+          m.courseCode === courseCode
             ? { ...m, weightage: parseInt(value.slice(0, -1)) }
             : m
         )
@@ -31,7 +31,7 @@ const SelectedModuleCard = ({
     } else {
       setAutoTradeModules(
         autoTradeModules.map((m, i) =>
-          i == index ? { ...m, weightage: w } : m
+          i === index ? { ...m, weightage: w } : m
         )
       );
       // onWeightageUpdate(value === "" ? 0 : w, index);

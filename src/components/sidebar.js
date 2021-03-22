@@ -49,7 +49,7 @@ const Sidebar = () => {
 
       {/* nav buttons */}
 
-      {activePage == "enroll" || activePage == "auto-search" ? (
+      {activePage === "enroll" || activePage === "auto-search" ? (
         <Cart />
       ) : (
         <>

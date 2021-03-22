@@ -6,38 +6,79 @@ import { useUser } from "../../../context/authContext";
 import ModuleTab from "./moduleTab";
 
 const Cart = () => {
-  const { cart, autoTradeModules, activePage, setActivePage } = useUser();
-  const db = firebase.firestore().collection("availability");
+  const {
+    cart,
+    autoTradeModules,
+    activePage,
+    setActivePage,
+    user,
+    enrolledModules,
+    setEnrolledModules,
+    setFailedEnrollModules,
+  } = useUser();
+  const db = firebase.firestore();
+  const collection = db.collection("availability");
 
-  const checkOutProc = async () => {
-    // db should be just the firebase.firestore()
-    var doc = db.doc("02.231");
-    await db.runTransaction(async (t) => {
-      const curModule = await t.get(doc);
-      if (curModule.data().available > 0) {
-        const newAvail = curModule.data().available - 1;
-        t.update(doc, { available: newAvail });
-      }
-    });
-  };
-
-  const array = activePage == "enroll" ? cart : autoTradeModules;
+  const array = activePage === "enroll" ? cart : autoTradeModules;
   const modules = array.map((m) => (
     <ModuleTab courseCode={m.courseCode} status={m.status} type={m.type} />
   ));
 
   const empty = (
     <div class="flex text-gray-400 py-2">
-      {activePage == "enroll"
+      {activePage === "enroll"
         ? "Your cart is empty!"
         : "You have not selected any modules!"}
     </div>
   );
 
+  const checkOutProc = async () => {
+    const tempSuc = [];
+    const tempFail = [];
+    for (const mod of array) {
+      try {
+        var doc = collection.doc(mod.courseCode);
+
+        await db.runTransaction(async (t) => {
+          const curModule = await t.get(doc);
+          if (curModule.data().available > 0) {
+            const newAvail = curModule.data().available - 1;
+            t.update(doc, { available: newAvail });
+            tempSuc.push(mod);
+          } else {
+            tempFail.push(mod);
+          }
+        });
+      } catch (e) {
+        console.log("Transaction error: ", e);
+      }
+    }
+
+    if (tempSuc.length) {
+      await db
+        .collection("users")
+        .doc(user.uid)
+        .update({
+          modules: tempSuc.concat(enrolledModules).map((m) => m.courseCode),
+        });
+
+      setEnrolledModules(
+        enrolledModules.concat(
+          tempSuc.map((m) => ({ ...m, newlyEnrolled: true }))
+        )
+      );
+    }
+    // push {enrollmentComplete: true} object onto failedEnrollModules
+    // to trigger display of checkout message
+    // both successful and failed messages are triggered by this
+    tempFail.push({ enrollmentComplete: true });
+    setFailedEnrollModules(tempFail);
+  };
+
   return (
     <div class="px-4 py-2 flex flex-col h-full">
       <div class="items-center flex flex-row w-full py-2">
-        {activePage == "enroll" ? (
+        {activePage === "enroll" ? (
           <></>
         ) : (
           <a
@@ -76,13 +117,13 @@ const Cart = () => {
           </a>
         )}
         <span class="text-3xl xl:text-4xl" data-testid="cartHeader">
-          {activePage == "enroll" ? "Your Cart" : "Selected"}
+          {activePage === "enroll" ? "Your Cart" : "Selected"}
         </span>
       </div>
       <div class="mb-auto overflow-y-scroll disable-scrollbars">
         {array.length ? modules : empty}
       </div>
-      {activePage == "enroll" && array.length ? (
+      {activePage === "enroll" && array.length ? (
         <button
           class={`bg-green-500 container py-3 px-8 mt-4 mb-3 rounded-md flex flex-row`}
           onClick={checkOutProc}

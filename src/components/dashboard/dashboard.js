@@ -6,7 +6,7 @@ import "firebase/firestore";
 import Sidebar from "../sidebar";
 import Header from "../header";
 import Card from "../card";
-import { AuthContext, useUser } from "../../context/authContext";
+import { AuthContext } from "../../context/authContext";
 
 const Dashboard = () => {
   const { user, setActivePage } = useContext(AuthContext);

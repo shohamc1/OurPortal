@@ -5,10 +5,10 @@ import CONSTANTS from "../../../constants";
 import firebase from "firebase/app";
 import "firebase/database";
 
-var database = firebase.database();
+var database = firebase.firestore();
 
 const Status = ({ statusType }) => {
-  const { STATUS_COLOUR, MODULE_COLOUR } = CONSTANTS;
+  const { STATUS_COLOUR } = CONSTANTS;
   var fillColour = STATUS_COLOUR[statusType]
     ? STATUS_COLOUR[statusType]
     : STATUS_COLOUR["Available"];
@@ -49,27 +49,27 @@ const ModuleCard = ({
 
   useEffect(() => {
     if (
-      (activePage == "auto-search" &&
-        autoTradeModules.some((m) => m.courseCode == courseCode)) ||
-      (activePage == "enroll" && cart.some((m) => m.courseCode == courseCode))
+      (activePage === "auto-search" &&
+        autoTradeModules.some((m) => m.courseCode === courseCode)) ||
+      (activePage === "enroll" && cart.some((m) => m.courseCode === courseCode))
     ) {
       setAdded(true);
     }
   }, []);
 
   useEffect(() => {
-    var array = activePage == "enroll" ? cart : autoTradeModules;
+    var array = activePage === "enroll" ? cart : autoTradeModules;
     setAdded(array.map((m) => m.courseCode).includes(courseCode));
   }, [courseCode, cart, autoTradeModules]);
 
-  var number = database.ref("avail").child(courseCode.replace(".", ""));
+  var number = database.collection("availability").doc(courseCode);
   useEffect(() => {
-    number.on("value", (snapshot) => {
-      var data = snapshot.val();
+    number.onSnapshot((snapshot) => {
+      var data = snapshot.data();
       console.log(data);
-      if (data == 0) {
+      if (data.available === 0) {
         setAvailable("Full");
-      } else if (data < 10) {
+      } else if (data.available < 10) {
         setAvailable("Filling Fast");
       } else {
         setAvailable("Available");
@@ -86,10 +86,10 @@ const ModuleCard = ({
     : MODULE_CARD_COLOUR.DEFAULT;
 
   const addToCart = () => {
-    if (activePage == "enroll") {
+    if (activePage === "enroll") {
       setAdded(true);
       setCart([...cart, { courseCode, type, courseName, status: available }]);
-    } else if (activePage == "auto-search") {
+    } else if (activePage === "auto-search") {
       if (autoTradeModules.length < 3) {
         setAdded(true);
         setAutoTradeModules([
@@ -106,9 +106,9 @@ const ModuleCard = ({
 
   const removeFromCart = () => {
     setAdded(false);
-    if (activePage == "enroll") {
+    if (activePage === "enroll") {
       setCart(cart.filter((m) => m.courseCode !== courseCode));
-    } else if (activePage == "auto-search") {
+    } else if (activePage === "auto-search") {
       setAutoTradeModules(
         autoTradeModules.filter((m) => m.courseCode !== courseCode)
       );
