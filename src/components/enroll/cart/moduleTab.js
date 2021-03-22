@@ -32,6 +32,7 @@ const ModuleTab = ({ courseCode, status, type }) => {
   return (
     <div
       class={`bg-gray-300 container py-2 px-4 mt-2 mb-3 rounded-md flex flex-row border-t-4 ${focusColor}`}
+      data-testid="moduleTab"
     >
       <div class="my-auto mr-3">
         <svg

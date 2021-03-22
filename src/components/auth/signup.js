@@ -12,6 +12,16 @@ const Signup = () => {
   const [lastName, setLastName] = useState("");
   const [signUpError, setSignUpError] = useState(false);
 
+  // const DB = firebase.firestore();
+  // const AUTH = firebase.auth();
+  // if (window.location.hostname === "localhost" && !DB) {
+  // if (window.Cypress) {
+  //   console.log("USING EMULATOR");
+  //   DB.settings({ experimentalForceLongPolling: true });
+  //   DB.useEmulator("localhost", 8080);
+  //   AUTH.useEmulator("http://localhost:9099");
+  // }
+
   const db = firebase.firestore().collection("users");
 
   const handleEmailChange = (event) => {

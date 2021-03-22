@@ -2,6 +2,7 @@
 
 describe("Sidebar and Header", () => {
   before(() => {
+    cy.visit("/");
     cy.login();
     cy.visit("/dashboard");
   });
@@ -33,7 +34,7 @@ describe("Sidebar and Header", () => {
       .should("contain", "Auto Trade");
   });
 
-  it('P2P Trade Highlighted" ', () => {
+  it('P2P Trade highlighted and header is "P2P Trade" ', () => {
     cy.getId("sideBarPeer").click();
     cy.getId("headerPageName").should("contain", "P2P Trade Request");
     cy.getId("sideBarPeer")
@@ -43,7 +44,7 @@ describe("Sidebar and Header", () => {
         expect($path).to.have.attr("stroke", "#F5F6F8");
       });
   });
-  it('Auto Trade Highlighted" ', () => {
+  it('Auto Trade highlighted and header is "Auto Trade" ', () => {
     cy.getId("sideBarAuto").click();
     cy.getId("headerPageName").should("contain", "Auto Trade");
     cy.getId("sideBarAuto")
@@ -53,7 +54,7 @@ describe("Sidebar and Header", () => {
         expect($path).to.have.attr("stroke", "#F5F6F8");
       });
   });
-  it('Home Highlighted"', () => {
+  it('Home highlighted and header is "Overview"', () => {
     cy.getId("sideBarHome").click();
     cy.getId("headerPageName").should("contain", "Overview");
     cy.getId("sideBarHome")
@@ -64,8 +65,9 @@ describe("Sidebar and Header", () => {
       });
   });
 
-  it("Enroll display empty cart", () => {
+  it('Enroll display empty cart and header is "Enroll"', () => {
     cy.getId("sideBarEnroll").click();
+    cy.getId("headerPageName").should("contain", "Enroll");
     cy.getId("cartHeader").should("contain", "Your Cart");
     cy.getId("sideBarHome").should("not.exist");
     cy.getId("sideBarEnroll").should("not.exist");

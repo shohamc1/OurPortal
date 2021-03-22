@@ -9,7 +9,10 @@ const Hits = ({ hits }) => {
     <>
       {hits.length !== 0 ? (
         <>
-          <div class="pl-6 grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+          <div
+            class="pl-6 grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4"
+            data-testid="customHitsResults"
+          >
             {hits.map((item, index) =>
               activePage == "auto-search" &&
               tradeModule.courseCode == item.courseCode ? (
@@ -33,7 +36,7 @@ const Hits = ({ hits }) => {
           </div>
         </>
       ) : (
-        <div class="ml-4 flex flex-col">
+        <div class="ml-4 flex flex-col" data-testid="customHitsMessage">
           <span class="text-3xl font-bold">No results 😞</span>
           <span class="text-xl font-medium">
             Try changing your search term.

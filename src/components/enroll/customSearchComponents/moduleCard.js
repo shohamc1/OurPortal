@@ -14,7 +14,7 @@ const Status = ({ statusType }) => {
     : STATUS_COLOUR["Available"];
 
   return (
-    <div class="flex flex-row items-center mb-2">
+    <div class="flex flex-row items-center mb-2" data-testid="moduleCardStatus">
       <svg
         width="12"
         height="12"
@@ -116,7 +116,10 @@ const ModuleCard = ({
   };
 
   return (
-    <div class="relative flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md overflow-hidden mr-6 mb-6">
+    <div
+      class="relative flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md overflow-hidden mr-6 mb-6"
+      data-testid="moduleCard"
+    >
       <div class={`text-4xl font-semibold pl-4 py-2 ${focusColor}`}>
         {courseCode}
       </div>
