@@ -94,7 +94,7 @@ const Enroll = () => {
         </div>
       </div>
       {showMessage ? (
-        <div class="absolute bottom-0 left-0 flex bg-gray-500 bg-opacity-20 h-full w-full z-20">
+        <div class="absolute bottom-0 left-0 flex bg-gray-dark bg-opacity-50 h-full w-full z-20">
           <div
             class={`${
               success ? "bg-green-500" : "bg-red-500"
@@ -129,8 +129,8 @@ const Enroll = () => {
             <div class="flex justify-center flex-col text-center">
               {success ? (
                 <>
-                  <p>
-                    You have successfully enrolled into the following module(s):
+                  <p class="font-semibold text-xl">
+                    You have successfully enrolled into the following modules
                   </p>
                   <br />
                   {enrolledModules.reduce((arr, m) => {
@@ -142,7 +142,9 @@ const Enroll = () => {
                 </>
               ) : (
                 <>
-                  <p>The following module(s): </p>
+                  <p class="font-semibold text-xl">
+                    The enrollment for the modules has failed
+                  </p>
                   <br />
                   {failedEnrollModules.reduce((arr, m) => {
                     if (m.courseCode) {
@@ -151,14 +153,14 @@ const Enroll = () => {
                     return arr;
                   }, [])}{" "}
                   <br />
-                  <p>
-                    is/are no longer available. Please select another module.
+                  <p class="text-xs italic">
+                    This is because the modules are no longer available.
                   </p>
                   {enrolledModules.find((m) => m.newlyEnrolled) ? (
                     <>
-                      <p>
-                        You have been successfully enrolled into all other
-                        modules:{" "}
+                      <p class="pt-4 font-semibold text-xl">
+                        You have been successfully enrolled into the following
+                        modules{" "}
                       </p>
                       <br />
                       {enrolledModules.reduce((arr, m) => {

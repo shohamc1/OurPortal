@@ -5,7 +5,7 @@ import CONSTANTS from "../../../constants";
 import firebase from "firebase/app";
 import "firebase/database";
 
-var database = firebase.database();
+var database = firebase.firestore();
 
 const Status = ({ statusType }) => {
   const { STATUS_COLOUR } = CONSTANTS;
@@ -62,14 +62,14 @@ const ModuleCard = ({
     setAdded(array.map((m) => m.courseCode).includes(courseCode));
   }, [courseCode, cart, autoTradeModules]);
 
-  var number = database.ref("avail").child(courseCode.replace(".", ""));
+  var number = database.collection("availability").doc(courseCode);
   useEffect(() => {
-    number.on("value", (snapshot) => {
-      var data = snapshot.val();
+    number.onSnapshot((snapshot) => {
+      var data = snapshot.data();
       console.log(data);
-      if (data === 0) {
+      if (data.available === 0) {
         setAvailable("Full");
-      } else if (data < 10) {
+      } else if (data.available < 10) {
         setAvailable("Filling Fast");
       } else {
         setAvailable("Available");

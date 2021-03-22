@@ -11,7 +11,7 @@ const Hits = ({ hits }) => {
     return (
       (activePage === "auto-search" &&
         tradeModule.courseCode === item.courseCode) ||
-      (activePage == "enroll" && enrolledModulesCode.includes(item.courseCode))
+      (activePage === "enroll" && enrolledModulesCode.includes(item.courseCode))
     );
   };
   return (
