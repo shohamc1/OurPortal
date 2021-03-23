@@ -4,7 +4,7 @@ describe("Landing", () => {
   it("Greets with image, header and slogan", () => {
     cy.visit("/");
     cy.contains("OurPortal").should("exist");
-    cy.contains("Get Your Modules").should("exist");
+    cy.contains("Get Your Mods").should("exist");
     cy.get('[alt="Focus"]')
       .should("be.visible")
       .and(($img) => {

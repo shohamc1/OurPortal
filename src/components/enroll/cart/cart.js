@@ -116,7 +116,7 @@ const Cart = () => {
             </svg>
           </a>
         )}
-        <span class="text-3xl xl:text-4xl">
+        <span class="text-3xl xl:text-4xl" data-testid="cartHeader">
           {activePage === "enroll" ? "Your Cart" : "Selected"}
         </span>
       </div>

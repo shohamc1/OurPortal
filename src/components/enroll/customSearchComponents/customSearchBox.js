@@ -39,6 +39,7 @@ const SearchBox = ({ currentRefinement, refine }) => (
       placeholder="Search"
       value={currentRefinement}
       onChange={(e) => refine(e.currentTarget.value)}
+      data-testid="customSearchBoxInput"
     />
 
     <button class="pr-2 xl:pr-4 border-r-2" onClick={(e) => refine("")}>

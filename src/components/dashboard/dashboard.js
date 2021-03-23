@@ -65,7 +65,9 @@ const Dashboard = () => {
       <div class="flex flex-col flex-grow">
         <Header pageName="Overview" />
         <div class="pl-6 pt-4">
-          <div class="text-5xl font-light mb-4">Good Morning, {firstName}</div>
+          <div class="text-5xl font-light mb-4" data-testId="welcomeMessage">
+            Good Morning, {firstName}
+          </div>
           <div class="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             {modules.length ? (
               modules.map((item, index) => (
