@@ -24,7 +24,9 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyCsNTpDcTDvEvjGdNrCECgQ5vnWga2pO9s",
   authDomain: "ourportal-e0a9c.firebaseapp.com",
@@ -38,6 +40,8 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 // this works for now but there is another recommended method here https://docs.cypress.io/guides/testing-strategies/google-authentication.html#Google-Developer-Console-Setup
+const db = firebase.firestore();
+const auth = firebase.auth();
 
 Cypress.Commands.add(
   "login",
@@ -62,4 +66,54 @@ Cypress.Commands.add("logout", () => {
 
 Cypress.Commands.add("getId", (dataTestId) => {
   cy.get(`[data-testid='${dataTestId}']`);
+});
+
+Cypress.Commands.add("deleteUser", () => {
+  return firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid)
+        .delete()
+        .then(() => {
+          console.log("Account removed from users collection");
+          firebase
+            .auth()
+            .currentUser.delete()
+            .then(() => {
+              console.log("Account removed successfully");
+            })
+            .catch((error) => {
+              console.error("Error deleting account: ", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error deleting account from collection: ", error);
+        });
+    } else {
+      console.log("NOT DELETED");
+    }
+  });
+  // return firebase
+  //   .firestore()
+  //   .collection("users")
+  //   .document(firebase.auth().currentUser.uid)
+  //   .delete()
+  //   .then(() => {
+  //     console.log("Account removed from users collection");
+  //     firebase
+  //       .auth()
+  //       .currentUser.delete()
+  //       .then(() => {
+  //         console.log("Account removed successfully");
+  //         cy.visit("/signup");
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error deleting account: ", error);
+  //       });
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error deleting account from collection: ", error);
+  //   });
 });

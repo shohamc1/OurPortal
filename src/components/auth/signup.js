@@ -149,7 +149,9 @@ const Signup = () => {
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
           </div>
-          <div class="w-full">{signUpError}</div>
+          <div class="w-full" data-testid="signUpErrorMessage">
+            {signUpError}
+          </div>
           <button
             class="flex flex-auto flex-row-reverse"
             onClick={(e) => {

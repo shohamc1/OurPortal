@@ -18,7 +18,7 @@ describe("Login", () => {
     cy.getId("loginEmail").type("invalid");
     cy.getId("loginPassword").type("0");
     cy.getId("loginBtn").click();
-    cy.getId("errorMessage").should(
+    cy.getId("loginErrorMessage").should(
       "contain",
       "The email address is badly formatted."
     );
@@ -28,7 +28,7 @@ describe("Login", () => {
     cy.getId("loginEmail").type("invalid@test.com");
     cy.getId("loginPassword").type("0");
     cy.getId("loginBtn").click();
-    cy.getId("errorMessage").should(
+    cy.getId("loginErrorMessage").should(
       "contain",
       "There is no user record corresponding to this identifier. The user may have been deleted."
     );
@@ -38,7 +38,7 @@ describe("Login", () => {
     cy.getId("loginEmail").type("testuser@gmail.com");
     cy.getId("loginPassword").type("0");
     cy.getId("loginBtn").click();
-    cy.getId("errorMessage").should(
+    cy.getId("loginErrorMessage").should(
       "contain",
       "The password is invalid or the user does not have a password."
     );

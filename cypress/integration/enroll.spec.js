@@ -35,7 +35,7 @@ describe("Enroll", () => {
     it("Empty cart displays 'Your cart is empty!'", () => {});
 
     it("Proceed button visible when cart has at least 1 item", () => {
-      cy.getId("moduleCard").find();
+      //cy.getId("moduleCard").find();
     });
 
     it("Module tab displays correct code and colour", () => {});

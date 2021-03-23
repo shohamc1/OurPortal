@@ -123,7 +123,7 @@ const Login = () => {
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
           </div>
-          <div class="w-full" data-testid="errorMessage">
+          <div class="w-full" data-testid="loginErrorMessage">
             {signInError}
           </div>
           <button
