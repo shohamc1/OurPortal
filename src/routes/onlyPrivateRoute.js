@@ -7,9 +7,7 @@ const OnlyPrivateRoute = ({ component: RouteComponent, ...rest }) => {
   const { user, loading } = useContext(AuthContext);
 
   if (!loading) {
-    return (
-      <>{!user ? <Redirect to="/" noThrow /> : <RouteComponent {...rest} />}</>
-    );
+    return <>{!user ? <Redirect to="/" /> : <RouteComponent {...rest} />}</>;
   } else
     return (
       <div class="flex items-center justify-center absolute w-full h-full">

@@ -4,7 +4,6 @@ import { Redirect } from "@reach/router";
 
 const OnlyPublicRoute = ({ component: RouteComponent, ...rest }) => {
   const { user, loading } = useContext(AuthContext);
-  console.log(`Public ${user}`);
   if (!loading) {
     return (
       <>
