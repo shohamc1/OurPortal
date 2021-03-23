@@ -1,7 +1,9 @@
-import * as React from "react";
+import React from "react";
+
+const browser = typeof window !== "undefined" && window;
 
 const NotFoundPage = () => {
-  return <div>Not Found</div>;
+  return <>{browser && <div>Not Found</div>}</>;
 };
 
 export default NotFoundPage;
