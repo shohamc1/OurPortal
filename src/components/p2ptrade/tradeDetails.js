@@ -33,7 +33,7 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
       .then((doc) => {
         var mods = doc.data().modules;
         var index = mods.indexOf(yourModDetails.courseCode);
-        if (index != -1) {
+        if (index !== -1) {
           mods[index] = theirModDetails.courseCode;
         }
         return mods;
@@ -50,7 +50,7 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
       .then((doc) => {
         var mods = doc.data().modules;
         var index = mods.indexOf(theirModDetails.courseCode);
-        if (index != -1) {
+        if (index !== -1) {
           mods[index] = yourModDetails.courseCode;
         }
         return mods;
@@ -112,13 +112,19 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
                       />
                     </svg>
                   </div>
-                  {popUp == "accepted" ? (
+                  {popUp === "accepted" ? (
                     <span class="text-5xl font-bold">
-                      Trade completed! &#x1F389;
+                      Trade completed!{" "}
+                      <span role="img" aria-label="party">
+                        &#x1F389;
+                      </span>
                     </span>
                   ) : (
                     <span class="text-5xl font-bold">
-                      Trade declined. &#x1F615;
+                      Trade declined.{" "}
+                      <span role="img" aria-label="sad">
+                        &#x1F615;
+                      </span>
                     </span>
                   )}
                 </div>
@@ -232,7 +238,12 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
       ) : (
         <div class="flex flex-col p-4">
           <span class="text-5xl font-bold">
-            This trade does not exist <a href="/">&#x1F61E;</a>
+            This trade does not exist{" "}
+            <a href="/">
+              <span role="img" aria-label="sad">
+                &#x1F61E;
+              </span>
+            </a>
           </span>
           <span class="text-3xl font-light">
             If you expected something to be here, contact the administrators

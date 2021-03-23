@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
@@ -66,6 +67,7 @@ const ConfirmTrade = ({ id }) => {
   // need to check if trade exists first
   return (
     <div class="flex">
+      <Helmet title={`Trade ${id} | OurPortal`} />
       {!loading ? (
         <>
           <TradeDetails

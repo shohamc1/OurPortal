@@ -23,6 +23,10 @@ exports.onCreateWebpackConfig = ({ actions, stage, getConfig }) => {
         components: path.resolve(__dirname, "src/components"),
         pages: path.resolve(__dirname, "src/pages"),
         assets: path.resolve(__dirname, "src/assets"),
+        constants: path.resolve(__dirname, "src/constants"),
+        context: path.resolve(__dirname, "src/context"),
+        routes: path.resolve(__dirname, "src/routes"),
+        styles: path.resolve(__dirname, "src/styles"),
       },
     },
   });

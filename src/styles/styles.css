@@ -18,6 +18,16 @@
   animation: spin 2s linear infinite;
 }
 
+.loader-sm {
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  border-top: 4px solid black;
+  width: 24px;
+  height: 24px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
 .disable-scrollbars::-webkit-scrollbar {
   width: 0px;
   background: transparent; /* Chrome/Safari/Webkit */
