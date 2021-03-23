@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import * as axios from "axios";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 import Sidebar from "../sidebar";
 import Header from "../header";
 import Card from "../card";
 import { useUser } from "../../context/authContext";
 
+var userDB = firebase.firestore().collection("users");
+var modDB = firebase.firestore().collection("modules");
+
 const Request = () => {
   const [info, setInfo] = useState(true);
   const [userUID, setUserUID] = useState("");
   const [email, setEmail] = useState("");
-  const [popUp, setPopUp] = useState(true);
+  const [popUp, setPopUp] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+  const [mod, setMod] = useState({});
   const { setActivePage, user } = useUser();
 
   useEffect(() => {
@@ -19,6 +26,30 @@ const Request = () => {
     setUserUID(user.uid);
 
     // check if trade exists
+    userDB
+      .doc(user.uid)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          var modules = doc.data()?.modules;
+          // test modules
+          for (let element of modules) {
+            if (/02\.\S+/gm.test(element)) {
+              return element;
+            }
+          }
+        }
+      })
+      .then((mod) => {
+        modDB
+          .doc(mod)
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              setMod(doc.data());
+            }
+          });
+      });
   }, []);
 
   const closeInfo = (e) => {
@@ -38,6 +69,7 @@ const Request = () => {
   };
 
   const sendRequest = () => {
+    setIsClicked(true);
     console.log({ senderID: userUID, receiverEID: email });
     axios
       .post(
@@ -45,8 +77,9 @@ const Request = () => {
         { senderID: userUID, receiverEID: email }
       )
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           setPopUp(true);
+          setIsClicked(false);
         }
       })
       .catch((err) => {
@@ -128,11 +161,11 @@ const Request = () => {
                 Your Current Module
               </span>
               <Card
-                courseCode="50.004"
-                courseName="Introduction to Bullshit"
-                instructorFirstName="Ernest"
-                instructorLastName="Chong"
-                type="ISTD"
+                courseCode={mod.courseCode}
+                courseName={mod.courseName}
+                instructorFirstName={mod.instructorFirstName}
+                instructorLastName={mod.instructorLastName}
+                type={mod.type}
               />
             </div>
 
@@ -182,37 +215,42 @@ const Request = () => {
                   />
 
                   {/* generate magic link here */}
-                  <button
-                    href="#"
-                    class="flex flex-row mx-auto bg-green-500 text-gray-50 w-full py-2 rounded justify-center"
-                    onClick={sendRequest}
-                  >
-                    <span class="mr-2">Send</span>
-                    <svg
-                      width="26"
-                      height="24"
-                      viewBox="0 0 26 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                  {isClicked ? (
+                    <button class="opacity-50 flex flex-row mx-auto bg-green-500 text-gray-50 w-full py-2 rounded justify-center">
+                      <div class="loader-sm"></div>
+                    </button>
+                  ) : (
+                    <button
+                      class="flex flex-row mx-auto bg-green-500 text-gray-50 w-full py-2 rounded justify-center"
+                      onClick={sendRequest}
                     >
-                      <path
-                        d="M15.2917 5L22.2481 12L15.2917 19"
-                        stroke="#F5F5F5"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <line
-                        x1="20.9717"
-                        y1="12.0317"
-                        x2="4.60703"
-                        y2="12.0317"
-                        stroke="#F5F5F5"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                  </button>
+                      <span class="mr-2">Send</span>
+                      <svg
+                        width="26"
+                        height="24"
+                        viewBox="0 0 26 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15.2917 5L22.2481 12L15.2917 19"
+                          stroke="#F5F5F5"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <line
+                          x1="20.9717"
+                          y1="12.0317"
+                          x2="4.60703"
+                          y2="12.0317"
+                          stroke="#F5F5F5"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
