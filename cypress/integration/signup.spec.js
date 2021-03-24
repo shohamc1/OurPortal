@@ -17,8 +17,20 @@ describe("Signup", () => {
     cy.get("[autoComplete='family-name']").type("Dover");
     cy.get("button").contains("Sign Up").click();
     // successful signup routes to page
-    cy.getId("welcomeMessage").should("contain", "Ben");
+    cy.getId("welcomeMessage", 20000).should("contain", "Ben");
     cy.deleteUser();
+    cy.on("uncaught:exception", (err, runnable) => {
+      expect(err.message).to.include("something about the error");
+
+      // using mocha's async done callback to finish
+      // this test so we prove that an uncaught exception
+      // was thrown
+      done();
+
+      // return false to prevent the error from
+      // failing this test
+      return false;
+    });
     cy.getId("logoutBtn").click();
   });
 

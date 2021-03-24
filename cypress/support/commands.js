@@ -64,56 +64,56 @@ Cypress.Commands.add("logout", () => {
   return firebase.auth().signOut();
 });
 
-Cypress.Commands.add("getId", (dataTestId) => {
-  cy.get(`[data-testid='${dataTestId}']`);
+Cypress.Commands.add("getId", (dataTestId, time) => {
+  var t = time || 10000;
+  cy.get(`[data-testid='${dataTestId}']`, { timeout: t });
 });
 
 Cypress.Commands.add("deleteUser", () => {
-  return firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      firebase
-        .firestore()
-        .collection("users")
-        .doc(firebase.auth().currentUser.uid)
-        .delete()
-        .then(() => {
-          console.log("Account removed from users collection");
-          firebase
-            .auth()
-            .currentUser.delete()
-            .then(() => {
-              console.log("Account removed successfully");
-            })
-            .catch((error) => {
-              console.error("Error deleting account: ", error);
-            });
-        })
-        .catch((error) => {
-          console.error("Error deleting account from collection: ", error);
-        });
-    } else {
-      console.log("NOT DELETED");
-    }
-  });
-  // return firebase
-  //   .firestore()
-  //   .collection("users")
-  //   .document(firebase.auth().currentUser.uid)
-  //   .delete()
-  //   .then(() => {
-  //     console.log("Account removed from users collection");
+  // return firebase.auth().onAuthStateChanged((user) => {
+  //   if (user) {
   //     firebase
-  //       .auth()
-  //       .currentUser.delete()
+  //       .firestore()
+  //       .collection("users")
+  //       .doc(firebase.auth().currentUser.uid)
+  //       .delete()
   //       .then(() => {
-  //         console.log("Account removed successfully");
-  //         cy.visit("/signup");
+  //         console.log("Account removed from users collection");
+  //         firebase
+  //           .auth()
+  //           .currentUser.delete()
+  //           .then(() => {
+  //             console.log("Account removed successfully");
+  //           })
+  //           .catch((error) => {
+  //             console.error("Error deleting account: ", error);
+  //           });
   //       })
   //       .catch((error) => {
-  //         console.error("Error deleting account: ", error);
+  //         console.error("Error deleting account from collection: ", error);
   //       });
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error deleting account from collection: ", error);
-  //   });
+  //   } else {
+  //     console.log("NOT DELETED");
+  //   }
+  // });
+  return firebase
+    .firestore()
+    .collection("users")
+    .doc(firebase.auth().currentUser.uid)
+    .delete()
+    .then(() => {
+      console.log("Account removed from users collection");
+      firebase
+        .auth()
+        .currentUser.delete()
+        .then(() => {
+          console.log("Account removed successfully");
+        })
+        .catch((error) => {
+          console.error("Error deleting account: ", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Error deleting account from collection: ", error);
+    });
 });

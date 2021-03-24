@@ -4,7 +4,45 @@ describe("Login", () => {
   before(() => {
     cy.visit("/login");
   });
-  beforeEach(() => {
+
+  it("Navigates to Dashboard on success", () => {
+    cy.getId("loginEmail").type("testuser@gmail.com");
+    cy.getId("loginPassword").type("test123");
+    cy.getId("loginBtn").click();
+    cy.url().should("contain", "/dashboard");
+    cy.getId("welcomeMessage").should("contain", "test");
+    cy.logout();
+  });
+});
+describe("logout", () => {
+  it("Logout redirects to landing", () => {
+    cy.visit("/login");
+    cy.login();
+    cy.visit("/dashboard");
+    cy.url().should("contain", "/dashboard");
+    cy.getId("welcomeMessage").should("contain", "test");
+    cy.getId("logoutBtn").click();
+    cy.on("uncaught:exception", (err, runnable) => {
+      expect(err.message).to.include("something about the error");
+
+      // using mocha's async done callback to finish
+      // this test so we prove that an uncaught exception
+      // was thrown
+      done();
+
+      // return false to prevent the error from
+      // failing this test
+      return false;
+    });
+    cy.url().should("eq", "http://localhost:8000/");
+  });
+});
+describe("Bad Logins", () => {
+  before(() => {
+    cy.visit("/login");
+  });
+
+  afterEach(() => {
     cy.getId("loginEmail").clear();
     cy.getId("loginPassword").clear();
   });
@@ -42,25 +80,6 @@ describe("Login", () => {
       "contain",
       "The password is invalid or the user does not have a password."
     );
-  });
-
-  it("Navigates to Dashboard on success", () => {
-    cy.getId("loginEmail").type("testuser@gmail.com");
-    cy.getId("loginPassword").type("test123");
-    cy.getId("loginBtn").click();
-    cy.url().should("contain", "/dashboard");
-    cy.getId("welcomeMessage").should("contain", "test");
-    cy.logout();
-  });
-});
-describe("logout", () => {
-  it("Logout redirects to landing", () => {
-    cy.login();
-    cy.visit("/dashboard");
-    cy.url().should("contain", "/dashboard");
-    cy.getId("welcomeMessage").should("contain", "test");
-    cy.getId("logoutBtn").click();
-    cy.url().should("eq", "http://localhost:8000/");
   });
 });
 // User is at landing page => the pic loads and the 2 important buttons exist

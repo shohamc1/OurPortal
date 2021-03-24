@@ -34,9 +34,9 @@ describe("Sidebar and Header", () => {
       .should("contain", "Auto Trade");
   });
   describe("Sidebar and Header", () => {
-    afterEach(() => {
-      cy.visit("/dashboard");
-    });
+    // afterEach(() => {
+    //   cy.visit("/dashboard");
+    // });
 
     it('P2P Trade highlighted and header is "P2P Trade" ', () => {
       cy.getId("sideBarPeer").click();
