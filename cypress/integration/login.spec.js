@@ -14,7 +14,7 @@ describe("Login", () => {
     cy.logout();
   });
 });
-describe("logout", () => {
+describe("Logout", () => {
   it("Logout redirects to landing", () => {
     cy.visit("/login");
     cy.login();

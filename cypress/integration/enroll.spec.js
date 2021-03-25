@@ -16,25 +16,25 @@ describe("Enroll", () => {
     });
 
     it("Modules displayed with no text in search", () => {
-      cy.getId("customHitsResults", 30000).children().should("have.length", 20);
+      cy.getId("customHitsResults", 60000).children().should("have.length", 20);
       cy.contains("You have reached the end of results.");
     });
     it("Search based on professor", () => {
       cy.getId("customSearchBoxInput").type("Hokama Rhema");
-      cy.getId("customHitsResults", 30000).children().should("have.length", 2);
+      cy.getId("customHitsResults", 60000).children().should("have.length", 2);
       cy.getId("02.136DH").should("be.visible");
       cy.getId("02.127DH").should("be.visible");
       cy.contains("You have reached the end of results.");
     });
     it("Search based on module name", () => {
       cy.getId("customSearchBoxInput").type("Computer Vision");
-      cy.getId("customHitsResults", 30000).children().should("have.length", 1);
+      cy.getId("customHitsResults", 60000).children().should("have.length", 1);
       cy.getId("50.035").should("be.visible");
       cy.contains("You have reached the end of results.");
     });
     it("Search based on module code", () => {
       cy.getId("customSearchBoxInput").type("01.107");
-      cy.getId("customHitsResults", 30000).children().should("have.length", 1);
+      cy.getId("customHitsResults", 60000).children().should("have.length", 1);
       cy.getId("01.107").should("be.visible");
       cy.contains("You have reached the end of results.");
     });

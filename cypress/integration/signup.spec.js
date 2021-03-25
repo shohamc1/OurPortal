@@ -11,14 +11,6 @@ describe("Signup", () => {
   });
 
   it("Successful Signup", () => {
-    cy.get("[type='email']").type("signuptest@gmail.com");
-    cy.get("[type='password']").type("qwerty1234");
-    cy.get("[autoComplete='given-name']").type("Ben");
-    cy.get("[autoComplete='family-name']").type("Dover");
-    cy.get("button").contains("Sign Up").click();
-    // successful signup routes to page
-    cy.getId("welcomeMessage", 30000).should("contain", "Ben");
-    cy.deleteUser();
     cy.on("uncaught:exception", (err, runnable) => {
       expect(err.message).to.include("something about the error");
 
@@ -31,6 +23,16 @@ describe("Signup", () => {
       // failing this test
       return false;
     });
+
+    cy.get("[type='email']").type("signuptest@gmail.com");
+    cy.get("[type='password']").type("qwerty1234");
+    cy.get("[autoComplete='given-name']").type("Ben");
+    cy.get("[autoComplete='family-name']").type("Dover");
+    cy.get("button").contains("Sign Up").click();
+    // successful signup routes to page
+    cy.getId("welcomeMessage", 60000).should("contain", "Ben");
+    cy.deleteUser();
+
     cy.getId("logoutBtn").click();
   });
 
