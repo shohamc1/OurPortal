@@ -118,7 +118,7 @@ const ModuleCard = ({
   return (
     <div
       class="relative flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md overflow-hidden mr-6 mb-6"
-      data-testid="moduleCard"
+      data-testid={`${courseCode}`}
     >
       <div class={`text-4xl font-semibold pl-4 py-2 ${focusColor}`}>
         {courseCode}

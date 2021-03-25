@@ -17,7 +17,7 @@ describe("Signup", () => {
     cy.get("[autoComplete='family-name']").type("Dover");
     cy.get("button").contains("Sign Up").click();
     // successful signup routes to page
-    cy.getId("welcomeMessage", 20000).should("contain", "Ben");
+    cy.getId("welcomeMessage", 30000).should("contain", "Ben");
     cy.deleteUser();
     cy.on("uncaught:exception", (err, runnable) => {
       expect(err.message).to.include("something about the error");
