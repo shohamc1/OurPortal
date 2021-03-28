@@ -40,8 +40,11 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 // this works for now but there is another recommended method here https://docs.cypress.io/guides/testing-strategies/google-authentication.html#Google-Developer-Console-Setup
-const db = firebase.firestore();
-const auth = firebase.auth();
+
+Cypress.Commands.add("getId", (dataTestId, time) => {
+  var t = time || 10000;
+  cy.get(`[data-testid='${dataTestId}']`, { timeout: t });
+});
 
 Cypress.Commands.add(
   "login",
@@ -62,11 +65,6 @@ Cypress.Commands.add("logout", () => {
     displayName: "logout",
   });
   return firebase.auth().signOut();
-});
-
-Cypress.Commands.add("getId", (dataTestId, time) => {
-  var t = time || 10000;
-  cy.get(`[data-testid='${dataTestId}']`, { timeout: t });
 });
 
 Cypress.Commands.add("deleteUser", () => {
@@ -115,5 +113,14 @@ Cypress.Commands.add("deleteUser", () => {
     })
     .catch((error) => {
       console.error("Error deleting account from collection: ", error);
+    });
+});
+Cypress.Commands.add("deleteMod", (...courseCodes) => {
+  return firebase
+    .firestore()
+    .collection("users")
+    .doc(firebase.auth().currentUser.uid)
+    .update({
+      modules: firebase.firestore.FieldValue.arrayRemove(...courseCodes),
     });
 });

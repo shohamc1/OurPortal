@@ -14,7 +14,10 @@ const Card = ({
     ? MODULE_CARD_COLOUR[type]
     : MODULE_CARD_COLOUR.DEFAULT;
   return (
-    <div class="relative flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md overflow-hidden mr-6 mb-6">
+    <div
+      class="relative flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md overflow-hidden mr-6 mb-6"
+      data-testid={`${courseCode}`}
+    >
       <div class={`text-4xl font-semibold pl-4 py-2 ${focusColor}`}>
         {courseCode}
       </div>

@@ -30,7 +30,7 @@ describe("Signup", () => {
     cy.get("[autoComplete='family-name']").type("Dover");
     cy.get("button").contains("Sign Up").click();
     // successful signup routes to page
-    cy.getId("welcomeMessage", 60000).should("contain", "Ben");
+    cy.getId("dashboardWelcome", 60000).should("contain", "Ben");
     cy.deleteUser();
 
     cy.getId("logoutBtn").click();

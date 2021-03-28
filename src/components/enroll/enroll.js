@@ -99,6 +99,7 @@ const Enroll = () => {
             class={`${
               success ? "bg-green-500" : "bg-red-500"
             } px-5 pt-4 pb-5 w-1/2 flex flex-col rounded fixed transform -translate-x-2/4 -translate-y-2/4 left-1/2 top-1/2`}
+            data-testid="enrollModal"
           >
             <div class="flex justify-end">
               <svg
@@ -135,7 +136,9 @@ const Enroll = () => {
                   <br />
                   {enrolledModules.reduce((arr, m) => {
                     if (m.newlyEnrolled) {
-                      arr.push(<p>{`${m.courseCode}: ${m.courseName}`}</p>);
+                      arr.push(
+                        <p data-testid="enrollMods">{`${m.courseCode}: ${m.courseName}`}</p>
+                      );
                     }
                     return arr;
                   }, [])}

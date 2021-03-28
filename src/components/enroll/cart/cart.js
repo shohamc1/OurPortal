@@ -76,7 +76,7 @@ const Cart = () => {
   };
 
   return (
-    <div class="px-4 py-2 flex flex-col h-full">
+    <div class="px-4 py-2 flex flex-col h-full" data-testid="cart">
       <div class="items-center flex flex-row w-full py-2">
         {activePage === "enroll" ? (
           <></>
@@ -120,7 +120,10 @@ const Cart = () => {
           {activePage === "enroll" ? "Your Cart" : "Selected"}
         </span>
       </div>
-      <div class="mb-auto overflow-y-scroll disable-scrollbars">
+      <div
+        class="mb-auto overflow-y-scroll disable-scrollbars"
+        data-testid="cartContent"
+      >
         {array.length ? modules : empty}
       </div>
       {activePage === "enroll" && array.length ? (

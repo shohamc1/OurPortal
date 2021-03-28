@@ -10,7 +10,7 @@ describe("Login", () => {
     cy.getId("loginPassword").type("test123");
     cy.getId("loginBtn").click();
     cy.url().should("contain", "/dashboard");
-    cy.getId("welcomeMessage").should("contain", "test");
+    cy.getId("dashboardWelcome").should("contain", "test");
     cy.logout();
   });
 });
