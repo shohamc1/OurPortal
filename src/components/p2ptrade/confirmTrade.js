@@ -3,9 +3,6 @@ import { Helmet } from "react-helmet";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
-import Sidebar from "../sidebar";
-import Header from "../header";
-import Card from "../card";
 import TradeDetails from "./tradeDetails";
 
 var database = firebase.firestore().collection("trades");

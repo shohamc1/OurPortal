@@ -4,3 +4,4 @@ public
 .env
 cypress/screenshots/
 cypress/videos/
+k6/results

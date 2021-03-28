@@ -8,6 +8,9 @@ on:
 jobs:
   cypress:
     runs-on: ubuntu-latest
+    env:
+      GATSBY_ALGOLIA_APP_ID: ${{ secrets.GATSBY_ALGOLIA_APP_ID }}
+      GATSBY_ALGOLIA_SEARCH_KEY: ${{ secrets.GATSBY_ALGOLIA_SEARCH_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
