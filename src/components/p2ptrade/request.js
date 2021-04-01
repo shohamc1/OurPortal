@@ -70,7 +70,6 @@ const Request = () => {
 
   const sendRequest = () => {
     setIsClicked(true);
-    console.log({ senderID: userUID, receiverEID: email });
     axios
       .post(
         "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendRequest",
