@@ -10,6 +10,7 @@ import Trade from "../components/autoTrade/trade";
 import Enroll from "../components/enroll/enroll";
 import Request from "../components/p2ptrade/request";
 import ConfirmTrade from "../components/p2ptrade/confirmTrade";
+import Admin from "../components/admin/admin";
 
 import { AuthProvider } from "../context/authContext";
 import OnlyPublicRoute from "../routes/onlyPublicRoute";
@@ -30,6 +31,8 @@ const Index = () => {
         <OnlyPrivateRoute component={Enroll} path="enroll" />
         <OnlyPrivateRoute component={Request} path="request" />
         <ConfirmTrade path="trade/:id" />
+
+        <OnlyPrivateRoute component={Admin} path="admin" />
       </Router>
     </AuthProvider>
   );
