@@ -13,6 +13,7 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
+    "test": "jest",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
     "ci": "start-server-and-test develop http://localhost:8000 cy:run"
@@ -35,8 +36,13 @@
     "react-instantsearch-dom": "^6.10.0"
   },
   "devDependencies": {
+    "babel-jest": "^26.6.3",
+    "babel-preset-gatsby": "^1.2.0",
     "cypress": "^6.6.0",
     "cypress-firebase": "^1.8.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
+    "react-test-renderer": "^17.0.2",
     "start-server-and-test": "^1.12.0",
     "tailwindcss": "^2.0.3"
   }
