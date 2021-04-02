@@ -1,11 +1,11 @@
 import React from "react";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 
 import Header from "@components/header.js";
 
 describe("Header", () => {
   it("renders correctly", () => {
-    const tree = renderer.create(<Header />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const { getByTestId } = render(<Header />);
+    expect(getByTestId("headerPageName")).toHaveTextContent("Test");
   });
 });

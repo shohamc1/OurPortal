@@ -19,4 +19,5 @@ module.exports = {
     __PATH_PREFIX__: ``,
   },
   setupFiles: [`<rootDir>/jest/loadershim.js`],
+  setupFilesAfterEnv: ["<rootDir>/jest/setup-test-env.js"],
 };
