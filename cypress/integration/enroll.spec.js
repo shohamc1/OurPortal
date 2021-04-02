@@ -5,7 +5,6 @@ describe("Enroll", () => {
     cy.visit("/");
     cy.login();
     cy.visit("/enroll");
-    //cy.deleteMod(["02.136DH", "50.046", "50.044", "50.043"]);
   });
   after(() => {
     cy.logout();
@@ -52,14 +51,6 @@ describe("Enroll", () => {
     });
   });
 
-  // describe("Module Card", () => {
-  //   it("Colour corresponds to pillar", () => {});
-  //   it("Availability indicator color", () => {});
-  //   it("'+' button adds to cart, button changes to 'x'", () => {});
-  //   it("'x' button removes from cart, button changes to '+'", () => {});
-  //   it("disabled '+' when module is full", () => {});
-  // });
-
   describe("Cart Usage", () => {
     it("Header displays 'Your Cart'", () => {
       cy.getId("cartHeader").should("contain", "Your Cart");
@@ -68,8 +59,21 @@ describe("Enroll", () => {
       cy.getId("cartContent").should("contain", "Your cart is empty!");
     });
 
-    it("Proceed button visible when cart has at least 1 item", () => {
+    it("Add item to cart", () => {
       cy.getId("customSearchBoxInput").type("Hokama Rhema");
+      cy.getId("02.136DH").find("button").click();
+      cy.getId("cartContent").children().should("have.length", 1);
+    });
+
+    it("Remove item via module card", () => {
+      cy.getId("customHitsResults")
+        .find("[data-testid='02.136DH']")
+        .find("button")
+        .click();
+      cy.getId("cartContent").should("contain", "Your cart is empty!");
+    });
+
+    it("Proceed button visible when cart has at least 1 item", () => {
       cy.getId("02.136DH").find("button").click();
       cy.getId("cart").find("button[class^=bg-green-500]").should("be.visible");
     });
@@ -81,6 +85,7 @@ describe("Enroll", () => {
       cy.getId("50.043").find("button").click();
       cy.getId("cartContent").children().should("have.length", 4);
     });
+
     it("Module tab displays correct code and colour", () => {
       cy.getId("customSearchBoxInput").clear().type("40");
       cy.getId("40.324").find("button").click();
@@ -116,7 +121,7 @@ describe("Enroll", () => {
       cy.getId("cartContent").children().should("have.length", 4);
     });
 
-    it("Checkout successfully with success modal", () => {
+    it("Success modal and empty cart upon success", () => {
       cy.getId("cart").find("button[class^=bg-green-500]").click();
       cy.getId("enrollModal", 30000)
         .should("be.visible")
@@ -138,6 +143,21 @@ describe("Enroll", () => {
       cy.getId("cartContent").should("contain", "Your cart is empty!");
     });
 
+    it("Searching for enrolled mods returns no results", () => {
+      cy.getId("customSearchBoxInput").clear().type("02.136");
+      cy.getId("customHitsResults").children().should("have.length", 0);
+      cy.contains("You have reached the end of results.");
+      cy.getId("customSearchBoxInput").clear().type("50.046");
+      cy.getId("customHitsResults").children().should("have.length", 0);
+      cy.contains("You have reached the end of results.");
+      cy.getId("customSearchBoxInput").clear().type("50.044");
+      cy.getId("customHitsResults").children().should("have.length", 0);
+      cy.contains("You have reached the end of results.");
+      cy.getId("customSearchBoxInput").clear().type("50.043");
+      cy.getId("customHitsResults").children().should("have.length", 0);
+      cy.contains("You have reached the end of results.");
+    });
+
     it("Homepage shows successfully enrolled modules", () => {
       cy.visit("/dashboard");
       cy.getId("dashboardMods", 30000).children().should("have.length", 4);
@@ -145,10 +165,10 @@ describe("Enroll", () => {
       cy.getId("50.046").should("be.visible");
       cy.getId("50.044").should("be.visible");
       cy.getId("50.043").should("be.visible");
-      cy.deleteMod(...["02.136DH", "50.046", "50.044", "50.043"]);
+      cy.deleteMod(["02.136DH", "50.046", "50.044", "50.043"]);
     });
-
-    // it("Proceed clears cart and enrolls user", () => {});
-    // it("Proceed clears cart and rejects user when module is full", () => {});
+    // TODO Test for failed enrollment
+    // TODO Test the availability symbol to see if colour works: create command to add a mod to the database?
+    // TODO clean up hardcoding by using fixtures instead
   });
 });

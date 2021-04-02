@@ -134,7 +134,10 @@ const Request = () => {
         <Header pageName="P2P Trade Request" />
         <div class="flex flex-col flex-grow px-6 pt-4">
           {info ? (
-            <div class="p-2 bg-red-400 rounded mb-4">
+            <div
+              class="p-2 bg-red-400 rounded mb-4"
+              data-testid="requestInfoTab"
+            >
               <div class="ml-2 my-2 text-justify">
                 <button class="float-right mx-2 p-2" onClick={closeInfo}>
                   <svg
@@ -202,7 +205,10 @@ const Request = () => {
               <span class="text-4xl font-bold text-justify">
                 Recipient's Details
               </span>
-              <div class="flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md mr-6 mb-6 p-2">
+              <div
+                class="flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md mr-6 mb-6 p-2"
+                data-testid="requestRecipientCard"
+              >
                 <div class="my-auto">
                   <span class="font-semibold text-lg">Email</span>
                   <input
@@ -222,6 +228,7 @@ const Request = () => {
                     <button
                       class="flex flex-row mx-auto bg-green-500 text-gray-50 w-full py-2 rounded justify-center"
                       onClick={sendRequest}
+                      data-testid="requestSendButton"
                     >
                       <span class="mr-2">Send</span>
                       <svg

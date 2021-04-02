@@ -51,7 +51,10 @@ const SelectedModuleCard = ({
   };
 
   return (
-    <div class="flex flex-row rounded items-center 2xl:self-center bg-gray-50 w-auto 2xl:w-3/4 h-auto shadow-md overflow-hidden my-2 px-4 py-2">
+    <div
+      class="flex flex-row rounded items-center 2xl:self-center bg-gray-50 w-auto 2xl:w-3/4 h-auto shadow-md overflow-hidden my-2 px-4 py-2"
+      data-testid="selectedModuleCard"
+    >
       <div class="text-base px-2 hidden">{selectionIndex} </div>
       <div class="text-lg xl:text-2xl font-semibold px-2 py-2 w-24 xl:w-32">
         {courseCode}

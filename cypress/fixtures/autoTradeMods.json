@@ -1,0 +1,16 @@
+{
+  "modules": [
+    {
+      "courseCode": "02.231TS",
+      "weightage": "29"
+    },
+    {
+      "courseCode": "02.230TS",
+      "weightage": "50"
+    },
+    {
+      "courseCode": "02.219TS",
+      "weightage": "21"
+    }
+  ]
+}

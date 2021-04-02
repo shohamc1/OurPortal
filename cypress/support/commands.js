@@ -68,32 +68,6 @@ Cypress.Commands.add("logout", () => {
 });
 
 Cypress.Commands.add("deleteUser", () => {
-  // return firebase.auth().onAuthStateChanged((user) => {
-  //   if (user) {
-  //     firebase
-  //       .firestore()
-  //       .collection("users")
-  //       .doc(firebase.auth().currentUser.uid)
-  //       .delete()
-  //       .then(() => {
-  //         console.log("Account removed from users collection");
-  //         firebase
-  //           .auth()
-  //           .currentUser.delete()
-  //           .then(() => {
-  //             console.log("Account removed successfully");
-  //           })
-  //           .catch((error) => {
-  //             console.error("Error deleting account: ", error);
-  //           });
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error deleting account from collection: ", error);
-  //       });
-  //   } else {
-  //     console.log("NOT DELETED");
-  //   }
-  // });
   return firebase
     .firestore()
     .collection("users")
@@ -115,12 +89,39 @@ Cypress.Commands.add("deleteUser", () => {
       console.error("Error deleting account from collection: ", error);
     });
 });
-Cypress.Commands.add("deleteMod", (...courseCodes) => {
+
+Cypress.Commands.add("deleteMod", (courseCodes) => {
   return firebase
     .firestore()
     .collection("users")
     .doc(firebase.auth().currentUser.uid)
     .update({
       modules: firebase.firestore.FieldValue.arrayRemove(...courseCodes),
+    });
+});
+
+Cypress.Commands.add("enrollMod", (courseCodes) => {
+  return firebase
+    .firestore()
+    .collection("users")
+    .doc(firebase.auth().currentUser.uid)
+    .update({
+      modules: firebase.firestore.FieldValue.arrayUnion(...courseCodes),
+    });
+});
+
+Cypress.Commands.add("removeAutoTradeMods", (autoTradeMods) => {
+  Cypress.log({
+    displayName: "remove autotrade mods",
+    modules: autoTradeMods,
+  });
+  return firebase
+    .firestore()
+    .collection("users")
+    .doc(firebase.auth().currentUser.uid)
+    .update({
+      autoTradeModules: firebase.firestore.FieldValue.arrayRemove(
+        ...autoTradeMods
+      ),
     });
 });

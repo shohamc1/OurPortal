@@ -156,7 +156,10 @@ const Trade = () => {
         <Header pageName="Auto Trade" />
         <div class="flex flex-col text-sm text-gray-800 w-full py-4 px-4 h-full">
           {showInfo ? (
-            <div class="flex flex-col rounded mb-4 shadow-md border-2 border-red-400">
+            <div
+              class="flex flex-col rounded mb-4 shadow-md border-2 border-red-400"
+              data-testid="tradeInfoTab"
+            >
               <div class="flex flex-row items-center h-1/6 w-auto rounded-t ">
                 <div class="font-bold text-lg ml-2">Information</div>
                 <button class="ml-auto mr-2 p-2" onClick={closeInfo}>
@@ -221,7 +224,10 @@ const Trade = () => {
           <h2 class="font-bold text-3xl mt-4">Selected Modules</h2>
           <div class="min-h-text-sm">
             {showUpdateMessage ? (
-              <p class="font-light text-green-500 text-sm mb-2">
+              <p
+                class="font-light text-green-500 text-sm mb-2"
+                data-testid="tradeUpdateMessage"
+              >
                 Your Selection is Updated
               </p>
             ) : (
@@ -238,11 +244,15 @@ const Trade = () => {
               class={`${
                 remainingWeightage ? "bg-red-700" : "bg-green-500"
               } text-white text-lg xl:text-xl text-center opacity-90 font-bold w-10 2xl:w-12 min-w-min p-2 m-2 rounded-md`}
+              data-testid="tradeRemainingWeightage"
             >
               {remainingWeightage}
             </div>
             {invalidWeightage ? (
-              <div class="flex flex-col text-xs text-red-500">
+              <div
+                class="flex flex-col text-xs text-red-500"
+                data-testid="tradeExceedWeightage"
+              >
                 <svg
                   width="24"
                   height="24"
@@ -283,6 +293,7 @@ const Trade = () => {
               } rounded py-2 mr-2 xl:px-10 ml-auto xl:mr-4 text-white text-xl 2xl:text-2xl w-1/5`}
               onClick={displaySearch}
               disabled={!tradeModule}
+              data-testid="tradeSearchButton"
             >
               Search
             </button>
@@ -292,6 +303,7 @@ const Trade = () => {
               } rounded py-2 px-4 mr-2 xl:px-10 xl:mr-4 text-white text-xl 2xl:text-2xl w-1/5`}
               disabled={remainingWeightage !== 0}
               onClick={updateFirestore}
+              data-testid="tradeUpdateButton"
             >
               Update
             </button>

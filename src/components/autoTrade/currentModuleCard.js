@@ -14,7 +14,10 @@ const CurrentModuleCard = ({
   instructorLastName,
 }) => {
   return (
-    <div class="flex flex-none flex-row items-center self-center rounded bg-gray-50 w-auto md:w-3/4 2xl:w-2/3 h-auto shadow-md mt-2">
+    <div
+      class="flex flex-none flex-row items-center self-center rounded bg-gray-50 w-auto md:w-3/4 2xl:w-2/3 h-auto shadow-md mt-2"
+      data-testid="currentModuleCard"
+    >
       {courseCode ? (
         <div class="text-3xl xl:text-4xl font-semibold px-4 py-4 xl:py-6">
           {courseCode}
