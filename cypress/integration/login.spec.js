@@ -10,7 +10,7 @@ describe("Login", () => {
     cy.getId("loginPassword").type("test123");
     cy.getId("loginBtn").click();
     cy.url().should("contain", "/dashboard");
-    cy.getId("dashboardWelcome").should("contain", "test");
+    cy.getId("welcomeMessage").should("contain", "Test");
     cy.logout();
   });
 });
@@ -20,7 +20,7 @@ describe("Logout", () => {
     cy.login();
     cy.visit("/dashboard");
     cy.url().should("contain", "/dashboard");
-    cy.getId("welcomeMessage").should("contain", "test");
+    cy.getId("welcomeMessage").should("contain", "Test");
     cy.getId("logoutBtn").click();
     cy.on("uncaught:exception", (err, runnable) => {
       expect(err.message).to.include("something about the error");

@@ -29,3 +29,19 @@ jobs:
           path: |
             cypress/screenshots
             cypress/videos
+
+  jest:
+    runs-on: ubuntu-latest
+    env:
+      GATSBY_ALGOLIA_APP_ID: ${{ secrets.GATSBY_ALGOLIA_APP_ID }}
+      GATSBY_ALGOLIA_SEARCH_KEY: ${{ secrets.GATSBY_ALGOLIA_SEARCH_KEY }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run jest tests
+        run: npm run test
