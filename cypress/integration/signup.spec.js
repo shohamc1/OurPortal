@@ -32,7 +32,6 @@ describe("Signup", () => {
     // successful signup routes to page
     cy.getId("dashboardWelcome", 60000).should("contain", "Ben");
     cy.deleteUser();
-
     cy.getId("logoutBtn").click();
   });
 
