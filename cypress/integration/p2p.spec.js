@@ -7,7 +7,7 @@ describe("P2P Trade", () => {
     cy.visit("/request");
   });
   after(() => {
-    cy.deleteMod(["02.144DH"]);
+    cy.deleteMod(["02.136DH"]);
     cy.logout();
   });
 
@@ -33,12 +33,13 @@ describe("P2P Trade", () => {
 
   describe("With enrolled module", () => {
     before(() => {
-      cy.enrollMod(["02.144DH"]);
-      cy.visit("/request");
+      cy.enrollMod(["02.136DH"]).then(() => {
+        cy.reload();
+      });
     });
 
     it("Module Card Visible", () => {
-      cy.getId("02.144DH", 60000);
+      cy.getId("02.136DH", 30000);
     });
     it("Button disabled when not enrolled", () => {
       cy.getId("requestSendButton").should("not.be.disabled"); // NEED TO FIX

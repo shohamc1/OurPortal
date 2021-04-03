@@ -40,7 +40,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 // this works for now but there is another recommended method here https://docs.cypress.io/guides/testing-strategies/google-authentication.html#Google-Developer-Console-Setup
-const User = null;
 Cypress.Commands.add("getId", (dataTestId, time) => {
   var t = time || 10000;
   cy.get(`[data-testid='${dataTestId}']`, { timeout: t });
@@ -91,23 +90,27 @@ Cypress.Commands.add("deleteUser", () => {
 });
 
 Cypress.Commands.add("deleteMod", (courseCodes) => {
-  return firebase
-    .firestore()
-    .collection("users")
-    .doc(firebase.auth().currentUser.uid)
-    .update({
-      modules: firebase.firestore.FieldValue.arrayRemove(...courseCodes),
-    });
+  return cy.document().then({ timeout: 10000 }, (doc) => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .update({
+        modules: firebase.firestore.FieldValue.arrayRemove(...courseCodes),
+      });
+  });
 });
 
 Cypress.Commands.add("enrollMod", (courseCodes) => {
-  return firebase
-    .firestore()
-    .collection("users")
-    .doc(firebase.auth().currentUser.uid)
-    .update({
-      modules: firebase.firestore.FieldValue.arrayUnion(...courseCodes),
-    });
+  return cy.document().then({ timeout: 10000 }, (doc) => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .update({
+        modules: firebase.firestore.FieldValue.arrayUnion(...courseCodes),
+      });
+  });
 });
 
 Cypress.Commands.add("removeAutoTradeMods", (autoTradeMods) => {
@@ -115,13 +118,15 @@ Cypress.Commands.add("removeAutoTradeMods", (autoTradeMods) => {
     displayName: "remove autotrade mods",
     modules: autoTradeMods,
   });
-  return firebase
-    .firestore()
-    .collection("users")
-    .doc(firebase.auth().currentUser.uid)
-    .update({
-      autoTradeModules: firebase.firestore.FieldValue.arrayRemove(
-        ...autoTradeMods
-      ),
-    });
+  return cy.document().then({ timeout: 10000 }, (doc) => {
+    return firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .update({
+        autoTradeModules: firebase.firestore.FieldValue.arrayRemove(
+          ...autoTradeMods
+        ),
+      });
+  });
 });
