@@ -2,7 +2,7 @@
 const mods = [];
 describe("Auto Trade", () => {
   before(() => {
-    cy.fixture("autoTradeMods").then((autoTradeMods) => {
+    cy.fixture("autoTradeMods", 30000).then((autoTradeMods) => {
       autoTradeMods.modules.forEach(($mod) => {
         let mod = {
           courseCode: $mod.courseCode,
