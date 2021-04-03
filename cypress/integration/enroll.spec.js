@@ -4,7 +4,9 @@ describe("Enroll", () => {
   before(() => {
     cy.visit("/");
     cy.login();
-    cy.visit("/enroll");
+    cy.deleteMod(["02.136DH", "50.046", "50.044", "50.043"]).then(() => {
+      cy.visit("/enroll");
+    });
   });
   after(() => {
     cy.logout();

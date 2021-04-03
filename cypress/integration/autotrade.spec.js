@@ -13,7 +13,11 @@ describe("Auto Trade", () => {
     });
     cy.visit("/");
     cy.login();
-    cy.visit("/autotrade");
+    cy.deleteMod(["02.136DH"]).then(() => {
+      cy.removeAutoTradeMods(mods).then(() => {
+        cy.visit("/autotrade");
+      });
+    });
   });
   after(() => {
     cy.removeAutoTradeMods(mods);

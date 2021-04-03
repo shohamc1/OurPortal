@@ -4,7 +4,9 @@ describe("P2P Trade", () => {
   before(() => {
     cy.visit("/");
     cy.login();
-    cy.visit("/request");
+    cy.deleteMod(["02.136DH"]).then(() => {
+      cy.visit("/request");
+    });
   });
   after(() => {
     cy.deleteMod(["02.136DH"]);
