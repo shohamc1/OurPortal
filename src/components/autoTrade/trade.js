@@ -157,12 +157,11 @@ const Trade = () => {
         <div class="flex flex-col text-sm text-gray-800 w-full py-4 px-4 h-full">
           {showInfo ? (
             <div
-              class="flex flex-col rounded mb-4 shadow-md border-2 border-red-400"
-              data-testid="tradeInfoTab"
+              class="p-2 border-2 border-red-400 rounded mb-4"
+              data-testid="requestInfoTab"
             >
-              <div class="flex flex-row items-center h-1/6 w-auto rounded-t ">
-                <div class="font-bold text-lg ml-2">Information</div>
-                <button class="ml-auto mr-2 p-2" onClick={closeInfo}>
+              <div class="ml-2 my-2 text-justify">
+                <button class="float-right mx-2 p-2" onClick={closeInfo}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="12"
@@ -172,14 +171,13 @@ const Trade = () => {
                     <path d="M23.954 21.03l-9.184-9.095 9.092-9.174-2.832-2.807-9.09 9.179-9.176-9.088-2.81 2.81 9.186 9.105-9.095 9.184 2.81 2.81 9.112-9.192 9.18 9.1z" />
                   </svg>
                 </button>
-              </div>
-              <div class="mx-2 my-2 text-justify">
+                <b>Welcome to Auto Trading.</b>
                 <p>
-                  Welcome to Auto Trading. This feature allows you to put your
-                  enrolled HASS module up for exchange for a chance to obtain
-                  your desired hass module. At the end of the enrollment period,
-                  our algorithm will attempt to help everyone who used this
-                  feature to get their desired module!
+                  This feature allows you to put your enrolled HASS module up
+                  for exchange for a chance to obtain your desired hass module.
+                  At the end of the enrollment period, our algorithm will
+                  attempt to help everyone who used this feature to get their
+                  desired module!
                 </p>
                 <p class="mt-2">Instructions:</p>
                 <ol class="list-decimal list-inside w-3/4 self-center mt-2">

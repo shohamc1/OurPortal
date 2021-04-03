@@ -8,6 +8,7 @@ import Sidebar from "../sidebar";
 import Header from "../header";
 import Card from "../card";
 import { useUser } from "../../context/authContext";
+import { navigate } from "@reach/router";
 
 var userDB = firebase.firestore().collection("users");
 var modDB = firebase.firestore().collection("modules");
@@ -19,6 +20,8 @@ const Request = () => {
   const [popUp, setPopUp] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [mod, setMod] = useState({});
+  const [done, setDone] = useState(false);
+  const [hasMod, setHasMod] = useState(true);
   const { setActivePage, user } = useUser();
 
   useEffect(() => {
@@ -48,6 +51,12 @@ const Request = () => {
             if (doc.exists) {
               setMod(doc.data());
             }
+          })
+          .then(() => {
+            if (Object.keys(mod).length === 0 || mod === undefined) {
+              setDone(true);
+              setHasMod(false);
+            }
           });
       });
   }, []);
@@ -61,6 +70,11 @@ const Request = () => {
     setPopUp(false);
   };
 
+  const dismissMessageRedirect = () => {
+    navigate("/dashboard");
+    setDone(false);
+  };
+
   const handleEmailChange = (event) => {
     const target = event.target;
     const value = target.value;
@@ -69,6 +83,10 @@ const Request = () => {
   };
 
   const sendRequest = () => {
+    if (Object.keys(mod).length === 0 || mod === undefined) {
+      setDone(true);
+      setHasMod(false);
+    }
     setIsClicked(true);
     axios
       .post(
@@ -89,6 +107,48 @@ const Request = () => {
   return (
     <div class="flex">
       <Helmet title="P2P Trade Request | OurPortal" />
+      {done && !hasMod ? (
+        <>
+          <div class="absolute bottom-0 left-0 flex bg-gray-dark bg-opacity-50 h-full w-full z-20">
+            <div class="bg-gray-100 px-5 pt-4 pb-5 w-1/2 flex flex-col rounded fixed transform -translate-x-2/4 -translate-y-2/4 left-1/2 top-1/2">
+              <div class="flex justify-end">
+                <svg
+                  class="cursor-pointer"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  onClick={dismissMessageRedirect}
+                >
+                  <path
+                    d="M3 3L9.3871 9.3871"
+                    stroke="#14142B"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M3 9.38708L9.3871 2.99999"
+                    stroke="#14142B"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <span class="text-5xl font-bold">Uh oh! &#x1F62C;</span>
+              <span class="text-2xl font-medium">
+                Seems like you do not have a HASS module yet. Come back once you
+                have one!
+              </span>
+            </div>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
       {popUp ? (
         <>
           <div class="absolute bottom-0 left-0 flex bg-gray-dark bg-opacity-50 h-full w-full z-20">
@@ -135,7 +195,7 @@ const Request = () => {
         <div class="flex flex-col flex-grow px-6 pt-4">
           {info ? (
             <div
-              class="p-2 bg-red-400 rounded mb-4"
+              class="p-2 border-2 border-red-400 rounded mb-4"
               data-testid="requestInfoTab"
             >
               <div class="ml-2 my-2 text-justify">
@@ -150,13 +210,17 @@ const Request = () => {
                   </svg>
                 </button>
                 <b>Welcome to P2P Trading.</b>
-                <p>Explain here</p>
+                <p>
+                  Already have someone to trade with? Here you can just input
+                  their username and once they accept, you will be able to swap
+                  modules.
+                </p>
               </div>
             </div>
           ) : (
             <></>
           )}
-          <div class="grid grid-flow-col grid-cols-auto my-auto">
+          <div class="flex flex-col w-1/2 mx-auto my-auto">
             <div class="flex flex-col">
               {/* your current module */}
               <span class="text-4xl font-bold text-justify">
@@ -174,6 +238,7 @@ const Request = () => {
             <div class="self-center justify-self-center">
               {/* trade SVG */}
               <svg
+                style={{ rotate: "90deg" }}
                 version="1.1"
                 id="Capa_1"
                 x="0px"
