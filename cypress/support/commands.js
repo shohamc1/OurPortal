@@ -66,27 +66,38 @@ Cypress.Commands.add("logout", () => {
   return firebase.auth().signOut();
 });
 
-Cypress.Commands.add("deleteUser", () => {
-  return firebase
-    .firestore()
-    .collection("users")
-    .doc(firebase.auth().currentUser.uid)
-    .delete()
-    .then(() => {
-      console.log("Account removed from users collection");
-      firebase
-        .auth()
-        .currentUser.delete()
-        .then(() => {
-          console.log("Account removed successfully");
-        })
-        .catch((error) => {
-          console.error("Error deleting account: ", error);
-        });
-    })
-    .catch((error) => {
-      console.error("Error deleting account from collection: ", error);
-    });
+Cypress.Commands.add("getUser", (o) => {
+  return firebase.auth().onAuthStateChanged(($user) => {
+    if ($user) {
+      console.log("User registered!");
+      o.user = $user;
+    } else {
+      console.log("User logged out");
+    }
+  });
+});
+Cypress.Commands.add("deleteUser", (user) => {
+  return cy.document().then({ timeout: 10000 }, (doc) => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(user.uid)
+      .delete()
+      .then(() => {
+        console.log("Account removed from users collection");
+        user
+          .delete()
+          .then(() => {
+            console.log("Account removed successfully");
+          })
+          .catch((error) => {
+            console.log("Error deleting account");
+          });
+      })
+      .catch((error) => {
+        console("Error deleting account from collection:");
+      });
+  });
 });
 
 Cypress.Commands.add("deleteMod", (courseCodes) => {

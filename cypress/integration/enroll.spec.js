@@ -160,7 +160,9 @@ describe("Enroll", () => {
 
     it("Homepage shows successfully enrolled modules", () => {
       cy.visit("/dashboard");
-      cy.getId("dashboardMods").children(30000).should("have.length", 4);
+      cy.getId("dashboardMods")
+        .children({ timeout: 30000 })
+        .should("have.length", 4);
       cy.getId("02.136DH").should("be.visible");
       cy.getId("50.046").should("be.visible");
       cy.getId("50.044").should("be.visible");
