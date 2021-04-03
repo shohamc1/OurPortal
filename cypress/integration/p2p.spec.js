@@ -12,11 +12,7 @@ describe("P2P Trade", () => {
   });
 
   it("Dismissiable information tab on visit", () => {
-    cy.getId("requestInfoTab")
-      .should("be.visible")
-      .and("contain", "Welcome to P2P Trading")
-      .find("svg")
-      .click();
+    cy.getId("requestInfoTab").should("be.visible").find("button").click();
   });
 
   describe("No enrolled module", () => {

@@ -22,11 +22,7 @@ describe("Auto Trade", () => {
   });
 
   it("Dismissiable information tab on visit", () => {
-    cy.getId("tradeInfoTab")
-      .should("be.visible")
-      .and("contain", "Information")
-      .find("button")
-      .click();
+    cy.getId("tradeInfoTab").should("be.visible").find("button").click();
   });
 
   describe("No enrolled module", () => {

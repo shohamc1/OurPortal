@@ -158,7 +158,7 @@ const Trade = () => {
           {showInfo ? (
             <div
               class="p-2 border-2 border-red-400 rounded mb-4"
-              data-testid="requestInfoTab"
+              data-testid="tradeInfoTab"
             >
               <div class="ml-2 my-2 text-justify">
                 <button class="float-right mx-2 p-2" onClick={closeInfo}>
