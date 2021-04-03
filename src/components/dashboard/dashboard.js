@@ -86,45 +86,6 @@ const Dashboard = () => {
             ) : (
               <></>
             )}
-            {/* <Card
-              courseCode="30.001"
-              courseName="Ayylmao"
-              instructorFirstName="Yang Huei"
-              instructorLastName="Pang"
-              type="HASS"
-            />
-
-            <Card
-              courseCode="30.002"
-              courseName="ggezpz"
-              instructorFirstName="Yang Huei"
-              instructorLastName="Pang"
-              type="EPD"
-            />
-
-            <Card
-              courseCode="30.003"
-              courseName="wth"
-              instructorFirstName="Yang Huei"
-              instructorLastName="Pang"
-              type="ISTD"
-            />
-
-            <Card
-              courseCode="30.004"
-              courseName="aaaa"
-              instructorFirstName="Yang Huei"
-              instructorLastName="Pang"
-              type="ESD"
-            />
-
-            <Card
-              courseCode="30.004"
-              courseName="aaaa"
-              instructorFirstName="Yang Huei"
-              instructorLastName="Pang"
-              type="ASD"
-            /> */}
           </div>
         </div>
       </div>

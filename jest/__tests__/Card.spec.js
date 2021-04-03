@@ -20,7 +20,7 @@ describe("Header", () => {
       />
     );
 
-    expect(getByTestId("courseCode")).toHaveTextContent("02.213");
+    expect(getByTestId("02.213")).toHaveTextContent("02.213");
     expect(getByTestId("courseName")).toHaveTextContent("Course Name");
     expect(getByTestId("instructorLastName")).toHaveTextContent("Last");
     expect(getByTestId("instructorFirstName")).toHaveTextContent("First");
@@ -36,7 +36,7 @@ describe("Header", () => {
         type="HASS"
       />
     );
-    expect(getByTestId("courseCode")).toHaveClass("bg-pastel-red");
+    expect(getByTestId("02.213")).toHaveClass("bg-pastel-red");
   });
 
   test("EPD Card", () => {
@@ -49,7 +49,7 @@ describe("Header", () => {
         type="EPD"
       />
     );
-    expect(getByTestId("courseCode")).toHaveClass("bg-pastel-mint");
+    expect(getByTestId("02.213")).toHaveClass("bg-pastel-mint");
   });
 
   test("ESD Card", () => {
@@ -62,7 +62,7 @@ describe("Header", () => {
         type="ESD"
       />
     );
-    expect(getByTestId("courseCode")).toHaveClass("bg-pastel-blue");
+    expect(getByTestId("02.213")).toHaveClass("bg-pastel-blue");
   });
 
   test("ISTD Card", () => {
@@ -75,7 +75,7 @@ describe("Header", () => {
         type="ISTD"
       />
     );
-    expect(getByTestId("courseCode")).toHaveClass("bg-pastel-turquoise");
+    expect(getByTestId("02.213")).toHaveClass("bg-pastel-turquoise");
   });
 
   test("ASD Card", () => {
@@ -88,7 +88,7 @@ describe("Header", () => {
         type="ASD"
       />
     );
-    expect(getByTestId("courseCode")).toHaveClass("bg-pastel-yellow");
+    expect(getByTestId("02.213")).toHaveClass("bg-pastel-yellow");
   });
 
   test("Default Card", () => {
@@ -100,6 +100,6 @@ describe("Header", () => {
         instructorLastName="Last"
       />
     );
-    expect(getByTestId("courseCode")).toHaveClass("bg-gray-500");
+    expect(getByTestId("02.213")).toHaveClass("bg-gray-500");
   });
 });
