@@ -2,7 +2,7 @@
 const mods = [];
 describe("Auto Trade", () => {
   before(() => {
-    cy.fixture("autoTradeMods", 30000).then((autoTradeMods) => {
+    cy.fixture("autoTradeMods", { timeout: 30000 }).then((autoTradeMods) => {
       autoTradeMods.modules.forEach(($mod) => {
         let mod = {
           courseCode: $mod.courseCode,
@@ -13,7 +13,11 @@ describe("Auto Trade", () => {
     });
     cy.visit("/");
     cy.login();
-    cy.visit("/autotrade");
+    cy.deleteMod(["02.136DH"]).then(() => {
+      cy.removeAutoTradeMods(mods).then(() => {
+        cy.visit("/autotrade");
+      });
+    });
   });
   after(() => {
     cy.removeAutoTradeMods(mods);
@@ -22,11 +26,7 @@ describe("Auto Trade", () => {
   });
 
   it("Dismissiable information tab on visit", () => {
-    cy.getId("tradeInfoTab")
-      .should("be.visible")
-      .and("contain", "Information")
-      .find("button")
-      .click();
+    cy.getId("tradeInfoTab").should("be.visible").find("button").click();
   });
 
   describe("No enrolled module", () => {
@@ -53,8 +53,9 @@ describe("Auto Trade", () => {
 
   describe("With enrolled module", () => {
     before(() => {
-      cy.enrollMod(["02.136DH"]);
-      cy.reload();
+      cy.enrollMod(["02.136DH"]).then(() => {
+        cy.reload();
+      });
     });
     it("Currently enrolled module displayed", () => {
       cy.getId("currentModuleCard", 60000).should("contain", "02.136DH");
@@ -223,25 +224,6 @@ describe("Auto Trade", () => {
             .find("input")
             .should("have.value", mods[index].weightage);
         });
-      // .should((cards) => {
-      //   cy.wrap(cards[0])
-      //     .should("contain", "02.231TS")
-      //     .find("input")
-      //     .should("contain", "29");
-      //   cy.wrap(cards[1])
-      //     .should("contain", "02.230TS")
-      //     .find("input")
-      //     .should("contain", "50");
-      //   cy.wrap(cards[2])
-      //     .should("contain", "02.219TS")
-      //     .find("input")
-      //     .should("contain", "21");
-      // });
-      // cy.getId("selectedModuleCard")
-      //   .should("have.length", 3)
-      //   .and("contain", "02.231TS")
-      //   .and("contain", "02.230TS")
-      //   .and("contain", "02.219TS");
 
       cy.get("tradeUpdateMessage").should("not.exist");
     });

@@ -4,7 +4,9 @@ describe("Enroll", () => {
   before(() => {
     cy.visit("/");
     cy.login();
-    cy.visit("/enroll");
+    cy.deleteMod(["02.136DH", "50.046", "50.044", "50.043"]).then(() => {
+      cy.visit("/enroll");
+    });
   });
   after(() => {
     cy.logout();
@@ -160,7 +162,9 @@ describe("Enroll", () => {
 
     it("Homepage shows successfully enrolled modules", () => {
       cy.visit("/dashboard");
-      cy.getId("dashboardMods", 30000).children().should("have.length", 4);
+      cy.getId("dashboardMods")
+        .children({ timeout: 30000 })
+        .should("have.length", 4);
       cy.getId("02.136DH").should("be.visible");
       cy.getId("50.046").should("be.visible");
       cy.getId("50.044").should("be.visible");
