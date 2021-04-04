@@ -53,7 +53,7 @@ const Request = () => {
             }
           })
           .then(() => {
-            if (Object.keys(mod).length === 0 || mod === undefined) {
+            if (!mod || Object.keys(mod).length === 0 || mod === undefined) {
               setDone(true);
               setHasMod(false);
             }
