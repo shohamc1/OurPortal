@@ -1,11 +1,13 @@
 import React from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
+import { Link } from "gatsby";
 /**
  * Standardised header with configurable text
  * @param {string} pageName - header text
+ * @param {string} backAction - determines if back button is shown
  */
-const Header = ({ pageName = "Test" }) => {
+const Header = ({ pageName = "Test", backAction = false }) => {
   const logoutProc = () => {
     firebase
       .auth()
@@ -17,6 +19,22 @@ const Header = ({ pageName = "Test" }) => {
 
   return (
     <div class="flex border-b-2 w-auto h-auto items-center">
+      {backAction ? (
+        <Link to="/dashboard">
+          <div class="pl-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path d="M0 12l9-8v6h15v4h-15v6z" />
+            </svg>
+          </div>
+        </Link>
+      ) : (
+        <div></div>
+      )}
       <h1
         class="font-bold text-5xl px-4 py-4 mr-auto"
         data-testId="headerPageName"

@@ -5,8 +5,8 @@ import { useUser } from "../context/authContext";
 
 /**
  * Sidebar with configurable highlight
-//  * @param {string} active - determines which button will be highlighted
-// using activePage from context now
+ * @param {string} activePage - determines which button will be highlighted
+ * using activePage from context now
  */
 const Sidebar = () => {
   const { activePage } = useUser();
