@@ -87,7 +87,7 @@ const Enroll = () => {
         <Helmet title="Enroll | OurPortal" />
         <Sidebar />
         <div class="flex flex-col flex-grow">
-          <Header pageName="Enroll" backAction={true} />
+          <Header pageName="Enroll" backAction={false} />
           <div class="h-full">
             <AlgoliaMainContent />
           </div>
