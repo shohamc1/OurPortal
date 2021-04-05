@@ -128,7 +128,7 @@ const Cart = () => {
       </div>
       {activePage === "enroll" && array.length ? (
         <button
-          class={`bg-green-500 container py-3 px-8 mt-4 mb-3 rounded-md flex flex-row`}
+          class="bg-green-500 container py-3 px-8 mt-4 mb-3 rounded-md flex flex-row"
           onClick={checkOutProc}
         >
           <span class="text-white text-lg xl:text-xl text-center opacity-90 font-normal w-full">

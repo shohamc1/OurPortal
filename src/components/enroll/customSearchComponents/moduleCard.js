@@ -66,7 +66,6 @@ const ModuleCard = ({
   useEffect(() => {
     number.onSnapshot((snapshot) => {
       var data = snapshot.data();
-      console.log(data);
       if (data.available === 0) {
         setAvailable("Full");
       } else if (data.available < 10) {
