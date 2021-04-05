@@ -212,7 +212,7 @@ const Request = () => {
                 <b>Welcome to P2P Trading.</b>
                 <p>
                   Already have someone to trade with? Here you can just input
-                  their username and once they accept, you will be able to swap
+                  their email and once they accept, you will be able to swap
                   modules.
                 </p>
               </div>
