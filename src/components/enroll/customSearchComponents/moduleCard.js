@@ -41,8 +41,12 @@ const ModuleCard = ({
     activePage,
     autoTradeModules,
     setAutoTradeModules,
+    enrolledModules,
     cart,
     setCart,
+    pillar,
+    setPillar,
+    setAddToCartErrorMessage,
   } = useUser();
   const [added, setAdded] = useState(false);
   const [available, setAvailable] = useState("Full");
@@ -84,10 +88,46 @@ const ModuleCard = ({
     ? MODULE_CARD_COLOUR[type]
     : MODULE_CARD_COLOUR.DEFAULT;
 
+  const hitMaxModules = cart.length + enrolledModules.length >= 4;
+  const hasHASSModule =
+    enrolledModules.find((m) => m.courseCode.slice(0, 2) === "02") ||
+    cart.find((m) => m.courseCode.slice(0, 2) === "02");
+  const canSelectHASSModule = type === "HASS" && !hasHASSModule;
+  const canSelectThisPillar = type !== "HASS" && (!pillar || type === pillar);
+  const hitMaxPillarModules =
+    !hasHASSModule &&
+    cart.length + enrolledModules.length >= 3 &&
+    type !== "HASS";
+
+  const canEnroll =
+    !hitMaxModules &&
+    !hitMaxPillarModules &&
+    (canSelectHASSModule || canSelectThisPillar);
+
   const addToCart = () => {
     if (activePage === "enroll") {
-      setAdded(true);
-      setCart([...cart, { courseCode, type, courseName, status: available }]);
+      if (canEnroll) {
+        setAdded(true);
+        setCart([...cart, { courseCode, type, courseName, status: available }]);
+
+        if (!pillar && type !== "HASS") {
+          setPillar(type);
+        }
+      } else if (hitMaxModules) {
+        setAddToCartErrorMessage(
+          "Oops, you have already selected/enrolled in 4 modules."
+        );
+      } else if (hitMaxPillarModules) {
+        setAddToCartErrorMessage(
+          "Oops, you have already selected/enrolled in 3 pillar modules. Pick a HASS module instead."
+        );
+      } else if (type === "HASS") {
+        setAddToCartErrorMessage(
+          "Oops, you can only enroll in one HASS module."
+        );
+      } else {
+        setAddToCartErrorMessage("Oops, this module is not from your pillar.");
+      }
     } else if (activePage === "auto-search") {
       if (autoTradeModules.length < 3) {
         setAdded(true);

@@ -31,12 +31,16 @@ const EditCard = ({
         if (doc.exists) {
           var mods = doc.data().modules;
           mods.splice(mods.indexOf(courseCode), 1);
-          return mods;
+          return { mods, autoTradeMods: doc.data().autoTradeModules };
         }
       })
-      .then((mods) => {
+      .then(({ mods, autoTradeMods }) => {
         db.doc(user.uid)
-          .update({ modules: mods })
+          .update({
+            modules: mods,
+            autoTradeModules:
+              courseCode.slice(0, 2) === "02" ? null : autoTradeMods,
+          })
           .then(() => {
             setVisible(false);
             setDeleted(true);

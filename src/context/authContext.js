@@ -7,6 +7,7 @@ const AuthContext = React.createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [pillar, setPillar] = useState(""); // ISTD, ESD, ASD, EPD
   // modules currently in cart
   // cart is emptied once user checks out
   const [cart, setCart] = useState([]);
@@ -22,6 +23,9 @@ const AuthProvider = ({ children }) => {
   const [autoTradeModules, setAutoTradeModules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activePage, setActivePage] = useState("home"); // home, enroll, peer, auto, auto-search
+  // error message when user tries to select invalid module combinations
+  // eg. 2 HASS modules, modules from 2 different pillars, more than 4 modules, more than 3 pillar modules
+  const [addToCartErrorMessage, setAddToCartErrorMessage] = useState("");
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -35,8 +39,12 @@ const AuthProvider = ({ children }) => {
       value={{
         user,
         loading,
+        pillar,
+        setPillar,
         cart,
         setCart,
+        addToCartErrorMessage,
+        setAddToCartErrorMessage,
         enrolledModules,
         setEnrolledModules,
         failedEnrollModules,

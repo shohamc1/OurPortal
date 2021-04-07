@@ -22,4 +22,16 @@ const MODULE_TAB_COLOUR = {
   DEFAULT: "border-gray-500",
 };
 
-export default { STATUS_COLOUR, MODULE_CARD_COLOUR, MODULE_TAB_COLOUR };
+const PILLAR_COURSE_CODE = {
+  20: "ASD",
+  30: "EPD",
+  40: "ESD",
+  50: "ISTD",
+};
+
+export default {
+  STATUS_COLOUR,
+  MODULE_CARD_COLOUR,
+  MODULE_TAB_COLOUR,
+  PILLAR_COURSE_CODE,
+};
