@@ -22,6 +22,7 @@ const Request = () => {
   const [mod, setMod] = useState({});
   const [done, setDone] = useState(false);
   const [hasMod, setHasMod] = useState(true);
+  const [hasTrade, setHasTrade] = useState(false);
   const { setActivePage, user } = useUser();
 
   useEffect(() => {
@@ -34,6 +35,10 @@ const Request = () => {
       .get()
       .then((doc) => {
         if (doc.exists) {
+          if (doc.data().hasOpenTrade) {
+            setHasTrade(true);
+            console.log("has trade");
+          }
           var modules = doc.data()?.modules;
           // test modules
           for (let element of modules) {
@@ -87,6 +92,10 @@ const Request = () => {
       setDone(true);
       setHasMod(false);
     }
+    if (hasTrade) {
+      dismissMessageRedirect();
+    }
+
     setIsClicked(true);
     axios
       .post(
@@ -95,8 +104,16 @@ const Request = () => {
       )
       .then((res) => {
         if (res.status === 200) {
-          setPopUp(true);
-          setIsClicked(false);
+          userDB
+            .doc(user.uid)
+            .update({ hasOpenTrade: true })
+            .then(() => {
+              setPopUp(true);
+              setIsClicked(false);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       })
       .catch((err) => {
@@ -107,6 +124,51 @@ const Request = () => {
   return (
     <div class="flex">
       <Helmet title="P2P Trade Request | OurPortal" />
+      {hasTrade ? (
+        <>
+          <div class="absolute bottom-0 left-0 flex bg-gray-dark bg-opacity-50 h-full w-full z-20">
+            <div class="bg-gray-100 px-5 pt-4 pb-5 w-1/2 flex flex-col rounded fixed transform -translate-x-2/4 -translate-y-2/4 left-1/2 top-1/2">
+              <div class="flex justify-end">
+                <svg
+                  class="cursor-pointer"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  onClick={dismissMessageRedirect}
+                >
+                  <path
+                    d="M3 3L9.3871 9.3871"
+                    stroke="#14142B"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M3 9.38708L9.3871 2.99999"
+                    stroke="#14142B"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <span class="text-5xl font-bold">
+                You already have an open trade!
+              </span>
+              <span class="text-2xl font-medium">
+                You have to wait for your existing trade to be accepted or
+                declined
+              </span>
+            </div>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
+
       {done && !hasMod ? (
         <>
           <div class="absolute bottom-0 left-0 flex bg-gray-dark bg-opacity-50 h-full w-full z-20">
