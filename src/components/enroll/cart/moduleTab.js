@@ -46,7 +46,10 @@ const ModuleTab = ({ courseCode, status, type }) => {
         </svg>
       </div>
       <span class="mr-auto">{courseCode}</span>
-      <button onClick={removeFromCart}>
+      <button
+        onClick={removeFromCart}
+        data-testid={`moduleTabDelete-${courseCode}`}
+      >
         <svg
           width="24"
           height="24"

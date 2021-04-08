@@ -193,7 +193,7 @@ describe("Enroll", () => {
 
     it("Toggle show updates with no modules enrolled message", () => {
       cy.getId("dashboardShow").click();
-      cy.contains("Seems like you have no modules yet.");
+      cy.contains("Seems like you have no modules yet.", { timeout: 10000 });
     });
   });
 
@@ -205,10 +205,8 @@ describe("Enroll", () => {
 
     it("Different pillar warning", () => {
       cy.getId("customSearchBoxInput").type("50");
-      cy.contains(mods[1]);
       cy.getId(mods[1]).find("button").click();
       cy.getId("customSearchBoxInput").clear().type("20");
-      cy.contains(extraMods[1]);
       cy.getId(extraMods[1]).find("button").click();
       cy.getId("enrollModal", 10000)
         .should("be.visible")
@@ -218,9 +216,7 @@ describe("Enroll", () => {
     });
     it("Enrolling in more than 3 pillar modules", () => {
       cy.getId("customSearchBoxInput").clear().type("50");
-      cy.contains(mods[2]);
       cy.getId(mods[2]).find("button").click();
-      cy.contains(mods[3]);
       cy.getId(mods[3]).find("button").click();
       cy.getId(extraMods[2]).find("button").click();
       cy.getId("enrollModal", 10000)
@@ -231,18 +227,19 @@ describe("Enroll", () => {
         )
         .find("svg")
         .click();
-      cy.getId("customHitsResults")
-        .find(`[data-testid='${mods[3]}']`)
-        .find("button")
-        .click();
+      cy.getId(`moduleTabDelete-${mods[3]}`).click();
     });
 
     it("Enrolling in more than one HASS", () => {
       cy.getId("customSearchBoxInput").clear().type("02.13");
-      cy.contains(mods[0]);
-      cy.getId(mods[0]).find("button").click();
-      cy.contains(extraMods[0]);
-      cy.getId(extraMods[0]).find("button").click();
+      // cy.getId(mods[0]).within(() => {
+      //   cy.get("button").click();
+      // });
+      // cy.getId(extraMods[0]).within(() => {
+      //   cy.get("button").click();
+      // });
+      cy.getId(mods[0]).find("button").click({ force: true });
+      cy.getId(extraMods[0]).find("button").click({ force: true });
       cy.getId("enrollModal", 10000)
         .should("be.visible")
         .and("contain", "Oops, you can only enroll in one HASS module.")
@@ -251,10 +248,8 @@ describe("Enroll", () => {
     });
     it("Enrolling in more than 4 modules", () => {
       cy.getId("customSearchBoxInput").clear().type("50");
-      cy.contains(mods[3]);
-      cy.getId(mods[3]).find("button").click();
-      cy.contains(extraMods[2]);
-      cy.getId(extraMods[2]).find("button").click();
+      cy.getId(mods[3]).find("button").click({ force: true });
+      cy.getId(extraMods[2]).find("button").click({ force: true });
       cy.getId("enrollModal", 10000)
         .should("be.visible")
         .and(
