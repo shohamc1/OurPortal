@@ -73,7 +73,7 @@ describe("Valid signup", () => {
     cy.getId("dashboardWelcome", 30000)
       .should("contain", "Ben")
       .then(() => {
-        cy.wait(5000);
+        cy.wait(3000);
         cy.deleteUser(o.user).then(() => {
           cy.logout;
         });

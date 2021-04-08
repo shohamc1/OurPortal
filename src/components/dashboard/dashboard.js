@@ -138,7 +138,7 @@ const Dashboard = () => {
             )}
           </div>
           {modules.length == 0 ? (
-            <span class="text-2xl">
+            <span class="text-2xl" data-testid="dashboardNoMod">
               Seems like you have no modules yet. &#x1F61E;
             </span>
           ) : (

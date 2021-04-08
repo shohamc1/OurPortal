@@ -46,13 +46,5 @@ describe("P2P Trade", () => {
     it("Module Card Visible", () => {
       cy.getId("02.136DH", 30000);
     });
-    // it("Button disabled when not enrolled", () => {
-    //   cy.getId("requestSendButton").should("not.be.disabled"); // NEED TO FIX
-    // });
   });
-
-  // describe("Input Recipient Email", () => {
-  //   // handle invalid input?
-  //   // prevent spamming?
-  // });
 });

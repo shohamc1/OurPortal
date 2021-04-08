@@ -191,9 +191,9 @@ describe("Enroll", () => {
       cy.getId("dashboardMods").children().should("have.length", 0);
     });
 
-    it("Toggle edit updates with no modules enrolled message", () => {
+    it("Toggle show updates with no modules enrolled message", () => {
       cy.getId("dashboardShow").click();
-      // find the message "Seems like you have no modules yet."
+      cy.contains("Seems like you have no modules yet.");
     });
   });
 
