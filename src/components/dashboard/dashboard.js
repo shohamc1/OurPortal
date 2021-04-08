@@ -16,12 +16,14 @@ const Dashboard = () => {
   const [modules, setModules] = useState([]);
   const [mode, setMode] = useState(true); // false -> edit, true -> display
   const [loading, setLoading] = useState(true);
+  const [timeOfDay, setTimeOfDay] = useState(false); // false -> morning, true -> evening
   const db = firebase.firestore().collection("users");
   const moduleDB = firebase.firestore().collection("modules");
 
   useEffect(() => {
     setActivePage("home");
     setMode(true);
+    new Date().getHours() > 12 ? setTimeOfDay(true) : setTimeOfDay(false);
   }, []);
 
   useEffect(() => {
@@ -32,11 +34,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     setLoading(true);
-    if (mode) {
-      fetchData();
-    } else {
-      setLoading(false);
-    }
+    mode ? fetchData() : setLoading(false);
   }, [userUID, mode]);
 
   const toggleMode = () => {
@@ -99,7 +97,9 @@ const Dashboard = () => {
               class="text-5xl font-light mb-4"
               data-testId="dashboardWelcome"
             >
-              Good Morning, {firstName}
+              {timeOfDay
+                ? `Good Evening, ${firstName}`
+                : `Good Morning, ${firstName}`}
             </div>
             {mode ? (
               <button
