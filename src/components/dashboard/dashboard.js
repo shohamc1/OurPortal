@@ -135,12 +135,18 @@ const Dashboard = () => {
               </button>
             )}
           </div>
-          <div
-            class="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4"
-            data-testid="dashboardMods"
-          >
-            <ModsGrid modules={modules} mode={mode} />
-          </div>
+          {modules.length == 0 ? (
+            <span class="text-2xl">
+              Seems like you have no modules yet. &#x1F61E;
+            </span>
+          ) : (
+            <div
+              class="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4"
+              data-testid="dashboardMods"
+            >
+              <ModsGrid modules={modules} mode={mode} />
+            </div>
+          )}
         </div>
       </div>
     </div>
