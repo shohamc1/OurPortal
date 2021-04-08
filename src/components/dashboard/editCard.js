@@ -21,6 +21,7 @@ const EditCard = ({
   const { user } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
   const [deleted, setDeleted] = useState(false);
+
   const deleteProc = (e) => {
     e.preventDefault();
     setVisible(true);
@@ -53,7 +54,7 @@ const EditCard = ({
   }
 
   return (
-    <div class="pulse relative flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md overflow-hidden mr-6 mb-6">
+    <div class="animate-wiggle relative flex flex-col rounded bg-gray-50 w-auto h-60 shadow-md overflow-hidden mr-6 mb-6">
       <div
         class={`flex text-4xl font-semibold pl-4 py-2 ${focusColor}`}
         data-testid={courseCode}

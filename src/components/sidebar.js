@@ -41,6 +41,7 @@ const Sidebar = () => {
   return (
     <div class="flex flex-col max-w-1/7 h-screen bg-gray-100 rounded-r-lg sticky top-0">
       {/* header text */}
+
       <a href="/dashboard" data-testid="sideBarOurPortal">
         <h1 class="font-bold text-4xl xl:text-6xl pl-4 pr-8 py-4 mb-4">
           OurPortal
@@ -155,14 +156,15 @@ const Sidebar = () => {
           <span class="text-3xl xl:text-4xl">Auto Trade</span>
         </div>
       </a>
-
-      {activePage === "enroll" || activePage === "auto-search" ? (
-        <div class="border-t-2">
-          <Cart />
-        </div>
-      ) : (
-        <></>
-      )}
+      <div class="overflow-y-auto overflow-x-hidden">
+        {activePage === "enroll" || activePage === "auto-search" ? (
+          <div class="border-t-2">
+            <Cart />
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 };
