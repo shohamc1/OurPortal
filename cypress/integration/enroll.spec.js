@@ -198,15 +198,17 @@ describe("Enroll", () => {
   });
 
   describe("Warning modals when enrolling", () => {
-    const extraMods = ["02.155TS", "20.302", "50.045"];
+    const extraMods = ["02.131DH", "20.302", "50.045"];
     before(() => {
       cy.visit("/enroll");
     });
 
     it("Different pillar warning", () => {
       cy.getId("customSearchBoxInput").type("50");
+      cy.contains(mods[1]);
       cy.getId(mods[1]).find("button").click();
       cy.getId("customSearchBoxInput").clear().type("20");
+      cy.contains(extraMods[1]);
       cy.getId(extraMods[1]).find("button").click();
       cy.getId("enrollModal", 10000)
         .should("be.visible")
@@ -216,7 +218,9 @@ describe("Enroll", () => {
     });
     it("Enrolling in more than 3 pillar modules", () => {
       cy.getId("customSearchBoxInput").clear().type("50");
+      cy.contains(mods[2]);
       cy.getId(mods[2]).find("button").click();
+      cy.contains(mods[3]);
       cy.getId(mods[3]).find("button").click();
       cy.getId(extraMods[2]).find("button").click();
       cy.getId("enrollModal", 10000)
@@ -234,8 +238,10 @@ describe("Enroll", () => {
     });
 
     it("Enrolling in more than one HASS", () => {
-      cy.getId("customSearchBoxInput").clear().type("02.1");
+      cy.getId("customSearchBoxInput").clear().type("02.13");
+      cy.contains(mods[0]);
       cy.getId(mods[0]).find("button").click();
+      cy.contains(extraMods[0]);
       cy.getId(extraMods[0]).find("button").click();
       cy.getId("enrollModal", 10000)
         .should("be.visible")
@@ -245,7 +251,9 @@ describe("Enroll", () => {
     });
     it("Enrolling in more than 4 modules", () => {
       cy.getId("customSearchBoxInput").clear().type("50");
+      cy.contains(mods[3]);
       cy.getId(mods[3]).find("button").click();
+      cy.contains(extraMods[2]);
       cy.getId(extraMods[2]).find("button").click();
       cy.getId("enrollModal", 10000)
         .should("be.visible")
