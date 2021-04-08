@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 const mods = [];
+const singleMod = "02.144DH";
 describe("Auto Trade", () => {
   before(() => {
     cy.fixture("autoTradeMods", { timeout: 30000 }).then((autoTradeMods) => {
@@ -13,16 +14,18 @@ describe("Auto Trade", () => {
     });
     cy.visit("/");
     cy.login();
-    cy.deleteMod(["02.136DH"]).then(() => {
+    cy.deleteMod([singleMod]).then(() => {
       cy.removeAutoTradeMods(mods).then(() => {
         cy.visit("/autotrade");
       });
     });
   });
   after(() => {
-    cy.removeAutoTradeMods(mods);
-    cy.deleteMod(["02.136DH"]);
-    cy.logout();
+    cy.removeAutoTradeMods(mods).then(() => {
+      cy.deleteMod([singleMod]).then(() => {
+        cy.logout();
+      });
+    });
   });
 
   it("Dismissiable information tab on visit", () => {
@@ -53,12 +56,12 @@ describe("Auto Trade", () => {
 
   describe("With enrolled module", () => {
     before(() => {
-      cy.enrollMod(["02.136DH"]).then(() => {
+      cy.enrollMod([singleMod]).then(() => {
         cy.reload();
       });
     });
     it("Currently enrolled module displayed", () => {
-      cy.getId("currentModuleCard", 60000).should("contain", "02.136DH");
+      cy.getId("currentModuleCard", 60000).should("contain", singleMod);
       // .and("contain", "Lyric Poetry");
     });
 

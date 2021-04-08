@@ -34,10 +34,6 @@ describe("Sidebar and Header", () => {
       .should("contain", "Auto Trade");
   });
   describe("Sidebar and Header", () => {
-    // afterEach(() => {
-    //   cy.visit("/dashboard");
-    // });
-
     it('P2P Trade highlighted and header is "P2P Trade" ', () => {
       cy.getId("sideBarPeer").click();
       cy.getId("headerPageName").should("contain", "P2P Trade Request");
@@ -73,10 +69,12 @@ describe("Sidebar and Header", () => {
       cy.getId("sideBarEnroll").click();
       cy.getId("headerPageName").should("contain", "Enroll");
       cy.getId("cartHeader").should("contain", "Your Cart");
-      cy.getId("sideBarHome").should("not.exist");
-      cy.getId("sideBarEnroll").should("not.exist");
-      cy.getId("sideBarPeer").should("not.exist");
-      cy.getId("sideBarAuto").should("not.exist");
+      cy.getId("sideBarEnroll")
+        .should("have.class", "primary-button")
+        .find("path")
+        .should(($path) => {
+          expect($path).to.have.attr("stroke", "#F5F6F8");
+        });
     });
   });
 });

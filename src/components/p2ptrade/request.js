@@ -109,7 +109,10 @@ const Request = () => {
       <Helmet title="P2P Trade Request | OurPortal" />
       {done && !hasMod ? (
         <>
-          <div class="absolute bottom-0 left-0 flex bg-gray-dark bg-opacity-50 h-full w-full z-20">
+          <div
+            class="absolute bottom-0 left-0 flex bg-gray-dark bg-opacity-50 h-full w-full z-20"
+            data-testid="requestPopup"
+          >
             <div class="bg-gray-100 px-5 pt-4 pb-5 w-1/2 flex flex-col rounded fixed transform -translate-x-2/4 -translate-y-2/4 left-1/2 top-1/2">
               <div class="flex justify-end">
                 <svg

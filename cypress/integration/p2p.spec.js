@@ -9,43 +9,50 @@ describe("P2P Trade", () => {
     });
   });
   after(() => {
-    cy.deleteMod(["02.136DH"]);
-    cy.logout();
-  });
-
-  it("Dismissiable information tab on visit", () => {
-    cy.getId("requestInfoTab").should("be.visible").find("button").click();
+    cy.deleteMod(["02.136DH"]).then(() => {
+      cy.logout();
+    });
   });
 
   describe("No enrolled module", () => {
     it("Empty card when not enrolled", () => {
-      cy.contains("Your Current Module")
-        .next()
-        .get("span")
-        .should("contain", "");
+      cy.getId("requestPopup").should(
+        "contain",
+        "Seems like you do not have a HASS module yet. Come back once you have one!"
+      );
     });
-    it("Button disabled when not enrolled", () => {
-      cy.getId("requestSendButton"); // NEED TO FIX
+
+    it("Redirects to home on dismiss", () => {
+      cy.getId("requestPopup")
+        .find("svg")
+        .click()
+        .then(() => {
+          cy.url({ timeout: 10000 }).should("include", "/dashboard");
+        });
     });
   });
 
   describe("With enrolled module", () => {
     before(() => {
       cy.enrollMod(["02.136DH"]).then(() => {
-        cy.reload();
+        cy.visit("/request");
       });
+    });
+
+    it("Dismissiable information tab on visit", () => {
+      cy.getId("requestInfoTab").should("be.visible").find("button").click();
     });
 
     it("Module Card Visible", () => {
       cy.getId("02.136DH", 30000);
     });
-    it("Button disabled when not enrolled", () => {
-      cy.getId("requestSendButton").should("not.be.disabled"); // NEED TO FIX
-    });
+    // it("Button disabled when not enrolled", () => {
+    //   cy.getId("requestSendButton").should("not.be.disabled"); // NEED TO FIX
+    // });
   });
 
-  describe("Input Recipient Email", () => {
-    // handle invalid input?
-    // prevent spamming?
-  });
+  // describe("Input Recipient Email", () => {
+  //   // handle invalid input?
+  //   // prevent spamming?
+  // });
 });

@@ -105,6 +105,7 @@ const Dashboard = () => {
               <button
                 class="flex mb-auto ml-auto mr-4 p-2 rounded-full bg-gray-200 items-center"
                 onClick={toggleMode}
+                data-testid="dashboardEdit"
               >
                 <svg
                   class="mr-2"
@@ -121,6 +122,7 @@ const Dashboard = () => {
               <button
                 class="flex mb-auto ml-auto mr-4 p-2 rounded-full bg-gray-200 items-center"
                 onClick={toggleMode}
+                data-testid="dashboardShow"
               >
                 <svg
                   class="mr-2"

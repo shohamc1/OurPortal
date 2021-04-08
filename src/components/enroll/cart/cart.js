@@ -121,7 +121,7 @@ const Cart = () => {
         </span>
       </div>
       <div
-        class="mb-auto overflow-y-scroll disable-scrollbars"
+        class="mb-auto overflow-y-scroll disable-scrollbars min-h-0"
         data-testid="cartContent"
       >
         {array.length ? modules : empty}
