@@ -15,10 +15,15 @@ const EmptyModuleCard = () => {
       data-testid="emptyModuleCard"
     >
       <div class="text-base px-2 hidden">{0} </div>
-      <div class="text-lg xl:text-2xl text-gray-500 font-semibold px-2 py-2 w-24 xl:w-32">
+      <div
+        class="text-lg xl:text-2xl text-gray-500 font-semibold px-2 py-2 w-24 xl:w-32"
+        data-testid="courseCode"
+      >
         {"XX.XXX"}
       </div>
-      <div class="mx-2 my-2 xl:text-lg text-gray-500">No module selected</div>
+      <div class="mx-2 my-2 xl:text-lg text-gray-500" data-testid="courseName">
+        No module selected
+      </div>
       <div class="flex items-center ml-auto mr-4">
         <input
           class="mr-4 w-12 2xl:w-14 xl:text-lg text-gray-800 bg-gray-50 border-gray-500 border-b 
@@ -26,8 +31,9 @@ const EmptyModuleCard = () => {
         focus:outline-none focus:border-purple-500 focus:placeholder-opacity-40"
           placeholder="0"
           disabled
+          data-testid="weightInput"
         ></input>
-        <span class="inline-block ">
+        <span class="inline-block">
           <svg
             class="stroke-current text-gray-500 stroke-2"
             width="24"

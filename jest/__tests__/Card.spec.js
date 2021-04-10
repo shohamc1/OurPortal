@@ -3,7 +3,7 @@ import { getByLabelText, render } from "@testing-library/react";
 
 import Card from "@components/card.js";
 
-describe("Header", () => {
+describe("Card", () => {
   // suppress console warnings, they are categorized as errors for some reason
   beforeEach(() => {
     jest.spyOn(console, "error").mockImplementation(() => {});

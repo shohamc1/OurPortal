@@ -19,7 +19,10 @@ const CurrentModuleCard = ({
       data-testid="currentModuleCard"
     >
       {courseCode ? (
-        <div class="text-3xl xl:text-4xl font-semibold px-4 py-4 xl:py-6">
+        <div
+          class="text-3xl xl:text-4xl font-semibold px-4 py-4 xl:py-6"
+          data-testid="courseCode"
+        >
           {courseCode}
         </div>
       ) : (
@@ -30,6 +33,7 @@ const CurrentModuleCard = ({
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          data-testid="noModWarning"
         >
           <circle cx="12" cy="12" r="11" stroke="#ED2E7E" stroke-width="2" />
           <path
@@ -50,10 +54,13 @@ const CurrentModuleCard = ({
       )}
       {courseCode ? (
         <div class="text-lg xl:text-2xl pr-5">
-          <div>{courseName}</div>
+          <div data-testid="courseName">{courseName}</div>
         </div>
       ) : (
-        <div class="mx-auto my-6 text-lg  pr-5 justify-center text-center text-gray-500">
+        <div
+          class="mx-auto my-6 text-lg  pr-5 justify-center text-center text-gray-500"
+          data-testid="noModMessage"
+        >
           <div>
             You are currently not enrolled in a module eligible for trade
           </div>
@@ -61,8 +68,18 @@ const CurrentModuleCard = ({
       )}
       {courseCode ? (
         <div class="flex flex-col flex-grow items-end ml-auto mr-3 w-auto xl:text-lg">
-          <div class="font-light whitespace-nowrap">{instructorFirstName}</div>
-          <div class="font-light whitespace-nowrap">{instructorLastName}</div>
+          <div
+            class="font-light whitespace-nowrap"
+            data-testid="instructorFirstName"
+          >
+            {instructorFirstName}
+          </div>
+          <div
+            class="font-light whitespace-nowrap"
+            data-testid="instructorLastName"
+          >
+            {instructorLastName}
+          </div>
         </div>
       ) : (
         <></>
