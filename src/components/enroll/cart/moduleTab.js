@@ -42,10 +42,18 @@ const ModuleTab = ({ courseCode, status, type }) => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <circle cx="6" cy="6" r="6" fill={fillColour} />
+          <circle
+            cx="6"
+            cy="6"
+            r="6"
+            fill={fillColour}
+            data-testid="statusIndicator"
+          />
         </svg>
       </div>
-      <span class="mr-auto">{courseCode}</span>
+      <span class="mr-auto" data-testid="courseCode">
+        {courseCode}
+      </span>
       <button
         onClick={removeFromCart}
         data-testid={`moduleTabDelete-${courseCode}`}
