@@ -1,8 +1,10 @@
 /// <reference types="cypress" />
 
 describe("Landing", () => {
-  it("Greets with image, header and slogan", () => {
+  before(() => {
     cy.visit("/");
+  });
+  it("Greets with image, header and slogan", () => {
     cy.contains("OurPortal").should("exist");
     cy.contains("Get Your Mods").should("exist");
     cy.get('[alt="Focus"]')

@@ -5,14 +5,15 @@ describe("Enroll", () => {
     cy.visit("/");
     cy.login();
     cy.deleteMod(mods).then(() => {
+      cy.deleteMod(["02.144DH"]);
       cy.visit("/enroll");
     });
   });
   after(() => {
-    // cy.deleteMod(mods).then(() => {
-    //   cy.wait(500);
-    //   cy.logout();
-    // });
+    cy.deleteMod(mods).then(() => {
+      cy.wait(500);
+      cy.logout();
+    });
     cy.logout();
   });
 
@@ -142,8 +143,6 @@ describe("Enroll", () => {
       cy.getId(mods[2]).should("be.visible");
       cy.getId(mods[3]).should("be.visible");
     });
-
-    // TODO clean up hardcoding by using fixtures instead
   });
 
   describe("Unenroll modules", () => {
@@ -183,15 +182,15 @@ describe("Enroll", () => {
 
     it("Unenroll all modules", () => {
       cy.visit("/dashboard");
-      cy.getId("dashboardEdit").click();
-      cy.getId("editCardDelete").each(($el, $index, $list) => {
+      cy.getId("dashboardEdit", 10000).click();
+      cy.getId("editCardDelete", 10000).each(($el, $index, $list) => {
         cy.wrap($el).click();
         cy.wait(500);
       });
       cy.getId("dashboardMods").children().should("have.length", 0);
     });
 
-    it.only("Toggle show updates with no modules enrolled message", () => {
+    it("Toggle show updates with no modules enrolled message", () => {
       cy.visit("/dashboard");
 
       cy.getId("dashboardEdit").click();

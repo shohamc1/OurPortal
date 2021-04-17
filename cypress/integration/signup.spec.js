@@ -2,21 +2,21 @@
 
 describe("Signup", () => {
   before(() => {
-    cy.visit("/signup");
+    cy.visit("/");
+    cy.loginDelete();
+    cy.wait(5000);
   });
 
   it("Greets with Header and Slogan", () => {
+    cy.visit("/signup");
     cy.contains("OurPortal").should("exist");
     cy.contains("Get Your Mods").should("exist");
   });
 
   describe("Invalid Signup", () => {
     before(() => {
-      // cy.visit("/signup");
       cy.get("[type='email']").type("testuser@gmail.com");
       cy.get("[type='password']").type("12345");
-      // cy.get("[autoComplete='given-name']").type("");
-      // cy.get("[autoComplete='family-name']").type("");
     });
     it("Invalid Password", () => {
       cy.get("button").contains("Sign Up").click();
@@ -38,45 +38,21 @@ describe("Signup", () => {
 });
 
 describe("Valid signup", () => {
-  const o = { user: null };
   before(() => {
-    cy.getUser(o);
     cy.visit("/signup");
   });
-  // after(() => {
-  //   cy.wait(10000);
-  //   cy.deleteUser(o.user).then(() => {
-  //     cy.logout;
-  //   });
-  // });
 
   it("Successful Signup", () => {
-    // cy.on("uncaught:exception", (err, runnable) => {
-    //   expect(err.message).to.include("something about the error");
-
-    //   // using mocha's async done callback to finish
-    //   // this test so we prove that an uncaught exception
-    //   // was thrown
-    //   done();
-
-    //   // return false to prevent the error from
-    //   // failing this test
-    //   // return false;
-    // });
-
     cy.get("[type='email']").type("signuptest@gmail.com");
     cy.get("[type='password']").type("qwerty1234");
     cy.get("[autoComplete='given-name']").type("Ben");
     cy.get("[autoComplete='family-name']").type("Dover");
     cy.get("button").contains("Sign Up").click();
-    // successful signup routes to page
+    // successful signup routes to page\
     cy.getId("dashboardWelcome", 30000)
       .should("contain", "Ben")
       .then(() => {
-        cy.wait(3000);
-        cy.deleteUser(o.user).then(() => {
-          cy.logout;
-        });
+        cy.logout();
       });
   });
 });

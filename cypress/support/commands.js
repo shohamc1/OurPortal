@@ -59,6 +59,47 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add(
+  "loginDelete",
+  (email = "signuptest@gmail.com", password = "qwerty1234") => {
+    Cypress.log({
+      displayName: "login to delete",
+      consoleProps: () => {
+        return { email, password };
+      },
+    });
+    return firebase.default
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((credentials) => {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(credentials.user.uid)
+          .delete()
+          .then(() => {
+            console.log("Account removed from users collection");
+            credentials.user
+              .delete()
+              .then(() => {
+                console.log("Account removed successfully");
+              })
+              .catch((error) => {
+                console.log("Error deleting account");
+              });
+          })
+          .catch((error) => {
+            console.log("Error deleting account from collection:");
+          });
+      })
+      .catch((error) => {
+        console.log("User already deleted");
+      })
+      .then(firebase.auth().signOut());
+  }
+);
+// cy.document().then({ timeout: 10000 }, (doc) => {});
+
 Cypress.Commands.add("logout", () => {
   Cypress.log({
     displayName: "logout",
