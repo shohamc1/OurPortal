@@ -14,12 +14,19 @@ var firebaseConfig = {
   measurementId: "G-6KGX9H2DNY",
 };
 
-firebase.initializeApp(firebaseConfig);
+try {
+  firebase.app();
+} catch (e) {
+  firebase.initializeApp(firebaseConfig);
+}
 
+console.log(firebase.app());
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signInError, setSignInError] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const [sentPasswordResetEmail, setSentPasswordResetEmail] = useState(false);
 
   const handleEmailChange = (event) => {
     const target = event.target;
@@ -61,50 +68,128 @@ const Login = () => {
       });
   };
 
+  const resetPassword = () => {
+    firebase
+      .auth()
+      .sendPasswordResetEmail(email)
+      .then(function () {
+        // Email sent.
+        setSentPasswordResetEmail(true);
+      })
+      .catch(function (error) {
+        // An error happened.
+      });
+  };
+
+  const forgotPasswordComponent = (
+    <>
+      <span
+        class="mb-3 text-md cursor-pointer text-purple-600"
+        onClick={() => {
+          setForgotPassword(false);
+          setSentPasswordResetEmail(false);
+          setEmail("");
+        }}
+      >
+        {"< Back to log in"}
+      </span>
+      <div class="mb-4">
+        <div class="flex flex-row">
+          <span class="font-semibold text-lg">Reset Your Password</span>
+        </div>
+
+        <p>
+          Provide us with your log in email to send your reset credentials to.
+        </p>
+      </div>
+      <span class="font-semibold text-lg">Email</span>
+      <input
+        name="email"
+        autoComplete="email"
+        type="email"
+        class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
+        placeholder="john_doe@mymail.sutd.edu.sg"
+        value={email}
+        onChange={handleEmailChange}
+        data-testid="loginEmail"
+      />
+    </>
+  );
+
+  const loginComponent = (
+    <>
+      <span class="font-semibold text-lg">Email</span>
+      <input
+        name="email"
+        autoComplete="email"
+        type="email"
+        class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
+        placeholder="john_doe@mymail.sutd.edu.sg"
+        value={email}
+        onChange={handleEmailChange}
+        data-testid="loginEmail"
+      />
+      <div class="flex flex-row">
+        <span class="font-semibold text-lg">Password</span>
+        <span
+          class="text-md ml-auto text-purple-600 cursor-pointer"
+          onClick={() => {
+            setForgotPassword(true);
+            setEmail("");
+            setPassword("");
+          }}
+        >
+          Forgot your password?
+        </span>
+      </div>
+      <input
+        name="current-password"
+        autoComplete="current-password"
+        type="password"
+        class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
+        placeholder="********"
+        value={password}
+        onChange={handlePasswordChange}
+        data-testid="loginPassword"
+      />
+    </>
+  );
+
   return (
     <div class="flex flex-col w-screen h-screen">
       <Helmet title="Login | OurPortal" />
-      <div class="flex my-auto mx-auto flex-col px-2">
-        <span class="text-6xl md:text-8xl font-bold tracking-tight">
-          OurPortal
-        </span>
-        <span class="text-3xl md:text-4xl font-bold mb-8 tracking-tight">
-          Get Your Mods
-        </span>
+      <div class="flex my-auto mx-auto flex-col px-2 md:w-6/12 lg:w-4/12">
+        {forgotPassword ? (
+          <></>
+        ) : (
+          <>
+            <span class="text-6xl md:text-8xl font-bold tracking-tight">
+              OurPortal
+            </span>
+            <span class="text-3xl md:text-4xl font-bold mb-8 tracking-tight">
+              Get Your Mods
+            </span>
+          </>
+        )}
         <div class="flex flex-col rounded-lg bg-gray-300 p-4 px-6 mb-8">
-          <span class="font-semibold text-lg">Email</span>
-          <input
-            name="email"
-            autoComplete="email"
-            type="email"
-            class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
-            placeholder="john_doe@mymail.sutd.edu.sg"
-            value={email}
-            onChange={handleEmailChange}
-            data-testid="loginEmail"
-          />
-          <span class="font-semibold text-lg">Password</span>
-          <input
-            name="current-password"
-            autoComplete="current-password"
-            type="password"
-            class="w-full rounded bg-gray-600 px-4 py-4 mb-4"
-            placeholder="********"
-            value={password}
-            onChange={handlePasswordChange}
-            data-testid="loginPassword"
-          />
+          {forgotPassword ? forgotPasswordComponent : loginComponent}
         </div>
         <button
           class="bg-purple-500 rounded-button p-4 text-white"
-          onClick={emailLoginProc}
+          onClick={forgotPassword ? resetPassword : emailLoginProc}
           data-testid="loginBtn"
         >
-          Log In
+          {forgotPassword ? "Reset Password" : "Log In"}
         </button>
       </div>
-      {signInError && (
-        <div class="flex justify-center items-center mt-4 p-4 bg-red-500 text-white">
+      {(signInError || (forgotPassword && sentPasswordResetEmail)) && (
+        <div
+          class={`flex justify-center items-center mt-4 p-4 ${
+            forgotPassword && sentPasswordResetEmail
+              ? "bg-green-500"
+              : "bg-red-500"
+          } text-white`}
+        >
           <div class="mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -124,13 +209,17 @@ const Login = () => {
             </svg>
           </div>
           <div class="w-full" data-testid="loginErrorMessage">
-            {signInError}
+            {forgotPassword && sentPasswordResetEmail
+              ? "Email sent!"
+              : signInError}
           </div>
           <button
             class="flex flex-auto flex-row-reverse"
             onClick={(e) => {
               e.preventDefault();
-              setSignInError(false);
+              if (signInError) setSignInError(false);
+              if (forgotPassword && sentPasswordResetEmail)
+                setSentPasswordResetEmail(false);
             }}
           >
             <div>

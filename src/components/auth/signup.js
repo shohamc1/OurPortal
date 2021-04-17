@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-
+import ReactTooltip from "react-tooltip";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -53,29 +53,53 @@ const Signup = () => {
   };
 
   const signUpProc = () => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(function (user) {
-        console.log(user);
-        db.doc(user.user.uid).set({
-          firstName: firstName,
-          lastName: lastName,
-          email: user.user.email,
-          uid: user.user.uid,
-          modules: [],
+    if (password.length < 6) {
+      setSignUpError("Password must contain at least 6 characters");
+    } else if (password.length > 40) {
+      setSignUpError("Password cannot exceed 40 characters");
+    } else if (!password.match(/\d/)) {
+      setSignUpError("Password must contain at least one number");
+    } else if (!password.match(/[a-z]/)) {
+      setSignUpError("Password must contain at least one lowercase character");
+    } else if (!password.match(/[A-Z]/)) {
+      setSignUpError("Password must contain at least one uppercase character");
+    } else if (!password.match(/[@$!%*#?&]/)) {
+      setSignUpError("Password must contain at least one special character");
+    } else {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(function (user) {
+          console.log(user);
+          db.doc(user.user.uid).set({
+            firstName: firstName,
+            lastName: lastName,
+            email: user.user.email,
+            uid: user.user.uid,
+            modules: [],
+          });
+        })
+        .catch(function (error) {
+          var errorMessage = error.message;
+          setSignUpError(errorMessage);
         });
-      })
-      .catch(function (error) {
-        var errorMessage = error.message;
-        setSignUpError(errorMessage);
-      });
+    }
   };
+
+  const passwordTooltip = (
+    <span>
+      Password must be 6-40 characters in length and contain at least
+      <br />
+      one number, one lowercase letter, one uppercase letter and one
+      <br />
+      special character (@ $ ! % * # ? &)
+    </span>
+  );
 
   return (
     <div class="flex flex-col w-screen h-screen">
       <Helmet title="Signup | OurPortal" />
-      <div class="flex my-auto mx-auto flex-col px-2">
+      <div class="flex my-auto mx-auto flex-col px-2 w-6/12">
         <span class="text-6xl md:text-8xl font-bold tracking-tight">
           OurPortal
         </span>
@@ -93,7 +117,35 @@ const Signup = () => {
             value={email}
             onChange={handleEmailChange}
           />
-          <span class="font-semibold text-lg">Password</span>
+          <div class="flex flex-row">
+            <span class="font-semibold text-lg">Password</span>
+            <a
+              class="cursor-default ml-2 my-auto"
+              data-tip
+              data-for="passwordRequirements"
+            >
+              <svg
+                fill="#425563"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="18px"
+                height="18px"
+              >
+                <path d="M 12 0 C 5.371094 0 0 5.371094 0 12 C 0 18.628906 5.371094 24 12 24 C 18.628906 24 24 18.628906 24 12 C 24 5.371094 18.628906 0 12 0 Z M 12 2 C 17.523438 2 22 6.476563 22 12 C 22 17.523438 17.523438 22 12 22 C 6.476563 22 2 17.523438 2 12 C 2 6.476563 6.476563 2 12 2 Z M 12 5.8125 C 11.816406 5.8125 11.664063 5.808594 11.5 5.84375 C 11.335938 5.878906 11.183594 5.96875 11.0625 6.0625 C 10.941406 6.15625 10.851563 6.285156 10.78125 6.4375 C 10.710938 6.589844 10.6875 6.769531 10.6875 7 C 10.6875 7.226563 10.710938 7.40625 10.78125 7.5625 C 10.851563 7.71875 10.941406 7.84375 11.0625 7.9375 C 11.183594 8.03125 11.335938 8.085938 11.5 8.125 C 11.664063 8.164063 11.816406 8.1875 12 8.1875 C 12.179688 8.1875 12.371094 8.164063 12.53125 8.125 C 12.691406 8.085938 12.816406 8.03125 12.9375 7.9375 C 13.058594 7.84375 13.148438 7.71875 13.21875 7.5625 C 13.289063 7.410156 13.34375 7.226563 13.34375 7 C 13.34375 6.769531 13.289063 6.589844 13.21875 6.4375 C 13.148438 6.285156 13.058594 6.15625 12.9375 6.0625 C 12.816406 5.96875 12.691406 5.878906 12.53125 5.84375 C 12.371094 5.808594 12.179688 5.8125 12 5.8125 Z M 10.78125 9.15625 L 10.78125 18.125 L 13.21875 18.125 L 13.21875 9.15625 Z" />
+              </svg>
+            </a>
+            <ReactTooltip
+              id="passwordRequirements"
+              type="light"
+              place="top"
+              effect="solid"
+              multiline
+              backgroundColor="#d1dbda"
+            >
+              {passwordTooltip}
+            </ReactTooltip>
+          </div>
+
           <input
             name="current-password"
             autoComplete="current-password"

@@ -2,6 +2,7 @@ import React from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { Link } from "gatsby";
+import { navigate } from "@reach/router";
 /**
  * Standardised header with configurable text
  * @param {string} pageName - header text
@@ -12,6 +13,10 @@ const Header = ({ pageName = "Test", backAction = false }) => {
     firebase
       .auth()
       .signOut()
+      .then(function (_) {
+        navigate("/");
+        window.location.reload();
+      })
       .catch(function (error) {
         console.log(error);
       });

@@ -15,6 +15,7 @@ import Admin from "components/admin/admin";
 import { AuthProvider } from "context/authContext";
 import OnlyPublicRoute from "routes/onlyPublicRoute";
 import OnlyPrivateRoute from "routes/onlyPrivateRoute";
+import ResetPassword from "../components/auth/resetPassword";
 
 const Index = () => {
   return (
@@ -25,6 +26,7 @@ const Index = () => {
 
         <OnlyPublicRoute component={Login} path="/login" />
         <OnlyPublicRoute component={SignUp} path="/signup" />
+        <OnlyPublicRoute component={ResetPassword} path="/reset" />
 
         <OnlyPrivateRoute component={Dashboard} path="dashboard" />
         <OnlyPrivateRoute component={Trade} path="autotrade" />
