@@ -26,6 +26,10 @@ const AuthProvider = ({ children }) => {
   // error message when user tries to select invalid module combinations
   // eg. 2 HASS modules, modules from 2 different pillars, more than 4 modules, more than 3 pillar modules
   const [addToCartErrorMessage, setAddToCartErrorMessage] = useState("");
+  // time in milliseconds
+  // if no enrollment period object is found, startTime and endTime are null
+  const [enrollmentStartTime, setEnrollmentStartTime] = useState(null);
+  const [enrollmentEndTime, setEnrollmentEndTime] = useState(null);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -55,6 +59,10 @@ const AuthProvider = ({ children }) => {
         setActivePage,
         tradeModule,
         setTradeModule,
+        enrollmentStartTime,
+        enrollmentEndTime,
+        setEnrollmentStartTime,
+        setEnrollmentEndTime,
       }}
     >
       {children}

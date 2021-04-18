@@ -4,8 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import firebase from "firebase/app";
 import "firebase/firestore";
-import moment from "moment";
-import "moment-timezone";
+import { navigate } from "@reach/router";
 
 import Sidebar from "../sidebar";
 import Header from "../header";
@@ -25,13 +24,16 @@ const Trade = () => {
     setAutoTradeModules,
     tradeModule,
     setTradeModule,
+    enrollmentStartTime,
+    enrollmentEndTime,
+    setEnrollmentStartTime,
+    setEnrollmentEndTime,
   } = useUser();
+  console.log(user);
   const [showInfo, setShowInfo] = useState(true);
   const [showUpdateMessage, setShowUpdateMessage] = useState(false);
   const [remainingWeightage, setRemainingWeightage] = useState(100);
   const [invalidWeightage, setInvalidWeightage] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
   const [loading, setLoading] = useState(false);
   const db = firebase.firestore().collection("users");
   const moduleDB = firebase.firestore().collection("modules");
@@ -47,96 +49,111 @@ const Trade = () => {
         .get()
         .then((doc) => {
           var data = doc.data();
+          // if (data.admin) {
+          //   navigate("/admin");
+          // }
+          console.log(enrollmentStartTime);
+          if (enrollmentStartTime === null) {
+            enrollmentPeriodDb
+              .where(
+                "end",
+                ">",
+                firebase.firestore.Timestamp.fromMillis(Date.now())
+              )
+              .get()
+              .then((snapshot) => {
+                if (snapshot.size === 0) {
+                  setLoading(false);
+                  return;
+                }
 
-          enrollmentPeriodDb
-            .where(
-              "end",
-              ">",
-              firebase.firestore.Timestamp.fromMillis(Date.now())
-            )
-            .get()
-            .then((snapshot) => {
-              if (snapshot.size === 0) {
-                setLoading(false);
-                return;
-              }
-
-              let tempStart, tempEnd;
-              const now = Date.now();
-              if (snapshot.size > 1) {
-                let difference = Number.MAX_VALUE;
-                snapshot.forEach((d) => {
-                  const periodData = d.data();
-                  const tempDiff = periodData.end.toMillis() - now;
-                  if (tempDiff < difference) {
-                    difference = tempDiff;
-                    tempStart = periodData.start.toMillis();
-                    tempEnd = periodData.end.toMillis();
-                  }
-                });
-                setStartTime(tempStart);
-                setEndTime(tempEnd);
-              } else {
-                snapshot.forEach((d) => {
-                  tempStart = d.data().start.toMillis();
-                  tempEnd = d.data().end.toMillis();
-                });
-                setStartTime(tempStart);
-                setEndTime(tempEnd);
-              }
-
-              if (tempStart < Date.now()) {
-                if (data.autoTradeModules != null) {
-                  var modulesData = [];
-                  var promises = [];
-                  var totalWeightage = 0;
-
-                  data.autoTradeModules.forEach(function (item) {
-                    promises.push(
-                      moduleDB
-                        .doc(item.courseCode)
-                        .get()
-                        .then((doc) => {
-                          modulesData.push({
-                            ...doc.data(),
-                            weightage: item.weightage,
-                          });
-                          totalWeightage += item.weightage;
-                        })
-                    );
-                  });
-
-                  Promise.all(promises).then(() => {
-                    setAutoTradeModules(modulesData);
-                    setRemainingWeightage(100 - totalWeightage);
-
-                    if (data.modules != null) {
-                      data.modules.forEach(function (item) {
-                        moduleDB
-                          .where("courseCode", "==", item)
-                          .where("type", "==", "HASS")
-                          .get()
-                          .then((doc) => {
-                            if (!doc.empty) {
-                              doc.forEach((d) => {
-                                setTradeModule(d.data());
-                              });
-                            }
-                            setLoading(false);
-                          });
-                      });
-                    } else {
-                      setLoading(false);
+                let tempStart, tempEnd;
+                const now = Date.now();
+                if (snapshot.size > 1) {
+                  let difference = Number.MAX_VALUE;
+                  snapshot.forEach((d) => {
+                    const periodData = d.data();
+                    const tempDiff = periodData.end.toMillis() - now;
+                    if (tempDiff < difference) {
+                      difference = tempDiff;
+                      tempStart = periodData.start.toMillis();
+                      tempEnd = periodData.end.toMillis();
                     }
                   });
+                  setEnrollmentStartTime(tempStart);
+                  setEnrollmentEndTime(tempEnd);
+                } else {
+                  snapshot.forEach((d) => {
+                    tempStart = d.data().start.toMillis();
+                    tempEnd = d.data().end.toMillis();
+                  });
+                  setEnrollmentStartTime(tempStart);
+                  setEnrollmentEndTime(tempEnd);
                 }
-              } else {
-                setLoading(false);
-              }
-            });
+
+                if (tempStart < Date.now()) {
+                  fetchTradeInfo(data);
+                } else {
+                  setLoading(false);
+                }
+              });
+          } else if (enrollmentStartTime < Date.now()) {
+            fetchTradeInfo(data);
+          } else {
+            setLoading(false);
+          }
         });
     }
   }, []);
+
+  const fetchTradeInfo = (data) => {
+    if (data.autoTradeModules != null) {
+      var modulesData = [];
+      var promises = [];
+      var totalWeightage = 0;
+
+      data.autoTradeModules.forEach(function (item) {
+        promises.push(
+          moduleDB
+            .doc(item.courseCode)
+            .get()
+            .then((doc) => {
+              modulesData.push({
+                ...doc.data(),
+                weightage: item.weightage,
+              });
+              totalWeightage += item.weightage;
+            })
+        );
+      });
+
+      Promise.all(promises).then(() => {
+        setAutoTradeModules(modulesData);
+        setRemainingWeightage(100 - totalWeightage);
+
+        if (data.modules != null) {
+          data.modules.forEach(function (item) {
+            moduleDB
+              .where("courseCode", "==", item)
+              .where("type", "==", "HASS")
+              .get()
+              .then((doc) => {
+                if (!doc.empty) {
+                  doc.forEach((d) => {
+                    setTradeModule(d.data());
+                  });
+                }
+                setLoading(false);
+              });
+          });
+        } else {
+          setLoading(false);
+        }
+      });
+    } else {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     var totalWeightage = 0;
@@ -173,7 +190,8 @@ const Trade = () => {
       });
   };
 
-  const withinEnrollmentPeriod = startTime !== null && startTime < Date.now();
+  const withinEnrollmentPeriod =
+    enrollmentStartTime !== null && enrollmentStartTime < Date.now();
 
   const selectedModules = autoTradeModules.length
     ? autoTradeModules
@@ -372,8 +390,8 @@ const Trade = () => {
             </>
           ) : (
             <ClosedPortal
-              startTime={startTime}
-              endTime={endTime}
+              startTime={enrollmentStartTime}
+              endTime={enrollmentEndTime}
               name="Autotrade"
             />
           )}

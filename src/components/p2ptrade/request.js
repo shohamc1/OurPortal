@@ -24,10 +24,15 @@ const Request = () => {
   const [done, setDone] = useState(false);
   const [hasMod, setHasMod] = useState(true);
   const [hasTrade, setHasTrade] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { setActivePage, user } = useUser();
+  const {
+    setActivePage,
+    user,
+    enrollmentStartTime,
+    enrollmentEndTime,
+    setEnrollmentStartTime,
+    setEnrollmentEndTime,
+  } = useUser();
   const enrollmentPeriodDb = firebase
     .firestore()
     .collection("enrollmentPeriod");
@@ -43,90 +48,99 @@ const Request = () => {
       .get()
       .then((doc) => {
         if (doc.exists) {
+          // if (doc.data().admin) {
+          //   navigate("/admin");
+          // }
           // check if within enrollment period
-          enrollmentPeriodDb
-            .where(
-              "end",
-              ">",
-              firebase.firestore.Timestamp.fromMillis(Date.now())
-            )
-            .get()
-            .then((snapshot) => {
-              if (snapshot.size === 0) {
-                setLoading(false);
-                return;
-              }
-
-              let tempStart, tempEnd;
-              const now = Date.now();
-              if (snapshot.size > 1) {
-                let difference = Number.MAX_VALUE;
-                snapshot.forEach((d) => {
-                  const periodData = d.data();
-                  const tempDiff = periodData.end.toMillis() - now;
-                  if (tempDiff < difference) {
-                    difference = tempDiff;
-                    tempStart = periodData.start.toMillis();
-                    tempEnd = periodData.end.toMillis();
-                  }
-                });
-                setStartTime(tempStart);
-                setEndTime(tempEnd);
-              } else {
-                snapshot.forEach((d) => {
-                  tempStart = d.data().start.toMillis();
-                  tempEnd = d.data().end.toMillis();
-                });
-                setStartTime(tempStart);
-                setEndTime(tempEnd);
-              }
-              if (tempStart < Date.now()) {
-                // retrieve trade if within enrollment period
-                if (doc.data().hasOpenTrade) {
-                  setHasTrade(true);
-                  console.log("has trade");
-                }
-                var modules = doc.data()?.modules;
-                // test modules
-                let mod;
-                for (let element of modules) {
-                  if (/02\.\S+/gm.test(element)) {
-                    mod = element;
-                    break;
-                  }
+          if (enrollmentStartTime === null) {
+            enrollmentPeriodDb
+              .where(
+                "end",
+                ">",
+                firebase.firestore.Timestamp.fromMillis(Date.now())
+              )
+              .get()
+              .then((snapshot) => {
+                if (snapshot.size === 0) {
+                  setLoading(false);
+                  return;
                 }
 
-                // retrieve module if module is found
-                if (mod !== null) {
-                  modDB
-                    .doc(mod)
-                    .get()
-                    .then((doc) => {
-                      if (doc.exists) {
-                        setMod(doc.data());
-                      }
-                    })
-                    .then(() => {
-                      if (
-                        !mod ||
-                        Object.keys(mod).length === 0 ||
-                        mod === undefined
-                      ) {
-                        setDone(true);
-                        setHasMod(false);
-                      }
-                      setLoading(false);
-                    });
+                let tempStart, tempEnd;
+                const now = Date.now();
+                if (snapshot.size > 1) {
+                  let difference = Number.MAX_VALUE;
+                  snapshot.forEach((d) => {
+                    const periodData = d.data();
+                    const tempDiff = periodData.end.toMillis() - now;
+                    if (tempDiff < difference) {
+                      difference = tempDiff;
+                      tempStart = periodData.start.toMillis();
+                      tempEnd = periodData.end.toMillis();
+                    }
+                  });
+                  setEnrollmentStartTime(tempStart);
+                  setEnrollmentEndTime(tempEnd);
+                } else {
+                  snapshot.forEach((d) => {
+                    tempStart = d.data().start.toMillis();
+                    tempEnd = d.data().end.toMillis();
+                  });
+                  setEnrollmentStartTime(tempStart);
+                  setEnrollmentEndTime(tempEnd);
+                }
+                if (tempStart < Date.now()) {
+                  // retrieve trade if within enrollment period
+                  fetchTradeInfo(doc);
                 } else {
                   setLoading(false);
                 }
-              } else {
-                setLoading(false);
-              }
-            });
+              });
+          } else if (enrollmentStartTime < Date.now()) {
+            fetchTradeInfo(doc);
+          } else {
+            setLoading(false);
+          }
         }
       });
   }, []);
+
+  const fetchTradeInfo = (doc) => {
+    if (doc.data().hasOpenTrade) {
+      setHasTrade(true);
+      console.log("has trade");
+    }
+    var modules = doc.data()?.modules;
+    // test modules
+    let mod;
+    for (let element of modules) {
+      if (/02\.\S+/gm.test(element)) {
+        mod = element;
+        break;
+      }
+    }
+
+    // retrieve module if module is found
+    if (mod !== null) {
+      modDB
+        .doc(mod)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            setMod(doc.data());
+          }
+        })
+        .then(() => {
+          if (!mod || Object.keys(mod).length === 0 || mod === undefined) {
+            setDone(true);
+            setHasMod(false);
+          }
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  };
 
   const closeInfo = (e) => {
     e.preventDefault();
@@ -183,7 +197,8 @@ const Request = () => {
       });
   };
 
-  const withinEnrollmentPeriod = startTime !== null && startTime < Date.now();
+  const withinEnrollmentPeriod =
+    enrollmentStartTime !== null && enrollmentStartTime < Date.now();
 
   if (loading) return <></>;
 
@@ -415,7 +430,7 @@ const Request = () => {
                         placeholder="john_doe@mymail.sutd.edu.sg"
                         value={email}
                         onChange={handleEmailChange}
-                        disabled={startTime > Date.now()}
+                        disabled={!withinEnrollmentPeriod}
                       />
 
                       {/* generate magic link here */}
@@ -428,7 +443,7 @@ const Request = () => {
                           class="flex flex-row mx-auto bg-green-500 text-gray-50 w-full py-2 rounded justify-center"
                           onClick={sendRequest}
                           data-testid="requestSendButton"
-                          disabled={startTime > Date.now()}
+                          disabled={!withinEnrollmentPeriod}
                         >
                           <span class="mr-2">Send</span>
                           <svg
@@ -464,8 +479,8 @@ const Request = () => {
             </>
           ) : (
             <ClosedPortal
-              startTime={startTime}
-              endTime={endTime}
+              startTime={enrollmentStartTime}
+              endTime={enrollmentEndTime}
               name="Peer-to-Peer Trade"
             />
           )}

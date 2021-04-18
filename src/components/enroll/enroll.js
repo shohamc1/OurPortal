@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { navigate } from "@reach/router";
 
 import Sidebar from "../sidebar";
 import Header from "../header";
@@ -23,11 +24,13 @@ const Enroll = () => {
     user,
     addToCartErrorMessage,
     setAddToCartErrorMessage,
+    enrollmentStartTime,
+    enrollmentEndTime,
+    setEnrollmentStartTime,
+    setEnrollmentEndTime,
   } = useUser();
   const { PILLAR_COURSE_CODE } = CONSTANTS;
   const [showMessage, setShowMessage] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hideEnrollmentPeriodModal, setHideEnrollmentPeriodModal] = useState(
     false
@@ -41,6 +44,7 @@ const Enroll = () => {
 
   useEffect(() => {
     setLoading(true);
+    console.log(enrollmentStartTime);
     setActivePage("enroll");
     fetchData();
   }, []);
@@ -86,66 +90,80 @@ const Enroll = () => {
       .get()
       .then((doc) => {
         var data = doc.data();
+        // if (data.admin) {
+        //   navigate("/admin");
+        // }
         console.log(data);
-        var modulesArray = data.modules;
-        var modulesData = [];
-        var promises = [];
 
-        enrollmentPeriodDb
-          .where(
-            "end",
-            ">",
-            firebase.firestore.Timestamp.fromMillis(Date.now())
-          )
-          .get()
-          .then((snapshot) => {
-            if (snapshot.size === 0) {
-              setLoading(false);
-              return;
-            }
+        if (enrollmentStartTime === null) {
+          enrollmentPeriodDb
+            .where(
+              "end",
+              ">",
+              firebase.firestore.Timestamp.fromMillis(Date.now())
+            )
+            .get()
+            .then((snapshot) => {
+              if (snapshot.size === 0) {
+                setLoading(false);
+                return;
+              }
 
-            let tempStart, tempEnd;
-            const now = Date.now();
-            if (snapshot.size > 1) {
-              let difference = Number.MAX_VALUE;
-              snapshot.forEach((d) => {
-                const periodData = d.data();
-                const tempDiff = periodData.end.toMillis() - now;
-                if (tempDiff < difference) {
-                  difference = tempDiff;
-                  tempStart = periodData.start.toMillis();
-                  tempEnd = periodData.end.toMillis();
-                }
-              });
-              setStartTime(tempStart);
-              setEndTime(tempEnd);
-            } else {
-              snapshot.forEach((d) => {
-                tempStart = d.data().start.toMillis();
-                tempEnd = d.data().end.toMillis();
-              });
-              setStartTime(tempStart);
-              setEndTime(tempEnd);
-            }
+              let tempStart, tempEnd;
+              const now = Date.now();
+              if (snapshot.size > 1) {
+                let difference = Number.MAX_VALUE;
+                snapshot.forEach((d) => {
+                  const periodData = d.data();
+                  const tempDiff = periodData.end.toMillis() - now;
+                  if (tempDiff < difference) {
+                    difference = tempDiff;
+                    tempStart = periodData.start.toMillis();
+                    tempEnd = periodData.end.toMillis();
+                  }
+                });
+                setEnrollmentStartTime(tempStart);
+                setEnrollmentEndTime(tempEnd);
+              } else {
+                snapshot.forEach((d) => {
+                  tempStart = d.data().start.toMillis();
+                  tempEnd = d.data().end.toMillis();
+                });
+                setEnrollmentStartTime(tempStart);
+                setEnrollmentEndTime(tempEnd);
+              }
 
-            modulesArray.forEach(function (item) {
-              console.log(item);
-              promises.push(
-                moduleDB
-                  .doc(item)
-                  .get()
-                  .then((doc) => {
-                    modulesData.push(doc.data());
-                  })
-              );
+              fetchModuleInfo(data);
             });
-
-            Promise.all(promises).then(() => {
-              setEnrolledModules(modulesData);
-              setLoading(false);
-            });
-          });
+        } else if (enrollmentStartTime < Date.now()) {
+          fetchModuleInfo(data);
+        } else {
+          setLoading(false);
+        }
       });
+  };
+
+  const fetchModuleInfo = (data) => {
+    var modulesArray = data.modules;
+    var modulesData = [];
+    var promises = [];
+
+    modulesArray.forEach(function (item) {
+      console.log(item);
+      promises.push(
+        moduleDB
+          .doc(item)
+          .get()
+          .then((doc) => {
+            modulesData.push(doc.data());
+          })
+      );
+    });
+
+    Promise.all(promises).then(() => {
+      setEnrolledModules(modulesData);
+      setLoading(false);
+    });
   };
 
   const dismissMessage = () => {
@@ -161,7 +179,8 @@ const Enroll = () => {
     );
   };
 
-  const withinEnrollmentPeriod = startTime !== null && startTime < Date.now();
+  const withinEnrollmentPeriod =
+    enrollmentStartTime !== null && enrollmentStartTime < Date.now();
 
   const enrollmentCompleteMessageChild = success ? (
     <>
@@ -258,8 +277,8 @@ const Enroll = () => {
           onCloseHandler={() => setHideEnrollmentPeriodModal(true)}
           child={
             <ClosedPortal
-              startTime={startTime}
-              endTime={endTime}
+              startTime={enrollmentStartTime}
+              endTime={enrollmentEndTime}
               name="Enrollment"
               showImage={false}
               additionalComponent={

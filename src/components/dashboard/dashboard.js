@@ -8,6 +8,7 @@ import Header from "../header";
 
 import { AuthContext } from "../../context/authContext";
 import ModsGrid from "./modsGrid";
+import { navigate } from "@reach/router";
 
 const Dashboard = () => {
   const { user, setActivePage } = useContext(AuthContext);
@@ -46,6 +47,9 @@ const Dashboard = () => {
       .get()
       .then((doc) => {
         var data = doc.data();
+        // if (data.admin) {
+        //   navigate("/admin");
+        // }
         setFirstName(data.firstName);
 
         var modulesArray = data.modules;
