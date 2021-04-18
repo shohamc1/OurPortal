@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 const mods = [];
-const singleMod = "02.144DH";
+const singleMod = "02.136DH";
 describe("Auto Trade", () => {
   before(() => {
     cy.fixture("autoTradeMods", { timeout: 30000 }).then((autoTradeMods) => {
@@ -61,7 +61,7 @@ describe("Auto Trade", () => {
       });
     });
     it("Currently enrolled module displayed", () => {
-      cy.getId("currentModuleCard", 60000).should("contain", singleMod);
+      cy.getId("currentModuleCard", 30000).should("contain", singleMod);
       // .and("contain", "Lyric Poetry");
     });
 
@@ -119,9 +119,9 @@ describe("Auto Trade", () => {
 
     it("Alert when more than 3 modules selected", () => {
       cy.getId("customSearchBoxInput").clear();
-      cy.getId(mods[0].courseCode).find("button").click();
-      cy.getId(mods[1].courseCode).find("button").click();
-      cy.getId(mods[2].courseCode).find("button").click();
+      cy.getId(mods[0].courseCode).find("button").click({ force: true });
+      cy.getId(mods[1].courseCode).find("button").click({ force: true });
+      cy.getId(mods[2].courseCode).find("button").click({ force: true });
 
       const stub = cy.stub();
       cy.on("window:alert", stub);

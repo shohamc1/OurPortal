@@ -4,11 +4,15 @@ describe("Sidebar and Header", () => {
   before(() => {
     cy.visit("/");
     cy.login();
-    cy.visit("/dashboard");
+    cy.enrollMod(["02.136DH"]).then(() => {
+      cy.visit("/dashboard");
+    });
   });
 
   after(() => {
-    cy.logout();
+    cy.deleteMod(["02.136DH"]).then(() => {
+      cy.logout();
+    });
   });
 
   it("All links displayed with intended spelling", () => {

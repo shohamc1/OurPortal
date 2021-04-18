@@ -47,12 +47,12 @@ Cypress.Commands.add("getId", (dataTestId, time) => {
 
 Cypress.Commands.add(
   "login",
-  (email = "testuser@gmail.com", password = "test123") => {
+  (email = "yiern_goh@mymail.sutd.edu.sg", password = "Test123!") => {
     Cypress.log({
       displayName: "login",
-      consoleProps: () => {
-        return { email, password };
-      },
+      // consoleProps: () => {
+      //   return { email, password };
+      // },
     });
 
     return firebase.default.auth().signInWithEmailAndPassword(email, password);
@@ -61,7 +61,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   "loginDelete",
-  (email = "signuptest@gmail.com", password = "qwerty1234") => {
+  (email = "signuptest@mymail.sutd.edu.sg", password = "Qwerty123!") => {
     Cypress.log({
       displayName: "login to delete",
       consoleProps: () => {
@@ -93,6 +93,7 @@ Cypress.Commands.add(
           });
       })
       .catch((error) => {
+        console.log(error);
         console.log("User already deleted");
       })
       .then(firebase.auth().signOut());
@@ -181,4 +182,9 @@ Cypress.Commands.add("removeAutoTradeMods", (autoTradeMods) => {
         ),
       });
   });
+});
+// only for sign up spec
+Cypress.Commands.add("signUpCheckError", (message) => {
+  cy.get("button").contains("Sign Up").click();
+  cy.getId("signUpErrorMessage").should("contain", message);
 });

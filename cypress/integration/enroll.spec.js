@@ -189,14 +189,6 @@ describe("Enroll", () => {
       });
       cy.getId("dashboardMods").children().should("have.length", 0);
     });
-
-    it("Toggle show updates with no modules enrolled message", () => {
-      cy.visit("/dashboard");
-
-      cy.getId("dashboardEdit").click();
-      cy.getId("dashboardShow").click();
-      cy.getId("dashboardNoMod").should("exist");
-    });
   });
 
   describe("Warning modals when enrolling", () => {
