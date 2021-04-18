@@ -158,7 +158,7 @@ const Login = () => {
   return (
     <div class="flex flex-col w-screen h-screen">
       <Helmet title="Login | OurPortal" />
-      <div class="flex my-auto mx-auto flex-col px-2 md:w-6/12 lg:w-4/12">
+      <div class="flex my-auto mx-auto flex-col px-2">
         {forgotPassword ? (
           <></>
         ) : (

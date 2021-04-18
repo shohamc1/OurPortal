@@ -99,7 +99,7 @@ const Signup = () => {
   return (
     <div class="flex flex-col w-screen h-screen">
       <Helmet title="Signup | OurPortal" />
-      <div class="flex my-auto mx-auto flex-col px-2 w-6/12">
+      <div class="flex my-auto mx-auto flex-col px-2">
         <span class="text-6xl md:text-8xl font-bold tracking-tight">
           OurPortal
         </span>

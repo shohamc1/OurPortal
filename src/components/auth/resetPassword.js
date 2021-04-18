@@ -91,7 +91,7 @@ const ResetPassword = (props) => {
     return (
       <div class="flex flex-col w-screen h-screen">
         <Helmet title="Reset Password | OurPortal" />
-        <div class="flex my-auto mx-auto flex-col px-2 md:w-6/12 lg:w-4/12">
+        <div class="flex my-auto mx-auto flex-col px-2 ">
           <div class="flex flex-col rounded-lg bg-gray-300 p-4 px-6 mb-8">
             <span class="font-semibold text-lg">Create New Password</span>
             <div class="pb-4">
