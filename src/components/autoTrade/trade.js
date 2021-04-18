@@ -107,48 +107,53 @@ const Trade = () => {
   }, []);
 
   const fetchTradeInfo = (data) => {
-    if (data.autoTradeModules != null) {
-      var modulesData = [];
-      var promises = [];
-      var totalWeightage = 0;
-
-      data.autoTradeModules.forEach(function (item) {
-        promises.push(
-          moduleDB
-            .doc(item.courseCode)
-            .get()
-            .then((doc) => {
-              modulesData.push({
-                ...doc.data(),
-                weightage: item.weightage,
+    if (data.modules != null && data.modules.length) {
+      data.modules.forEach(function (item) {
+        moduleDB
+          .where("courseCode", "==", item)
+          .where("type", "==", "HASS")
+          .get()
+          .then((doc) => {
+            if (!doc.empty) {
+              doc.forEach((d) => {
+                setTradeModule(d.data());
               });
-              totalWeightage += item.weightage;
-            })
-        );
-      });
 
-      Promise.all(promises).then(() => {
-        setAutoTradeModules(modulesData);
-        setRemainingWeightage(100 - totalWeightage);
+              if (
+                data.autoTradeModules != null &&
+                data.autoTradeModules.length
+              ) {
+                var modulesData = [];
+                var promises = [];
+                var totalWeightage = 0;
 
-        if (data.modules != null) {
-          data.modules.forEach(function (item) {
-            moduleDB
-              .where("courseCode", "==", item)
-              .where("type", "==", "HASS")
-              .get()
-              .then((doc) => {
-                if (!doc.empty) {
-                  doc.forEach((d) => {
-                    setTradeModule(d.data());
-                  });
-                }
+                data.autoTradeModules.forEach(function (item) {
+                  promises.push(
+                    moduleDB
+                      .doc(item.courseCode)
+                      .get()
+                      .then((doc) => {
+                        modulesData.push({
+                          ...doc.data(),
+                          weightage: item.weightage,
+                        });
+                        totalWeightage += item.weightage;
+                      })
+                  );
+                });
+
+                Promise.all(promises).then(() => {
+                  setAutoTradeModules(modulesData);
+                  setRemainingWeightage(100 - totalWeightage);
+                  setLoading(false);
+                });
+              } else {
                 setLoading(false);
-              });
+              }
+            } else {
+              setLoading(false);
+            }
           });
-        } else {
-          setLoading(false);
-        }
       });
     } else {
       setLoading(false);
@@ -219,7 +224,9 @@ const Trade = () => {
         <div class="flex flex-col flex-grow">
           <Header pageName="Auto Trade" />
           <div class="h-full">
-            <AlgoliaMainContent />
+            <AlgoliaMainContent
+              withinEnrollmentPeriod={withinEnrollmentPeriod}
+            />
           </div>
         </div>
       </div>

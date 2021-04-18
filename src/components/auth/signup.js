@@ -11,6 +11,7 @@ const Signup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [signUpError, setSignUpError] = useState(false);
+  const [signUpComplete, setSignUpComplete] = useState(false);
 
   // const DB = firebase.firestore();
   // const AUTH = firebase.auth();
@@ -53,7 +54,11 @@ const Signup = () => {
   };
 
   const signUpProc = () => {
-    if (password.length < 6) {
+    if (!email || !password || !firstName || !lastName) {
+      setSignUpError("Please fill in all fields");
+    } else if (!email.match(/[a-z]+(?:_[a-z]+)+@mymail.sutd.edu.sg/gm)) {
+      setSignUpError("Please use your SUTD email to sign up");
+    } else if (password.length < 6) {
       setSignUpError("Password must contain at least 6 characters");
     } else if (password.length > 40) {
       setSignUpError("Password cannot exceed 40 characters");
@@ -71,12 +76,17 @@ const Signup = () => {
         .createUserWithEmailAndPassword(email, password)
         .then(function (user) {
           console.log(user);
+          firebase
+            .auth()
+            .currentUser.sendEmailVerification()
+            .then((val) => {
+              setSignUpComplete(true);
+            });
           db.doc(user.user.uid).set({
             firstName: firstName,
             lastName: lastName,
             email: user.user.email,
             uid: user.user.uid,
-            modules: [],
           });
         })
         .catch(function (error) {
@@ -96,6 +106,14 @@ const Signup = () => {
     </span>
   );
 
+  const emailTooltip = (
+    <span>
+      Please use your SUTD email address for sign up.
+      <br />
+      (eg. john_doe@mymail.sutd.edu.sg)
+    </span>
+  );
+
   return (
     <div class="flex flex-col w-screen h-screen">
       <Helmet title="Signup | OurPortal" />
@@ -107,7 +125,36 @@ const Signup = () => {
           Get Your Mods
         </span>
         <div class="flex flex-col rounded-lg bg-gray-300 p-4 px-6 mb-8">
-          <span class="font-semibold text-lg">Email</span>
+          <div class="flex flex-row">
+            <span class="font-semibold text-lg">Email</span>
+            <a
+              class="cursor-default ml-2 my-auto"
+              data-tip
+              data-for="emailRequirements"
+            >
+              <svg
+                fill="#7c3aed" //#425563
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="18px"
+                height="18px"
+              >
+                <path d="M 12 0 C 5.371094 0 0 5.371094 0 12 C 0 18.628906 5.371094 24 12 24 C 18.628906 24 24 18.628906 24 12 C 24 5.371094 18.628906 0 12 0 Z M 12 2 C 17.523438 2 22 6.476563 22 12 C 22 17.523438 17.523438 22 12 22 C 6.476563 22 2 17.523438 2 12 C 2 6.476563 6.476563 2 12 2 Z M 12 5.8125 C 11.816406 5.8125 11.664063 5.808594 11.5 5.84375 C 11.335938 5.878906 11.183594 5.96875 11.0625 6.0625 C 10.941406 6.15625 10.851563 6.285156 10.78125 6.4375 C 10.710938 6.589844 10.6875 6.769531 10.6875 7 C 10.6875 7.226563 10.710938 7.40625 10.78125 7.5625 C 10.851563 7.71875 10.941406 7.84375 11.0625 7.9375 C 11.183594 8.03125 11.335938 8.085938 11.5 8.125 C 11.664063 8.164063 11.816406 8.1875 12 8.1875 C 12.179688 8.1875 12.371094 8.164063 12.53125 8.125 C 12.691406 8.085938 12.816406 8.03125 12.9375 7.9375 C 13.058594 7.84375 13.148438 7.71875 13.21875 7.5625 C 13.289063 7.410156 13.34375 7.226563 13.34375 7 C 13.34375 6.769531 13.289063 6.589844 13.21875 6.4375 C 13.148438 6.285156 13.058594 6.15625 12.9375 6.0625 C 12.816406 5.96875 12.691406 5.878906 12.53125 5.84375 C 12.371094 5.808594 12.179688 5.8125 12 5.8125 Z M 10.78125 9.15625 L 10.78125 18.125 L 13.21875 18.125 L 13.21875 9.15625 Z" />
+              </svg>
+            </a>
+            <ReactTooltip
+              id="emailRequirements"
+              type="light"
+              place="top"
+              effect="solid"
+              multiline
+              border={true}
+              borderColor="#7c3aed"
+              textColor="#7c3aed"
+            >
+              {emailTooltip}
+            </ReactTooltip>
+          </div>
           <input
             name="email"
             autoComplete="email"
@@ -125,7 +172,7 @@ const Signup = () => {
               data-for="passwordRequirements"
             >
               <svg
-                fill="#425563"
+                fill="#7c3aed"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 width="18px"
@@ -140,7 +187,10 @@ const Signup = () => {
               place="top"
               effect="solid"
               multiline
-              backgroundColor="#d1dbda"
+              // backgroundColor="#d1dbda"
+              border={true}
+              borderColor="#7c3aed"
+              textColor="#7c3aed"
             >
               {passwordTooltip}
             </ReactTooltip>
@@ -181,8 +231,12 @@ const Signup = () => {
           Sign Up
         </button>
       </div>
-      {signUpError && (
-        <div class="flex justify-center items-center mt-4 p-4 bg-red-500 text-white">
+      {(signUpError || signUpComplete) && (
+        <div
+          class={`flex justify-center items-center mt-4 p-4 ${
+            signUpError ? "bg-red-500" : "bg-green-500"
+          } text-white`}
+        >
           <div class="mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -202,13 +256,15 @@ const Signup = () => {
             </svg>
           </div>
           <div class="w-full" data-testid="signUpErrorMessage">
-            {signUpError}
+            {signUpError ||
+              "A verification email has been sent to " + email + "!"}
           </div>
           <button
             class="flex flex-auto flex-row-reverse"
             onClick={(e) => {
               e.preventDefault();
               setSignUpError(false);
+              setSignUpComplete(false);
             }}
           >
             <div>

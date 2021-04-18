@@ -5,9 +5,10 @@ import { Redirect } from "@reach/router";
 const OnlyPublicRoute = ({ component: RouteComponent, ...rest }) => {
   const { user, loading } = useContext(AuthContext);
   if (!loading) {
+    if (user) console.log(user.emailVerified);
     return (
       <>
-        {!user ? (
+        {!user || !user.emailVerified ? (
           <RouteComponent {...rest} />
         ) : (
           <Redirect to="/dashboard" noThrow />
