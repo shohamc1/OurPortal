@@ -29,6 +29,8 @@
     "gatsby-plugin-postcss": "^3.7.0",
     "gatsby-plugin-react-helmet": "^3.10.0",
     "gatsby-plugin-sitemap": "^2.12.0",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
     "postcss": "^8.2.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

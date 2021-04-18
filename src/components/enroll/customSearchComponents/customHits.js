@@ -3,9 +3,8 @@ import { connectHits } from "react-instantsearch-dom";
 import ModuleCard from "./moduleCard";
 import { useUser } from "../../../context/authContext";
 
-const Hits = ({ hits }) => {
+const Hits = ({ hits, withinEnrollmentPeriod }) => {
   const { activePage, tradeModule, enrolledModules } = useUser();
-  console.log(enrolledModules);
   const enrolledModulesCode = enrolledModules.map((m) => m.courseCode);
   const shouldFilter = (item) => {
     return (
@@ -34,6 +33,7 @@ const Hits = ({ hits }) => {
                     instructorLastName={item.instructorLastName}
                     type={item.type}
                     key={index}
+                    disableAddToCart={!withinEnrollmentPeriod}
                   />
                 </>
               )

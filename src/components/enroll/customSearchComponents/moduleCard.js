@@ -35,6 +35,7 @@ const ModuleCard = ({
   instructorFirstName,
   instructorLastName,
   type,
+  disableAddToCart,
 }) => {
   const { MODULE_CARD_COLOUR } = CONSTANTS;
   const {
@@ -173,6 +174,7 @@ const ModuleCard = ({
           <button
             class="ml-auto mt-auto rounded-full h-1/2 bg-gray-300 text-sm px-4"
             onClick={added ? removeFromCart : addToCart}
+            disabled={disableAddToCart}
           >
             {added ? (
               <svg

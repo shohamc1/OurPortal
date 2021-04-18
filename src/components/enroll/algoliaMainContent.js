@@ -11,13 +11,13 @@ const searchClient = algoliasearch(
   process.env.GATSBY_ALGOLIA_SEARCH_KEY
 );
 
-const AlgoliaMainContent = () => {
+const AlgoliaMainContent = ({ withinEnrollmentPeriod }) => {
   const { activePage } = React.useContext(AuthContext);
   return (
     <InstantSearch searchClient={searchClient} indexName="ourportal">
       <Configure filters={activePage === "enroll" ? "" : "type:HASS"} />
       <CustomSearchBox />
-      <CustomHits />
+      <CustomHits withinEnrollmentPeriod={withinEnrollmentPeriod} />
     </InstantSearch>
   );
 };

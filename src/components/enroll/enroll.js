@@ -8,6 +8,7 @@ import Header from "../header";
 import AlgoliaMainContent from "./algoliaMainContent";
 import { useUser } from "../../context/authContext";
 import CONSTANTS from "../../constants";
+import ClosedPortal from "../closedPortal";
 
 const Enroll = () => {
   const {
@@ -25,11 +26,21 @@ const Enroll = () => {
   } = useUser();
   const { PILLAR_COURSE_CODE } = CONSTANTS;
   const [showMessage, setShowMessage] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [hideEnrollmentPeriodModal, setHideEnrollmentPeriodModal] = useState(
+    false
+  );
   const db = firebase.firestore().collection("users");
   const moduleDB = firebase.firestore().collection("modules");
+  const enrollmentPeriodDb = firebase
+    .firestore()
+    .collection("enrollmentPeriod");
   const success = failedEnrollModules.length <= 1;
 
   useEffect(() => {
+    setLoading(true);
     setActivePage("enroll");
     fetchData();
   }, []);
@@ -80,21 +91,60 @@ const Enroll = () => {
         var modulesData = [];
         var promises = [];
 
-        modulesArray.forEach(function (item) {
-          console.log(item);
-          promises.push(
-            moduleDB
-              .doc(item)
-              .get()
-              .then((doc) => {
-                modulesData.push(doc.data());
-              })
-          );
-        });
+        enrollmentPeriodDb
+          .where(
+            "end",
+            ">",
+            firebase.firestore.Timestamp.fromMillis(Date.now())
+          )
+          .get()
+          .then((snapshot) => {
+            if (snapshot.size === 0) {
+              setLoading(false);
+              return;
+            }
 
-        Promise.all(promises).then(() => {
-          setEnrolledModules(modulesData);
-        });
+            let tempStart, tempEnd;
+            const now = Date.now();
+            if (snapshot.size > 1) {
+              let difference = Number.MAX_VALUE;
+              snapshot.forEach((d) => {
+                const periodData = d.data();
+                const tempDiff = periodData.end.toMillis() - now;
+                if (tempDiff < difference) {
+                  difference = tempDiff;
+                  tempStart = periodData.start.toMillis();
+                  tempEnd = periodData.end.toMillis();
+                }
+              });
+              setStartTime(tempStart);
+              setEndTime(tempEnd);
+            } else {
+              snapshot.forEach((d) => {
+                tempStart = d.data().start.toMillis();
+                tempEnd = d.data().end.toMillis();
+              });
+              setStartTime(tempStart);
+              setEndTime(tempEnd);
+            }
+
+            modulesArray.forEach(function (item) {
+              console.log(item);
+              promises.push(
+                moduleDB
+                  .doc(item)
+                  .get()
+                  .then((doc) => {
+                    modulesData.push(doc.data());
+                  })
+              );
+            });
+
+            Promise.all(promises).then(() => {
+              setEnrolledModules(modulesData);
+              setLoading(false);
+            });
+          });
       });
   };
 
@@ -110,6 +160,8 @@ const Enroll = () => {
       })
     );
   };
+
+  const withinEnrollmentPeriod = startTime !== null && startTime < Date.now();
 
   const enrollmentCompleteMessageChild = success ? (
     <>
@@ -161,6 +213,8 @@ const Enroll = () => {
     </>
   );
 
+  if (loading) return <></>;
+
   return (
     <div class="relative">
       <div class="flex">
@@ -169,7 +223,9 @@ const Enroll = () => {
         <div class="flex flex-col flex-grow">
           <Header pageName="Enroll" backAction={false} />
           <div class="h-full">
-            <AlgoliaMainContent />
+            <AlgoliaMainContent
+              withinEnrollmentPeriod={withinEnrollmentPeriod}
+            />
           </div>
         </div>
       </div>
@@ -191,6 +247,32 @@ const Enroll = () => {
           onCloseHandler={() => setAddToCartErrorMessage("")}
           child={<div>{addToCartErrorMessage}</div>}
           dataTestId="enrollModal"
+        />
+      ) : (
+        <></>
+      )}
+      {!withinEnrollmentPeriod && !hideEnrollmentPeriodModal ? (
+        <Modal
+          modalColor="bg-white"
+          modalWidth="w-6/12"
+          onCloseHandler={() => setHideEnrollmentPeriodModal(true)}
+          child={
+            <ClosedPortal
+              startTime={startTime}
+              endTime={endTime}
+              name="Enrollment"
+              showImage={false}
+              additionalComponent={
+                <p class="lg:text-md sm:text-sm italic text-center mt-6">
+                  Browsing is permitted outside of the enrollment period, but
+                  please note that you will not be able to add any modules to
+                  your cart.
+                </p>
+              }
+              width="w-11/12"
+            />
+          }
+          dataTestId="enrollmentPeriodModal"
         />
       ) : (
         <></>
