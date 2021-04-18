@@ -4,7 +4,7 @@ import { Link } from "@reach/router";
 import firebase from "firebase/app";
 import "firebase/auth";
 
-const ResetPassword = ({ oobCode }) => {
+const ResetPassword = ({ oobCode, email }) => {
   const [password, setPassword] = useState("");
   const [passwordCopy, setPasswordCopy] = useState("");
   const [resetComplete, setResetComplete] = useState(false);
@@ -53,6 +53,27 @@ const ResetPassword = ({ oobCode }) => {
         .confirmPasswordReset(oobCode, password)
         .then((val) => {
           setResetComplete(true);
+
+          if (firebase.auth().currentUser) {
+            // if user uses reset password to verify email, add modules field to user firestore object
+            firebase.auth().signOut();
+            firebase
+              .firestore()
+              .collection("users")
+              .where("email", "==", email)
+              .get()
+              .then((snapshot) => {
+                snapshot.forEach((doc) => {
+                  if (!doc.data().modules) {
+                    firebase
+                      .firestore()
+                      .collection("users")
+                      .doc(doc.id)
+                      .update({ modules: [] });
+                  }
+                });
+              });
+          }
         })
         .catch((err) => {
           setErrorMsg("Error resetting pasword. Try again!");

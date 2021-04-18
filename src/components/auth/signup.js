@@ -56,7 +56,7 @@ const Signup = () => {
   const signUpProc = () => {
     if (!email || !password || !firstName || !lastName) {
       setSignUpError("Please fill in all fields");
-    } else if (!email.match(/[a-z]+(?:_[a-z]+)+@mymail.sutd.edu.sg/gm)) {
+    } else if (!email.match(/[a-z]+(?:_[a-z]+)*@mymail.sutd.edu.sg/gm)) {
       setSignUpError("Please use your SUTD email to sign up");
     } else if (password.length < 6) {
       setSignUpError("Password must contain at least 6 characters");

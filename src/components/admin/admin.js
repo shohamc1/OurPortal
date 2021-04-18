@@ -13,6 +13,9 @@ const Admin = () => {
   const [firstName, setFirstName] = useState("");
   const [admin, setAdmin] = useState(false);
   const [ready, setReady] = useState(false);
+  const [showEnrollmentPeriodForm, setShowEnrollmentPeriodForm] = useState(
+    false
+  );
   const { user, loading } = useContext(AuthContext);
 
   const db = firebase.firestore().collection("users");
@@ -67,6 +70,69 @@ const Admin = () => {
         console.log(err);
       });
   };
+
+  const enrollmentPeriodForm = (
+    <div class="m-auto flex flex-col w-5/12">
+      <span
+        class="text-xl font-semibold cursor-pointer mt-4 mb-6"
+        onClick={() => {
+          setShowEnrollmentPeriodForm(false);
+        }}
+      >
+        {"< Back"}
+      </span>
+      <div class="mb-4 flex flex-col">
+        <span class="text-xl font-semibold">Year</span>
+        <div class="flex flex-row">
+          <label for="curYear" class="mr-2">
+            <input type="radio" id="curYear" class="mr-1" />
+            {new Date(Date.now()).getFullYear()}
+          </label>
+          <label for="nextYear" class="mx-2">
+            <input type="radio" id="nextYear" class="mr-1" />
+            {new Date(Date.now()).getFullYear() + 1}
+          </label>
+        </div>
+      </div>
+      <div class="mb-4 flex flex-col">
+        <span class="text-xl font-semibold">Term</span>
+        <div class="flex flex-row">
+          <label for="1" class="mr-2">
+            <input type="radio" id="1" class="mr-1" />
+            Jan-May
+          </label>
+          <label for="2" class="mx-2">
+            <input type="radio" id="2" class="mr-1" />
+            May-Sep
+          </label>
+
+          <label for="3" class="mx-2">
+            <input type="radio" id="3" class="mr-1" />
+            Sep-Dec
+          </label>
+        </div>
+      </div>
+      <div class="mb-4 flex flex-col">
+        <span class="text-xl font-semibold">Start Date</span>
+        <input type="date" class="border-2 my-auto p-2 rounded" />
+      </div>
+      <div class="mb-4 flex flex-col">
+        <span class="text-xl font-semibold">Start Time</span>
+        <input type="time" class="border-2 my-auto p-2 rounded" />
+      </div>
+      <div class="mb-4 flex flex-col">
+        <span class="text-xl font-semibold">End Date</span>
+        <input type="date" class="border-2 my-auto p-2 rounded" />
+      </div>
+      <div class="mb-4 flex flex-col">
+        <span class="text-xl font-semibold">End Time</span>
+        <input type="time" class="border-2 my-auto p-2 rounded" />
+      </div>
+      <button class="primary-button py-3 text-white rounded my-6 text-xl font-semibold">
+        Submit
+      </button>
+    </div>
+  );
 
   if (!ready) {
     return (
@@ -137,23 +203,40 @@ const Admin = () => {
       <div class="flex flex-col flex-grow">
         <Header pageName="Admin Portal" />
         <div class="pl-4 pt-4">
-          <div class="text-5xl font-light mb-4" data-testId="welcomeMessage">
-            Hello {firstName}!
-          </div>
-          {!clicked ? (
-            <button
-              class="font-light bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 rounded-button px-12 py-4 w-1/5"
-              onClick={exportFunc}
-            >
-              <span class="text-3xl">Export CSV</span>
-            </button>
+          {showEnrollmentPeriodForm ? (
+            enrollmentPeriodForm
           ) : (
-            <button
-              disabled
-              class="opacity-50 font-light bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 rounded-button px-12 py-4 w-1/5 justify-center flex"
-            >
-              <div class="loader-sm"></div>
-            </button>
+            <>
+              <div
+                class="text-5xl font-light mb-4"
+                data-testId="welcomeMessage"
+              >
+                Hello {firstName}!
+              </div>
+              {!clicked ? (
+                <button
+                  class="font-light bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 rounded-button px-12 py-4 w-1/5"
+                  onClick={exportFunc}
+                >
+                  <span class="text-3xl">Export CSV</span>
+                </button>
+              ) : (
+                <button
+                  disabled
+                  class="opacity-50 font-light bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 rounded-button px-12 py-4 w-1/5 justify-center flex"
+                >
+                  <div class="loader-sm"></div>
+                </button>
+              )}
+              {/* <button
+                class="font-light bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 rounded-button px-12 py-4 ml-4"
+                onClick={() => {
+                  setShowEnrollmentPeriodForm(true);
+                }}
+              >
+                <span class="text-3xl">Set Enrollment Period</span>
+              </button> */}
+            </>
           )}
         </div>
       </div>

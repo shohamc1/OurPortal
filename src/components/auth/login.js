@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -27,6 +27,8 @@ const Login = () => {
   const [signInError, setSignInError] = useState(false);
   const [forgotPassword, setForgotPassword] = useState(false);
   const [sentPasswordResetEmail, setSentPasswordResetEmail] = useState(false);
+  const [needsVerificationLink, setNeedsVerificationLink] = useState(false);
+  const [verificationEmailSent, setVerificationEmailSent] = useState(false);
 
   const handleEmailChange = (event) => {
     const target = event.target;
@@ -51,6 +53,10 @@ const Login = () => {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(function (user) {
+        if (!firebase.auth().currentUser.emailVerified) {
+          setSignInError("Oops, your account has not been verified yet!");
+          setNeedsVerificationLink(true);
+        }
         // Add to database
         // firebase
         //   .database()
@@ -78,6 +84,18 @@ const Login = () => {
       })
       .catch(function (error) {
         // An error happened.
+      });
+  };
+
+  const sendVerificationEmail = () => {
+    firebase
+      .auth()
+      .currentUser.sendEmailVerification()
+      .then(() => {
+        setVerificationEmailSent(true);
+      })
+      .catch((e) => {
+        setSignInError(e.message);
       });
   };
 
@@ -181,11 +199,23 @@ const Login = () => {
         >
           {forgotPassword ? "Reset Password" : "Log In"}
         </button>
+        {needsVerificationLink ? (
+          <a
+            class="mt-8 cursor-pointer text-purple-600 text-center underline"
+            onClick={sendVerificationEmail}
+          >
+            Send verification email now
+          </a>
+        ) : (
+          <></>
+        )}
       </div>
-      {(signInError || (forgotPassword && sentPasswordResetEmail)) && (
+      {(signInError ||
+        (forgotPassword && sentPasswordResetEmail) ||
+        verificationEmailSent) && (
         <div
           class={`flex justify-center items-center mt-4 p-4 ${
-            forgotPassword && sentPasswordResetEmail
+            (forgotPassword && sentPasswordResetEmail) || verificationEmailSent
               ? "bg-green-500"
               : "bg-red-500"
           } text-white`}
@@ -209,7 +239,7 @@ const Login = () => {
             </svg>
           </div>
           <div class="w-full" data-testid="loginErrorMessage">
-            {forgotPassword && sentPasswordResetEmail
+            {(forgotPassword && sentPasswordResetEmail) || verificationEmailSent
               ? "Email sent!"
               : signInError}
           </div>
@@ -220,6 +250,7 @@ const Login = () => {
               if (signInError) setSignInError(false);
               if (forgotPassword && sentPasswordResetEmail)
                 setSentPasswordResetEmail(false);
+              if (verificationEmailSent) setVerificationEmailSent(false);
             }}
           >
             <div>

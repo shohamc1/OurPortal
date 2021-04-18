@@ -31,6 +31,7 @@ const EmailLink = (props) => {
           setValidCode(true);
           setMode(tempMode);
           setOobCode(tempCode);
+          setEmail(val);
         })
         .catch((e) => {
           setValidCode(false);
@@ -76,7 +77,8 @@ const EmailLink = (props) => {
   if (mode === "verifyEmail")
     return <VerifyEmail oobCode={oobCode} email={email} />;
 
-  if (mode === "resetPassword") return <ResetPassword oobCode={oobCode} />;
+  if (mode === "resetPassword")
+    return <ResetPassword oobCode={oobCode} email={email} />;
 
   return <></>;
 };
