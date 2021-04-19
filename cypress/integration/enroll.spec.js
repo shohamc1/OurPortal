@@ -11,10 +11,8 @@ describe("Enroll", () => {
   });
   after(() => {
     cy.deleteMod(mods).then(() => {
-      cy.wait(500);
       cy.logout();
     });
-    cy.logout();
   });
 
   describe("Searching for Mods", () => {

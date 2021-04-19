@@ -3,12 +3,12 @@
 describe("Signup", () => {
   before(() => {
     cy.visit("/");
-    cy.loginDelete();
-    cy.wait(5000);
+    cy.loginDelete().then(() => {
+      cy.visit("/signup");
+    });
   });
 
   it("Greets with Header and Slogan", () => {
-    cy.visit("/signup");
     cy.contains("OurPortal").should("exist");
     cy.contains("Get Your Mods").should("exist");
   });

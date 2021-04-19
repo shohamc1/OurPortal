@@ -50,118 +50,111 @@ Cypress.Commands.add(
   (email = "yiern_goh@mymail.sutd.edu.sg", password = "Test123!") => {
     Cypress.log({
       displayName: "login",
-      // consoleProps: () => {
-      //   return { email, password };
-      // },
     });
-
-    return firebase.default.auth().signInWithEmailAndPassword(email, password);
+    return new Cypress.Promise((resolve, reject) => {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          resolve();
+        });
+    });
   }
 );
+
+Cypress.Commands.add("logout", () => {
+  Cypress.log({
+    displayName: "logout",
+  });
+  return new Cypress.Promise((resolve, reject) => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        resolve();
+      });
+  });
+});
 
 Cypress.Commands.add(
   "loginDelete",
   (email = "signuptest@mymail.sutd.edu.sg", password = "Qwerty123!") => {
     Cypress.log({
       displayName: "login to delete",
-      consoleProps: () => {
-        return { email, password };
-      },
     });
-    return firebase.default
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((credentials) => {
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(credentials.user.uid)
-          .delete()
-          .then(() => {
-            console.log("Account removed from users collection");
-            credentials.user
-              .delete()
-              .then(() => {
-                console.log("Account removed successfully");
-              })
-              .catch((error) => {
-                console.log("Error deleting account");
-              });
-          })
-          .catch((error) => {
-            console.log("Error deleting account from collection:");
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-        console.log("User already deleted");
-      })
-      .then(firebase.auth().signOut());
+    return new Cypress.Promise((resolve, reject) => {
+      return firebase.default
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((credentials) => {
+          console.log("Authenticated ");
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(credentials.user.uid)
+            .delete()
+            .then(() => {
+              console.log("Account removed from users collection");
+              return credentials.user
+                .delete()
+                .then(() => {
+                  console.log("Account removed successfully");
+                })
+                .catch((error) => {
+                  console.log("Error deleting account");
+                })
+                .then(() => {
+                  firebase.auth().signOut();
+                  resolve();
+                });
+            })
+            .catch((error) => {
+              console.log("Error deleting account from collection:");
+            });
+        })
+        .catch((error) => {
+          console.log("User already deleted");
+        });
+    });
   }
 );
-// cy.document().then({ timeout: 10000 }, (doc) => {});
-
-Cypress.Commands.add("logout", () => {
-  Cypress.log({
-    displayName: "logout",
-  });
-  return firebase.auth().signOut();
-});
-
-Cypress.Commands.add("getUser", (o) => {
-  return firebase.auth().onAuthStateChanged(($user) => {
-    if ($user) {
-      console.log("User registered!");
-      o.user = $user;
-    } else {
-      console.log("User logged out");
-    }
-  });
-});
-Cypress.Commands.add("deleteUser", (user) => {
-  return cy.document().then({ timeout: 10000 }, (doc) => {
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(user.uid)
-      .delete()
-      .then(() => {
-        console.log("Account removed from users collection");
-        user
-          .delete()
-          .then(() => {
-            console.log("Account removed successfully");
-          })
-          .catch((error) => {
-            console.log("Error deleting account");
-          });
-      })
-      .catch((error) => {
-        console("Error deleting account from collection:");
-      });
-  });
-});
 
 Cypress.Commands.add("deleteMod", (courseCodes) => {
-  return cy.document().then({ timeout: 10000 }, (doc) => {
+  Cypress.log({
+    displayName: "delete mods",
+    modules: courseCodes,
+  });
+  return new Cypress.Promise((resolve, reject) => {
     firebase
       .firestore()
       .collection("users")
       .doc(firebase.auth().currentUser.uid)
       .update({
         modules: firebase.firestore.FieldValue.arrayRemove(...courseCodes),
+      })
+      .then(() => {
+        console.log(courseCodes + " deleted successfully");
+        resolve();
       });
   });
 });
 
 Cypress.Commands.add("enrollMod", (courseCodes) => {
-  return cy.document().then({ timeout: 10000 }, (doc) => {
+  Cypress.log({
+    displayName: "enroll mods",
+    modules: courseCodes,
+  });
+  return new Cypress.Promise((resolve, reject) => {
     firebase
       .firestore()
       .collection("users")
       .doc(firebase.auth().currentUser.uid)
       .update({
         modules: firebase.firestore.FieldValue.arrayUnion(...courseCodes),
+      })
+      .then(() => {
+        console.log(courseCodes + " enrolled successfully");
+        resolve();
       });
   });
 });
