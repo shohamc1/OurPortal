@@ -7,7 +7,6 @@ describe("Signup", () => {
       cy.visit("/signup");
     });
   });
-
   it("Greets with Header and Slogan", () => {
     cy.contains("OurPortal").should("exist");
     cy.contains("Get Your Mods").should("exist");
@@ -64,20 +63,20 @@ describe("Signup", () => {
 
       it("Password < 6 characters", () => {
         cy.get("[type='password']").type("a");
-        cy.signUpCheckError("Password must contain at least 6 characters");
+        cy.signUpCheckError("Password must contain at least 8 characters");
         cy.get("[type='password']").type("A");
-        cy.signUpCheckError("Password must contain at least 6 characters");
+        cy.signUpCheckError("Password must contain at least 8 characters");
         cy.get("[type='password']").type("1");
-        cy.signUpCheckError("Password must contain at least 6 characters");
+        cy.signUpCheckError("Password must contain at least 8 characters");
         cy.get("[type='password']").type("!");
-        cy.signUpCheckError("Password must contain at least 6 characters");
+        cy.signUpCheckError("Password must contain at least 8 characters");
       });
 
       it("Password has no number ", () => {
-        cy.get("[type='password']").clear().type("abcdef");
+        cy.get("[type='password']").clear().type("abcdefgh");
         cy.signUpCheckError("Password must contain at least one number");
 
-        cy.get("[type='password']").clear().type("Abcdef");
+        cy.get("[type='password']").clear().type("Abcdefgh");
         cy.signUpCheckError("Password must contain at least one number");
 
         cy.get("[type='password']").type("!");
@@ -85,7 +84,7 @@ describe("Signup", () => {
       });
 
       it("Password has no uppercase", () => {
-        cy.get("[type='password']").clear().type("abcde1");
+        cy.get("[type='password']").clear().type("abcdefg1");
         cy.signUpCheckError(
           "Password must contain at least one uppercase character"
         );
@@ -97,7 +96,7 @@ describe("Signup", () => {
       });
 
       it("Password has no special character", () => {
-        cy.get("[type='password']").clear().type("Abcde1");
+        cy.get("[type='password']").clear().type("Abcdefg1");
         cy.signUpCheckError(
           "Password must contain at least one special character"
         );
@@ -111,12 +110,62 @@ describe("Signup", () => {
       });
     });
 
+    describe("Invalid Name Fields", () => {
+      before(() => {
+        cy.get("[type='email']").type("yiern_goh@mymail.sutd.edu.sg");
+        cy.get("[type='password']").type("Validpw1!");
+        cy.get("[autoComplete='family-name']").type("x");
+      });
+      after(() => {
+        cy.get("[type='email']").clear();
+        cy.get("[type='password']").clear();
+        cy.get("[autoComplete='given-name']").clear();
+        cy.get("[autoComplete='family-name']").clear();
+      });
+
+      it("First name contains number", () => {
+        cy.get("[autoComplete='given-name']").clear().type("test1");
+        cy.signUpCheckError("Name field contains invalid characters");
+      });
+
+      it("First name Contains symbols", () => {
+        cy.get("[autoComplete='given-name']").clear().type("t-");
+        cy.signUpCheckError("Name field contains invalid characters");
+        cy.get("[autoComplete='given-name']").clear().type("t>");
+        cy.signUpCheckError("Name field contains invalid characters");
+        cy.get("[autoComplete='given-name']").clear().type("t!");
+        cy.signUpCheckError("Name field contains invalid characters");
+        cy.get("[autoComplete='given-name']").clear().type("t'");
+        cy.signUpCheckError("Name field contains invalid characters");
+        cy.get("[autoComplete='given-name']").clear().type("t@");
+        cy.signUpCheckError("Name field contains invalid characters");
+      });
+
+      it("Last name contains number", () => {
+        cy.get("[autoComplete='family-name']").clear().type("test1");
+        cy.signUpCheckError("Name field contains invalid characters");
+      });
+
+      it("Last name Contains symbols", () => {
+        cy.get("[autoComplete='family-name']").clear().type("t-");
+        cy.signUpCheckError("Name field contains invalid characters");
+        cy.get("[autoComplete='family-name']").clear().type("t>");
+        cy.signUpCheckError("Name field contains invalid characters");
+        cy.get("[autoComplete='family-name']").clear().type("t!");
+        cy.signUpCheckError("Name field contains invalid characters");
+        cy.get("[autoComplete='family-name']").clear().type("t'");
+        cy.signUpCheckError("Name field contains invalid characters");
+        cy.get("[autoComplete='family-name']").clear().type("t@");
+        cy.signUpCheckError("Name field contains invalid characters");
+      });
+    });
     describe("Invalid Email", () => {
       before(() => {
-        cy.get("[type='password']").clear().type("Valid1!");
+        cy.get("[type='password']").clear().type("Validpw1!");
         cy.get("[autoComplete='given-name']").type("x");
         cy.get("[autoComplete='family-name']").type("x");
       });
+
       // checks password before email
       it("Existing User", () => {
         cy.get("[type='email']").type("yiern_goh@mymail.sutd.edu.sg");

@@ -102,6 +102,7 @@ Cypress.Commands.add(
                 })
                 .catch((error) => {
                   console.log("Error deleting account");
+                  reject();
                 })
                 .then(() => {
                   firebase.auth().signOut();
@@ -110,10 +111,12 @@ Cypress.Commands.add(
             })
             .catch((error) => {
               console.log("Error deleting account from collection:");
+              reject();
             });
         })
         .catch((error) => {
           console.log("User already deleted");
+          resolve();
         });
     });
   }
