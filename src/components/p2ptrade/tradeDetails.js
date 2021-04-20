@@ -112,8 +112,8 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
       .get()
       .then(async (doc) => {
         await axios.post(
-          // "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendP2PResult",
-          "http://localhost:5001/ourportal-e0a9c/us-central1/sendP2PResult",
+          "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendP2PResult",
+          // "http://localhost:5001/ourportal-e0a9c/us-central1/sendP2PResult",
           { email: doc.data().email, outcome: "accept" }
         );
       });
@@ -131,8 +131,8 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
       .get()
       .then(async (doc) => {
         await axios.post(
-          // "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendP2PResult",
-          "http://localhost:5001/ourportal-e0a9c/us-central1/sendP2PResult",
+          "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendP2PResult",
+          // "http://localhost:5001/ourportal-e0a9c/us-central1/sendP2PResult",
           { email: doc.data().email, outcome: "decline" }
         );
       });

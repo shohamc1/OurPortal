@@ -448,7 +448,12 @@ const Request = () => {
                         placeholder="john_doe@mymail.sutd.edu.sg"
                         value={email}
                         onChange={handleEmailChange}
-                        disabled={!withinEnrollmentPeriod || !hasMod}
+                        disabled={
+                          !withinEnrollmentPeriod ||
+                          !hasMod ||
+                          hasTrade ||
+                          popUp
+                        }
                       />
 
                       {/* generate magic link here */}
@@ -461,7 +466,12 @@ const Request = () => {
                           class="flex flex-row mx-auto bg-green-500 text-gray-50 w-full py-2 rounded justify-center"
                           onClick={sendRequest}
                           data-testid="requestSendButton"
-                          disabled={!withinEnrollmentPeriod || !hasMod}
+                          disabled={
+                            !withinEnrollmentPeriod ||
+                            !hasMod ||
+                            hasTrade ||
+                            popUp
+                          }
                         >
                           <span class="mr-2">Send</span>
                           <svg
