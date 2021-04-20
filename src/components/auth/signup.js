@@ -13,16 +13,6 @@ const Signup = () => {
   const [signUpError, setSignUpError] = useState(false);
   const [signUpComplete, setSignUpComplete] = useState(false);
 
-  // const DB = firebase.firestore();
-  // const AUTH = firebase.auth();
-  // if (window.location.hostname === "localhost" && !DB) {
-  // if (window.Cypress) {
-  //   console.log("USING EMULATOR");
-  //   DB.settings({ experimentalForceLongPolling: true });
-  //   DB.useEmulator("localhost", 8080);
-  //   AUTH.useEmulator("http://localhost:9099");
-  // }
-
   const db = firebase.firestore().collection("users");
 
   const handleEmailChange = (event) => {
@@ -58,8 +48,8 @@ const Signup = () => {
       setSignUpError("Please fill in all fields");
     } else if (!email.match(/[a-z]+(?:_[a-z]+)*@mymail.sutd.edu.sg/gm)) {
       setSignUpError("Please use your SUTD email to sign up");
-    } else if (password.length < 6) {
-      setSignUpError("Password must contain at least 6 characters");
+    } else if (password.length < 8) {
+      setSignUpError("Password must contain at least 8 characters");
     } else if (password.length > 40) {
       setSignUpError("Password cannot exceed 40 characters");
     } else if (!password.match(/\d/)) {
@@ -70,6 +60,11 @@ const Signup = () => {
       setSignUpError("Password must contain at least one uppercase character");
     } else if (!password.match(/[@$!%*#?&]/)) {
       setSignUpError("Password must contain at least one special character");
+    } else if (
+      !firstName.match(/^[a-zA-Z]+$/) ||
+      !lastName.match(/^[a-zA-Z]+$/)
+    ) {
+      setSignUpError("Name field contains invalid characters");
     } else {
       firebase
         .auth()
@@ -98,7 +93,7 @@ const Signup = () => {
 
   const passwordTooltip = (
     <span>
-      Password must be 6-40 characters in length and contain at least
+      Password must be 8-40 characters in length and contain at least
       <br />
       one number, one lowercase letter, one uppercase letter and one
       <br />

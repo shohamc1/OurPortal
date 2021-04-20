@@ -11,10 +11,8 @@ describe("Enroll", () => {
   });
   after(() => {
     cy.deleteMod(mods).then(() => {
-      cy.wait(500);
       cy.logout();
     });
-    cy.logout();
   });
 
   describe("Searching for Mods", () => {
@@ -184,8 +182,7 @@ describe("Enroll", () => {
       cy.visit("/dashboard");
       cy.getId("dashboardEdit", 10000).click();
       cy.getId("editCardDelete", 10000).each(($el, $index, $list) => {
-        cy.wrap($el).click();
-        cy.wait(500);
+        cy.wrap($el).click().wait(1500);
       });
       cy.getId("dashboardMods").children().should("have.length", 0);
     });
@@ -198,7 +195,7 @@ describe("Enroll", () => {
     });
 
     it("Different pillar warning", () => {
-      cy.getId("customSearchBoxInput").type("50");
+      cy.getId("customSearchBoxInput").type("50.04");
       cy.getId(mods[1]).find("button").click();
       cy.getId("customSearchBoxInput").clear().type("20");
       cy.getId(extraMods[1]).find("button").click();
@@ -209,7 +206,7 @@ describe("Enroll", () => {
         .click();
     });
     it("Enrolling in more than 3 pillar modules", () => {
-      cy.getId("customSearchBoxInput").clear().type("50");
+      cy.getId("customSearchBoxInput").clear().type("50.04");
       cy.getId(mods[2]).find("button").click();
       cy.getId(mods[3]).find("button").click();
       cy.getId(extraMods[2]).find("button").click();

@@ -67,6 +67,7 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
 
     // delete active trade
     tradeDB.doc(id).delete();
+    userDB.doc(uid.your).update({ hasOpenTrade: false });
 
     setPopUp("accepted");
   };
@@ -74,6 +75,7 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
   const declinedProc = () => {
     // delete active trade
     tradeDB.doc(id).delete();
+    userDB.doc(uid.your).update({ hasOpenTrade: false });
 
     setPopUp("declined");
   };

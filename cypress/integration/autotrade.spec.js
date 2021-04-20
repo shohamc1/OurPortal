@@ -15,7 +15,9 @@ describe("Auto Trade", () => {
     cy.visit("/");
     cy.login();
     cy.deleteMod([singleMod]).then(() => {
+      console.log("cypress deleteMod promise");
       cy.removeAutoTradeMods(mods).then(() => {
+        console.log("cypress removeAutoTradeMods promise");
         cy.visit("/autotrade");
       });
     });
