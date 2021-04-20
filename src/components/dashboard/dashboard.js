@@ -18,6 +18,7 @@ const Dashboard = () => {
   const [mode, setMode] = useState(true); // false -> edit, true -> display
   const [loading, setLoading] = useState(true);
   const [timeOfDay, setTimeOfDay] = useState(false); // false -> morning, true -> evening
+  // const [show, setShow] = useState(false);
   const db = firebase.firestore().collection("users");
   const moduleDB = firebase.firestore().collection("modules");
 
@@ -45,11 +46,12 @@ const Dashboard = () => {
   const fetchData = () => {
     db.doc(user.uid)
       .get()
-      .then((doc) => {
+      .then(async (doc) => {
         var data = doc.data();
         // if (data.admin) {
         //   navigate("/admin");
-        // }
+        // } else {
+        //   setShow(true);
         setFirstName(data.firstName);
 
         var modulesArray = data.modules;
@@ -71,8 +73,11 @@ const Dashboard = () => {
           setModules(modulesData);
           setLoading(false);
         });
+        // }
       });
   };
+
+  // if (!show) return <></>;
 
   if (loading) {
     return (

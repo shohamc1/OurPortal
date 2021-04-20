@@ -61,8 +61,8 @@ const Signup = () => {
     } else if (!password.match(/[@$!%*#?&]/)) {
       setSignUpError("Password must contain at least one special character");
     } else if (
-      !firstName.match(/^[a-zA-Z]+$/) ||
-      !lastName.match(/^[a-zA-Z]+$/)
+      !firstName.match(/^[a-zA-Z ]+$/) ||
+      !lastName.match(/^[a-zA-Z ]+$/)
     ) {
       setSignUpError("Name field contains invalid characters");
     } else {

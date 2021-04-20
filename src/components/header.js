@@ -15,7 +15,6 @@ const Header = ({ pageName = "Test", backAction = false }) => {
       .signOut()
       .then(function (_) {
         navigate("/");
-        window.location.reload();
       })
       .catch(function (error) {
         console.log(error);
