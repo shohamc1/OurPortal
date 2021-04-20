@@ -175,7 +175,8 @@ const Request = () => {
     setIsClicked(true);
     axios
       .post(
-        "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendRequest",
+        "http://localhost:5001/ourportal-e0a9c/us-central1/sendRequest",
+        // "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendRequest",
         { senderID: userUID, receiverEID: email }
       )
       .then((res) => {
@@ -430,7 +431,7 @@ const Request = () => {
                         placeholder="john_doe@mymail.sutd.edu.sg"
                         value={email}
                         onChange={handleEmailChange}
-                        disabled={!withinEnrollmentPeriod}
+                        disabled={!withinEnrollmentPeriod || !hasMod}
                       />
 
                       {/* generate magic link here */}
@@ -443,7 +444,7 @@ const Request = () => {
                           class="flex flex-row mx-auto bg-green-500 text-gray-50 w-full py-2 rounded justify-center"
                           onClick={sendRequest}
                           data-testid="requestSendButton"
-                          disabled={!withinEnrollmentPeriod}
+                          disabled={!withinEnrollmentPeriod || !hasMod}
                         >
                           <span class="mr-2">Send</span>
                           <svg
