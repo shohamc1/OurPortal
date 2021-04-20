@@ -6,6 +6,7 @@ import "firebase/firestore";
 import Sidebar from "../sidebar";
 import Header from "../header";
 import Card from "../card";
+import axios from "axios";
 
 var userDB = firebase.firestore().collection("users");
 var tradeDB = firebase.firestore().collection("trades");
@@ -95,7 +96,7 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
       });
   };
 
-  const acceptProc = () => {
+  const acceptProc = async () => {
     // exchange modules
     exchangeYours();
     exchangeTheirs();
@@ -106,15 +107,35 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
     userDB.doc(uid.their).update({ hasOpenTrade: false });
 
     setPopUp("accepted");
+    userDB
+      .doc(uid.their)
+      .get()
+      .then(async (doc) => {
+        await axios.post(
+          // "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendP2PResult",
+          "http://localhost:5001/ourportal-e0a9c/us-central1/sendP2PResult",
+          { email: doc.data().email, outcome: "accept" }
+        );
+      });
   };
 
-  const declinedProc = () => {
+  const declinedProc = async () => {
     // delete active trade
     tradeDB.doc(id).delete();
     userDB.doc(uid.your).update({ hasOpenTrade: false });
     userDB.doc(uid.their).update({ hasOpenTrade: false });
 
     setPopUp("declined");
+    userDB
+      .doc(uid.their)
+      .get()
+      .then(async (doc) => {
+        await axios.post(
+          // "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendP2PResult",
+          "http://localhost:5001/ourportal-e0a9c/us-central1/sendP2PResult",
+          { email: doc.data().email, outcome: "decline" }
+        );
+      });
   };
 
   return (

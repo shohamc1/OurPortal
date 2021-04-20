@@ -181,8 +181,8 @@ const Request = () => {
     setIsClicked(true);
     axios
       .post(
-        // "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendRequest",
-        "http://localhost:5001/ourportal-e0a9c/us-central1/sendRequest",
+        "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendRequest",
+        // "http://localhost:5001/ourportal-e0a9c/us-central1/sendRequest",
         { senderID: userUID, receiverEID: email }
       )
       .then((res) => {
