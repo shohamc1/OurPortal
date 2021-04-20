@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { navigate } from "gatsby";
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -9,10 +9,45 @@ import Card from "../card";
 
 var userDB = firebase.firestore().collection("users");
 var tradeDB = firebase.firestore().collection("trades");
+var enrollmentPeriodDb = firebase.firestore().collection("enrollmentPeriod");
 
 const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
   const [info, setInfo] = useState(true);
   const [popUp, setPopUp] = useState(false);
+  const [withinTradingPeriod, setWithinTradingPeriod] = useState(false);
+
+  useEffect(() => {
+    enrollmentPeriodDb
+      .where("end", ">", firebase.firestore.Timestamp.fromMillis(Date.now()))
+      .get()
+      .then((snapshot) => {
+        if (snapshot.size === 0) {
+          return;
+        }
+
+        let tempStart;
+        const now = Date.now();
+        if (snapshot.size > 1) {
+          let difference = Number.MAX_VALUE;
+          snapshot.forEach((d) => {
+            const periodData = d.data();
+            const tempDiff = periodData.end.toMillis() - now;
+            if (tempDiff < difference) {
+              difference = tempDiff;
+              tempStart = periodData.start.toMillis();
+            }
+          });
+        } else {
+          snapshot.forEach((d) => {
+            tempStart = d.data().start.toMillis();
+          });
+        }
+        if (tempStart < Date.now()) {
+          // retrieve trade if within enrollment period
+          setWithinTradingPeriod(true);
+        }
+      });
+  }, []);
 
   const closeInfo = (e) => {
     e.preventDefault();
@@ -68,6 +103,7 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
     // delete active trade
     tradeDB.doc(id).delete();
     userDB.doc(uid.your).update({ hasOpenTrade: false });
+    userDB.doc(uid.their).update({ hasOpenTrade: false });
 
     setPopUp("accepted");
   };
@@ -76,13 +112,14 @@ const TradeDetails = ({ id, yourModDetails, theirModDetails, exists, uid }) => {
     // delete active trade
     tradeDB.doc(id).delete();
     userDB.doc(uid.your).update({ hasOpenTrade: false });
+    userDB.doc(uid.their).update({ hasOpenTrade: false });
 
     setPopUp("declined");
   };
 
   return (
     <>
-      {exists && yourModDetails && theirModDetails ? (
+      {exists && yourModDetails && theirModDetails && withinTradingPeriod ? (
         <>
           {popUp ? (
             <>

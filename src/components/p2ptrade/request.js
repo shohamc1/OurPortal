@@ -25,6 +25,7 @@ const Request = () => {
   const [hasMod, setHasMod] = useState(true);
   const [hasTrade, setHasTrade] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const {
     setActivePage,
     user,
@@ -149,6 +150,11 @@ const Request = () => {
 
   const dismissMessage = () => {
     setPopUp(false);
+    if (errorMsg) {
+      setErrorMsg("");
+    } else {
+      navigate("/dashboard");
+    }
   };
 
   const dismissMessageRedirect = () => {
@@ -175,8 +181,8 @@ const Request = () => {
     setIsClicked(true);
     axios
       .post(
-        "http://localhost:5001/ourportal-e0a9c/us-central1/sendRequest",
         // "https://us-central1-ourportal-e0a9c.cloudfunctions.net/sendRequest",
+        "http://localhost:5001/ourportal-e0a9c/us-central1/sendRequest",
         { senderID: userUID, receiverEID: email }
       )
       .then((res) => {
@@ -195,6 +201,11 @@ const Request = () => {
       })
       .catch((err) => {
         console.log(err);
+        setPopUp(true);
+        setErrorMsg(
+          "Oops, this email either does not exist or the user with this email does not have a HASS module yet."
+        );
+        setIsClicked(false);
       });
   };
 
@@ -327,8 +338,14 @@ const Request = () => {
                 </svg>
               </div>
 
-              <span class="text-5xl font-bold">
-                Trade request sent! &#x1F389;
+              <span
+                class={
+                  errorMsg
+                    ? "text-2xl font-semibold text-center"
+                    : "text-5xl font-bold"
+                }
+              >
+                {errorMsg ? errorMsg : <>Trade request sent! &#x1F389;</>}
               </span>
             </div>
           </div>
