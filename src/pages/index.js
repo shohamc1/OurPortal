@@ -22,7 +22,7 @@ const Index = () => {
     <AuthProvider>
       <Router basepath="/">
         <NotFoundPage default />
-        <Landing path="/" />
+        <OnlyPublicRoute component={Landing} path="/" />
 
         <OnlyPublicRoute component={Login} path="/login" />
         <OnlyPublicRoute component={SignUp} path="/signup" />
