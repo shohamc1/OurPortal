@@ -13,6 +13,6 @@ Technical Details
 - Frontend Deployment: Vercel
 - Seach Provider: Algolia
 - Authentication Provider: Firebase Authentication
-- Live Counter: Firebase Realtime Database
+- Live Counter: Firestore
 
 Backend code: https://github.com/xvnyv/ourportal_backend
