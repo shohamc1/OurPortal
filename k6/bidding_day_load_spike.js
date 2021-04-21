@@ -15,5 +15,5 @@ export let options = {
 const BASE_URL = "https://ourportal.shohamc1.com";
 
 export default () => {
-  http.get(BASE_URL);
+  http.get(BASE_URL, { timeout: 100000 });
 };

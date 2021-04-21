@@ -109,7 +109,6 @@ const Request = () => {
   const fetchTradeInfo = (doc) => {
     if (doc.data().hasOpenTrade) {
       setHasTrade(true);
-      console.log("has trade");
     }
     var modules = doc.data()?.modules;
     // test modules

@@ -29,7 +29,6 @@ const Trade = () => {
     setEnrollmentStartTime,
     setEnrollmentEndTime,
   } = useUser();
-  console.log(user);
   const [showInfo, setShowInfo] = useState(true);
   const [showUpdateMessage, setShowUpdateMessage] = useState(false);
   const [remainingWeightage, setRemainingWeightage] = useState(100);
@@ -52,7 +51,6 @@ const Trade = () => {
           // if (data.admin) {
           //   navigate("/admin");
           // }
-          console.log(enrollmentStartTime);
           if (enrollmentStartTime === null) {
             enrollmentPeriodDb
               .where(

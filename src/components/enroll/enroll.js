@@ -44,7 +44,6 @@ const Enroll = () => {
 
   useEffect(() => {
     setLoading(true);
-    console.log(enrollmentStartTime);
     setActivePage("enroll");
     fetchData();
   }, []);
@@ -93,7 +92,6 @@ const Enroll = () => {
         // if (data.admin) {
         //   navigate("/admin");
         // }
-        console.log(data);
 
         if (enrollmentStartTime === null) {
           enrollmentPeriodDb
@@ -149,7 +147,6 @@ const Enroll = () => {
     var promises = [];
 
     modulesArray.forEach(function (item) {
-      console.log(item);
       promises.push(
         moduleDB
           .doc(item)

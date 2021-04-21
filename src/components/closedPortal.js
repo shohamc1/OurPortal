@@ -15,7 +15,7 @@ const ClosedPortal = ({
   return (
     <div class={`mx-auto flex flex-col p-2 rounded ${width}`}>
       {showImage ? (
-        <div class="h-1/6 w-7/12 m-auto mb-8">
+        <div class="w-7/12 mx-auto mb-8">
           <ClosedSign />
         </div>
       ) : (

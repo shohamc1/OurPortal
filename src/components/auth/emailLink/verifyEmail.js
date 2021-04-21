@@ -11,20 +11,20 @@ const VerifyEmail = ({ oobCode, email }) => {
         .applyActionCode(oobCode)
         .then(() => {
           firebase.auth().signOut();
-          firebase
-            .firestore()
-            .collection("users")
-            .where("email", "==", email)
-            .get()
-            .then((snapshot) => {
-              snapshot.forEach((d) => {
-                firebase
-                  .firestore()
-                  .collection("users")
-                  .doc(d.id)
-                  .update({ modules: [] });
-              });
-            });
+          // firebase
+          //   .firestore()
+          //   .collection("users")
+          //   .where("email", "==", email)
+          //   .get()
+          //   .then((snapshot) => {
+          //     snapshot.forEach((d) => {
+          //       firebase
+          //         .firestore()
+          //         .collection("users")
+          //         .doc(d.id)
+          //         .update({ modules: [] });
+          //     });
+          //   });
         });
     }
   }, [email]);
