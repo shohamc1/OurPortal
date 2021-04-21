@@ -21,7 +21,10 @@ const ClosedPortal = ({
       ) : (
         <></>
       )}
-      <span class="lg:text-4xl sm:text-2xl font-bold mb-4 text-center ">
+      <span
+        class="lg:text-4xl sm:text-2xl font-bold mb-4 text-center "
+        data-testid="closedPortalMessage"
+      >
         Enrollment has not started!
       </span>
       <p class="lg:text-xl sm:text-md font-semibold text-center">

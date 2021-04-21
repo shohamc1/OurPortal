@@ -75,8 +75,8 @@ describe("Auto Trade", () => {
       cy.getId("tradeSearchButton").should("not.be.disabled");
     });
 
-    it("Update is disabled", () => {
-      cy.getId("tradeUpdateButton").should("be.disabled");
+    it("Update is enabled", () => {
+      cy.getId("tradeUpdateButton").should("not.be.disabled");
     });
   });
 
@@ -172,7 +172,7 @@ describe("Auto Trade", () => {
       cy.getId("selectedModuleCard")
         .eq(0)
         .find("input")
-        .type("+-./x")
+        .type("+-./x!@#$%^&*(){}][|eE")
         .should("have.value", "");
     });
 
@@ -231,6 +231,46 @@ describe("Auto Trade", () => {
         });
 
       cy.get("tradeUpdateMessage").should("not.exist");
+    });
+  });
+
+  describe("Delete selected modules", () => {
+    it(`Deleted ${mods[2]} empty module card appears`, () => {
+      cy.getId("deleteSelected").eq(2).click();
+      cy.getId("emptyModuleCard").should("have.length", 1);
+      cy.getId("selectedModuleCard")
+        .should("have.length", 2)
+        .each((card, index) => {
+          cy.wrap(card)
+            .should("contain", mods[index].courseCode)
+            .find("input")
+            .should("have.value", mods[index].weightage);
+        });
+    });
+
+    it(`Weightage updated upon delete, now invalid`, () => {
+      cy.getId("tradeRemainingWeightage")
+        .should("contain", "21")
+        .and("have.class", "bg-red-700");
+      cy.getId("tradeUpdateButton").should("be.disabled");
+    });
+    it(`Update weightage of ${mods[0]} for valid assignment`, () => {
+      cy.getId("selectedModuleCard").eq(0).find("input").clear().type("50");
+      cy.getId("tradeRemainingWeightage")
+        .should("contain", "0")
+        .and("have.class", "bg-green-500");
+      cy.getId("tradeUpdateButton").should("not.be.disabled");
+    });
+
+    it("Delete all selected modules, update not disabled when remaining weightage != 0", () => {
+      cy.getId("deleteSelected").eq(0).click();
+      cy.getId("deleteSelected").eq(0).click();
+      ``;
+      cy.getId("emptyModuleCard").should("have.length", 3);
+      cy.getId("tradeRemainingWeightage")
+        .should("contain", "100")
+        .and("have.class", "bg-red-700");
+      cy.getId("tradeUpdateButton").should("not.be.disabled");
     });
   });
 });

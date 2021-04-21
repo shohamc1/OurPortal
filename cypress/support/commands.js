@@ -37,7 +37,8 @@ const firebaseConfig = {
   appId: "1:569619605040:web:5d6bb04aea40940c5a6ff5",
   measurementId: "G-6KGX9H2DNY",
 };
-
+let originalStart;
+let originalEnd;
 firebase.initializeApp(firebaseConfig);
 // this works for now but there is another recommended method here https://docs.cypress.io/guides/testing-strategies/google-authentication.html#Google-Developer-Console-Setup
 Cypress.Commands.add("getId", (dataTestId, time) => {
@@ -167,8 +168,8 @@ Cypress.Commands.add("removeAutoTradeMods", (autoTradeMods) => {
     displayName: "remove autotrade mods",
     modules: autoTradeMods,
   });
-  return cy.document().then({ timeout: 10000 }, (doc) => {
-    return firebase
+  return new Cypress.Promise((resolve, reject) => {
+    firebase
       .firestore()
       .collection("users")
       .doc(firebase.auth().currentUser.uid)
@@ -176,7 +177,130 @@ Cypress.Commands.add("removeAutoTradeMods", (autoTradeMods) => {
         autoTradeModules: firebase.firestore.FieldValue.arrayRemove(
           ...autoTradeMods
         ),
+      })
+      .then(() => {
+        console.log(autoTradeMods + " autoTrade modules removed successfully");
+        resolve();
+      })
+      .catch((e) => {
+        console.log(e);
+        reject();
       });
+  });
+});
+
+Cypress.Commands.add("setOpenTradeValue", (bool) => {
+  Cypress.log({
+    displayName: "set open trade value",
+    value: bool,
+  });
+  return new Cypress.Promise((resolve, reject) => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .update({
+        hasOpenTrade: bool,
+      })
+      .then(() => {
+        console.log("hasOpenTrade set to " + bool);
+        resolve();
+      })
+      .catch((e) => {
+        console.log(e);
+        reject();
+      });
+  });
+});
+
+Cypress.Commands.add("setEnrollmentEnd", (closeEnrollment) => {
+  Cypress.log({
+    displayName: "Set enrollment end date",
+  });
+  const enrollmentPeriod = firebase
+    .firestore()
+    .collection("enrollmentPeriod")
+    .doc("2021S2");
+  return new Cypress.Promise((resolve, reject) => {
+    if (closeEnrollment) {
+      enrollmentPeriod
+        .get()
+        .then((doc) => {
+          originalEnd = doc.data().end;
+        })
+        .then(() => {
+          enrollmentPeriod.update({
+            end: firebase.firestore.Timestamp.fromMillis(Date.now()),
+          });
+        })
+        .then(() => {
+          console.log(" new enrollment end set");
+          resolve();
+        })
+        .catch((e) => {
+          console.log(e);
+          reject();
+        });
+    } else {
+      enrollmentPeriod
+        .update({
+          end: originalEnd,
+        })
+        .then(() => {
+          console.log(" original enrollment end set");
+          resolve();
+        })
+        .catch((e) => {
+          console.log(e);
+          reject();
+        });
+    }
+  });
+});
+Cypress.Commands.add("setEnrollmentStart", (closeEnrollment) => {
+  Cypress.log({
+    displayName: "Set enrollment start date",
+  });
+  const enrollmentPeriod = firebase
+    .firestore()
+    .collection("enrollmentPeriod")
+    .doc("2021S2");
+  return new Cypress.Promise((resolve, reject) => {
+    if (closeEnrollment) {
+      enrollmentPeriod
+        .get()
+        .then((doc) => {
+          originalStart = doc.data().start;
+        })
+        .then(() => {
+          enrollmentPeriod.update({
+            start: firebase.firestore.Timestamp.fromMillis(
+              Date.now() + 60 * 60 * 1000 * 24
+            ),
+          });
+        })
+        .then(() => {
+          console.log(" new enrollment start set");
+          resolve();
+        })
+        .catch((e) => {
+          console.log(e);
+          reject();
+        });
+    } else {
+      enrollmentPeriod
+        .update({
+          start: originalStart,
+        })
+        .then(() => {
+          console.log(" original enrollment start set");
+          resolve();
+        })
+        .catch((e) => {
+          console.log(e);
+          reject();
+        });
+    }
   });
 });
 // only for sign up spec

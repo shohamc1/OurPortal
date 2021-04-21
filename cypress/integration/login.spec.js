@@ -4,6 +4,12 @@ describe("Login", () => {
   before(() => {
     cy.visit("/login");
   });
+
+  it("Greets with Header and Slogan", () => {
+    cy.contains("OurPortal").should("exist");
+    cy.contains("Get Your Mods").should("exist");
+  });
+
   describe("Normal Login", () => {
     it("Navigates to Dashboard on success", () => {
       cy.getId("loginEmail").type("yiern_goh@mymail.sutd.edu.sg");
@@ -40,11 +46,6 @@ describe("Login", () => {
       cy.getId("loginPassword").clear();
     });
 
-    it("Greets with Header and Slogan", () => {
-      cy.contains("OurPortal").should("exist");
-      cy.contains("Get Your Mods").should("exist");
-    });
-
     it("Invalid Email Format", () => {
       cy.getId("loginEmail").type("invalid");
       cy.getId("loginPassword").type("0");
@@ -76,12 +77,12 @@ describe("Login", () => {
     });
 
     it("Unverified email", () => {
-      cy.getId("loginEmail").type("testuser@gmail.com");
-      cy.getId("loginPassword").type("test123");
+      cy.getId("loginEmail").type("signuptest@mymail.sutd.edu.sg");
+      cy.getId("loginPassword").type("Qwerty123!");
       cy.getId("loginBtn").click();
       cy.getId("loginErrorMessage").should(
         "contain",
-        "The password is invalid or the user does not have a password." // change this
+        "Oops, your account has not been verified yet!" // change this
       );
     });
   });

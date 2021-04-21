@@ -385,12 +385,16 @@ const Trade = () => {
                 </button>
                 <button
                   class={`${
-                    remainingWeightage && autoTradeModules.length
+                    (remainingWeightage !== 0 &&
+                      autoTradeModules.length !== 0) ||
+                    !tradeModule
                       ? "bg-gray-500"
                       : "secondary-button-ns"
                   } rounded py-2 px-4 mr-2 xl:px-10 xl:mr-4 text-white text-xl 2xl:text-2xl w-1/5`}
                   disabled={
-                    remainingWeightage !== 0 && autoTradeModules.length !== 0
+                    (remainingWeightage !== 0 &&
+                      autoTradeModules.length !== 0) ||
+                    !tradeModule
                   }
                   onClick={updateFirestore}
                   data-testid="tradeUpdateButton"
