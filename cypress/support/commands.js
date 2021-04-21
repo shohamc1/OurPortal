@@ -46,22 +46,44 @@ Cypress.Commands.add("getId", (dataTestId, time) => {
   cy.get(`[data-testid='${dataTestId}']`, { timeout: t });
 });
 
-Cypress.Commands.add(
-  "login",
-  (email = "yiern_goh@mymail.sutd.edu.sg", password = "Test123!") => {
-    Cypress.log({
-      displayName: "login",
-    });
-    return new Cypress.Promise((resolve, reject) => {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(() => {
-          resolve();
-        });
-    });
-  }
-);
+Cypress.Commands.add("login", () => {
+  Cypress.log({
+    displayName: "login",
+  });
+  return new Cypress.Promise((resolve, reject) => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(
+        Cypress.env("USERNAME"),
+        Cypress.env("PASSWORD")
+      )
+      .catch((e) => {
+        console.log("User not valid");
+      })
+      .then(() => {
+        resolve();
+      });
+  });
+});
+Cypress.Commands.add("adminLogin", () => {
+  Cypress.log({
+    displayName: "Admin login",
+  });
+  return new Cypress.Promise((resolve, reject) => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(
+        Cypress.env("ADMIN_USERNAME"),
+        Cypress.env("ADMIN_PASSWORD")
+      )
+      .catch((e) => {
+        console.log("User not valid");
+      })
+      .then(() => {
+        resolve();
+      });
+  });
+});
 
 Cypress.Commands.add("logout", () => {
   Cypress.log({

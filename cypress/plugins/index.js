@@ -15,15 +15,21 @@
 /**
  * @type {Cypress.PluginConfig}
  */
+require("dotenv").config();
 module.exports = (on, config) => {
   // for chrome browser 404 error. NEED THIS SHIT
+  config.env.username = process.env.USER;
+  config.env.password = process.env.PASSWORD;
+  config.env.admin_username = process.env.ADMIN_USER;
+  config.env.admin_password = process.env.ADMIN_PASSWORD;
 
-  on("before:browser:launch", (browser = {}, launchOptions) => {
-    if (browser.name === "chrome") {
-      // ^ make sure this is your browser name, you may
-      // be using 'canary' or 'chromium' for example, so change it to match!
-      launchOptions.args.push("--proxy-bypass-list=<-loopback>");
-      return launchOptions;
-    }
-  });
+  return config;
+  // on("before:browser:launch", (browser = {}, launchOptions) => {
+  //   if (browser.name === "chrome") {
+  //     // ^ make sure this is your browser name, you may
+  //     // be using 'canary' or 'chromium' for example, so change it to match!
+  //     launchOptions.args.push("--proxy-bypass-list=<-loopback>");
+  //     return launchOptions;
+  //   }
+  // });
 };

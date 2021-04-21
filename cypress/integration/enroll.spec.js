@@ -5,7 +5,7 @@ describe("Enroll", () => {
     cy.visit("/");
     cy.login();
     cy.deleteMod(mods).then(() => {
-      cy.deleteMod(["02.144DH"]);
+      cy.deleteMod(["02.136DH"]);
       cy.visit("/enroll");
     });
   });
@@ -168,7 +168,7 @@ describe("Enroll", () => {
 
     it("Unenroll HASS module", () => {
       cy.getId("dashboardEdit").click();
-      cy.getId("editCardDelete").eq(0).click();
+      cy.getId("editCardDelete").eq(0).click().wait(1500);
       cy.getId("dashboardMods").children().should("have.length", 3);
     });
 
@@ -184,7 +184,7 @@ describe("Enroll", () => {
       cy.getId("editCardDelete", 10000).each(($el, $index, $list) => {
         cy.wrap($el).click().wait(1500);
       });
-      cy.getId("dashboardMods").children().should("have.length", 0);
+      cy.getId("dashboardMods", 10000).children().should("have.length", 0);
     });
   });
 
@@ -223,12 +223,6 @@ describe("Enroll", () => {
 
     it("Enrolling in more than one HASS", () => {
       cy.getId("customSearchBoxInput").clear().type("02.13");
-      // cy.getId(mods[0]).within(() => {
-      //   cy.get("button").click();
-      // });
-      // cy.getId(extraMods[0]).within(() => {
-      //   cy.get("button").click();
-      // });
       cy.getId(mods[0]).find("button").click({ force: true });
       cy.getId(extraMods[0]).find("button").click({ force: true });
       cy.getId("enrollModal", 10000)

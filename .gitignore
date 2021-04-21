@@ -6,3 +6,4 @@ cypress/screenshots/
 cypress/videos/
 k6/results
 k6/firebase.js
+cypress.env.json

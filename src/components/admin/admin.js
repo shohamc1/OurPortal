@@ -145,7 +145,7 @@ const Admin = () => {
 
   if (ready && !admin) {
     return (
-      <div class="flex">
+      <div class="flex" data-testid="adminError">
         <Helmet title="Overview | OurPortal" />
         <div class="flex flex-col p-2">
           <span class="text-5xl font-bold">You're not an admin! &#x1F620;</span>
@@ -217,6 +217,7 @@ const Admin = () => {
                 <button
                   class="font-light bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 rounded-button px-12 py-4 w-1/5"
                   onClick={exportFunc}
+                  data-testid="adminExport"
                 >
                   <span class="text-3xl">Export CSV</span>
                 </button>

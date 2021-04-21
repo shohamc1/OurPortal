@@ -86,4 +86,32 @@ describe("Login", () => {
       );
     });
   });
+
+  describe("Visit pages when unauthenticated blocked", () => {
+    it("Visit Dashboard", () => {
+      cy.visit("/dashboard").then(() => {
+        cy.url({ timeout: 10000 }).should("not.include", "/dashboard");
+      });
+    });
+    it("Visit Autotrade", () => {
+      cy.visit("/autotrade").then(() => {
+        cy.url({ timeout: 10000 }).should("not.include", "/autotrade");
+      });
+    });
+    it("Visit Request", () => {
+      cy.visit("/request").then(() => {
+        cy.url({ timeout: 10000 }).should("not.include", "/request");
+      });
+    });
+    it("Visit Enroll", () => {
+      cy.visit("/dashboard").then(() => {
+        cy.url({ timeout: 10000 }).should("not.include", "/enroll");
+      });
+    });
+    it("Visit Admin", () => {
+      cy.visit("/admin").then(() => {
+        cy.url({ timeout: 10000 }).should("not.include", "/admin");
+      });
+    });
+  });
 });

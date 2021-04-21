@@ -5,7 +5,7 @@ describe("Sidebar and Header", () => {
     cy.visit("/");
     cy.login();
     cy.enrollMod(["02.136DH"]).then(() => {
-      cy.visit("/dashboard");
+      return;
     });
   });
 
