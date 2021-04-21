@@ -91,7 +91,7 @@ describe("Auto Trade", () => {
       );
     });
 
-    it("Non-HASS modules do exist", () => {
+    it("Non-HASS modules do not exist", () => {
       cy.getId("customSearchBoxInput").type("50.");
       cy.getId("customHitsMessage").should(($message) => {
         expect($message).to.contain("No results");
@@ -265,7 +265,6 @@ describe("Auto Trade", () => {
     it("Delete all selected modules, update not disabled when remaining weightage != 0", () => {
       cy.getId("deleteSelected").eq(0).click();
       cy.getId("deleteSelected").eq(0).click();
-      ``;
       cy.getId("emptyModuleCard").should("have.length", 3);
       cy.getId("tradeRemainingWeightage")
         .should("contain", "100")

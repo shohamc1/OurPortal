@@ -56,27 +56,39 @@ describe("P2P Trade", () => {
       cy.getId("requestSendButton").should("not.be.disabled");
     });
 
+    it("Invalid input", () => {
+      cy.getId("requestInput").type("notvalidinput");
+      cy.getId("requestSendButton").click();
+      cy.getId("requestPopupSent", 20000)
+        .should(
+          "contain",
+          "Oops, this email either does not exist or the user with this email does not have a HASS module yet."
+        )
+        .find("svg")
+        .click();
+    });
     it("Email does not exist in our database", () => {
-      cy.getId("requestInput").type("doesnotexist@mymail.sutd.edu.sg");
-      // cy.getId("requestSendButton").click();
-      // cy.getId("requestPopupSent").should("contain", "");
+      cy.getId("requestInput").type("@mymail.sutd.edu.sg");
+      cy.getId("requestSendButton").click();
+      cy.getId("requestPopupSent", 20000)
+        .should(
+          "contain",
+          "Oops, this email either does not exist or the user with this email does not have a HASS module yet."
+        )
+        .find("svg")
+
+        .click();
     });
   });
 
   describe("Has existing trade", () => {
     before(() => {
       cy.setOpenTradeValue(true).then(() => {
-        return;
+        cy.reload();
       });
     });
 
-    it("Sending trade request is disabled", () => {
-      cy.getId("requestInput"); //.should('be.disabled')
-      cy.getId("requestSendButton"); //.should('be.disabled')
-    });
-
     it("Not enrolled popup", () => {
-      cy.reload();
       cy.getId("requestPopupExistingTrade", 30000)
         .should("contain", "You already have an open trade!")
         .and(
@@ -86,7 +98,6 @@ describe("P2P Trade", () => {
     });
 
     it("Redirects to home on dismiss", () => {
-      cy.reload();
       cy.getId("requestPopupExistingTrade")
         .find("svg")
         .click()
