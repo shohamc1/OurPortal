@@ -12,8 +12,8 @@ describe("Login", () => {
 
   describe("Normal Login", () => {
     it("Navigates to Dashboard on success", () => {
-      cy.getId("loginEmail").type("yiern_goh@mymail.sutd.edu.sg");
-      cy.getId("loginPassword").type("Test123!");
+      cy.getId("loginEmail").type(Cypress.env("USERNAME"));
+      cy.getId("loginPassword").type(Cypress.env("PASSWORD"));
       cy.getId("loginBtn").click();
       cy.url().should("contain", "/dashboard");
       cy.getId("dashboardWelcome").should("contain", "Yi Ern");
