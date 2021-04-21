@@ -20,7 +20,6 @@ try {
   firebase.initializeApp(firebaseConfig);
 }
 
-console.log(firebase.app());
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

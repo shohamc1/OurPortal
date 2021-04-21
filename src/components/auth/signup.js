@@ -70,7 +70,6 @@ const Signup = () => {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(function (user) {
-          console.log(user);
           firebase
             .auth()
             .currentUser.sendEmailVerification()
@@ -82,6 +81,7 @@ const Signup = () => {
             lastName: lastName,
             email: user.user.email,
             uid: user.user.uid,
+            modules: [],
           });
         })
         .catch(function (error) {
