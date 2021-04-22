@@ -16,7 +16,7 @@ describe("Login", () => {
       cy.getId("loginPassword").type(Cypress.env("PASSWORD"));
       cy.getId("loginBtn").click();
       cy.url().should("contain", "/dashboard");
-      cy.getId("dashboardWelcome").should("contain", "Yi Ern");
+      cy.getId("dashboardWelcome", 30000).should("contain", "Yi Ern");
     });
     it("Logout redirects to landing", () => {
       cy.getId("logoutBtn").click();
@@ -67,7 +67,7 @@ describe("Login", () => {
     });
 
     it("Invalid password", () => {
-      cy.getId("loginEmail").type("testuser@gmail.com");
+      cy.getId("loginEmail").type(Cypress.env("USERNAME"));
       cy.getId("loginPassword").type("0");
       cy.getId("loginBtn").click();
       cy.getId("loginErrorMessage").should(
