@@ -11,10 +11,7 @@ jobs:
     env:
       GATSBY_ALGOLIA_APP_ID: ${{ secrets.GATSBY_ALGOLIA_APP_ID }}
       GATSBY_ALGOLIA_SEARCH_KEY: ${{ secrets.GATSBY_ALGOLIA_SEARCH_KEY }}
-      USERNAME: ${{ secrets.USERNAME }}
-      PASSWORD: ${{ secrets.PASSWORD }}
-      ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
-      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
@@ -25,6 +22,12 @@ jobs:
         run: npm ci
       - name: Run cypress tests
         run: npm run ci
+        with:
+          env:
+            CYPRESS_USERNAME: ${{ secrets.USERNAME }}
+            CYPRESS_PASSWORD: ${{ secrets.PASSWORD }}
+            CYPRESS_ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+            CYPRESS_ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
       - name: Persist cypress results
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
